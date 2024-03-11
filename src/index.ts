@@ -101,26 +101,27 @@ class APODWidget extends Widget {
 function activate(
   app: JupyterFrontEnd,
   palette: ICommandPalette,
+  settingRegistry: ISettingRegistry | null,
   restorer: ILayoutRestorer | null
 ) {
   console.log('JupyterLab extension jupyterlab_apod is activated!');
 
-  // if (settingRegistry) {
-  //   settingRegistry
-  //     .load(plugin.id)
-  //     .then(settings => {
-  //       console.log(
-  //         'jupyterlab_arpresent settings loaded:',
-  //         settings.composite
-  //       );
-  //     })
-  //     .catch(reason => {
-  //       console.error(
-  //         'Failed to load settings for jupyterlab_arpresent.',
-  //         reason
-  //       );
-  //     });
-  // }
+  if (settingRegistry) {
+    settingRegistry
+      .load(plugin.id)
+      .then(settings => {
+        console.log(
+          'jupyterlab_arpresent settings loaded:',
+          settings.composite
+        );
+      })
+      .catch(reason => {
+        console.error(
+          'Failed to load settings for jupyterlab_arpresent.',
+          reason
+        );
+      });
+  }
 
   // requestAPI<any>('get-example')
   //   .then(data => {
