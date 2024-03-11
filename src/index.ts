@@ -1,13 +1,16 @@
 import {
+  ILayoutRestorer,
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
+import {
+  ICommandPalette,
+  MainAreaWidget,
+  WidgetTracker
+} from '@jupyterlab/apputils';
 
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { Widget } from '@lumino/widgets';
-
-import { requestAPI } from './handler';
 
 interface APODResponse {
   copyright: string;
@@ -95,7 +98,11 @@ class APODWidget extends Widget {
 /**
  * Activate the APOD widget extension.
  */
-function activate(app: JupyterFrontEnd, palette: ICommandPalette) {
+function activate(
+  app: JupyterFrontEnd,
+  palette: ICommandPalette,
+  restorer: ILayoutRestorer | null
+) {
   console.log('JupyterLab extension jupyterlab_apod is activated!');
 
   // if (settingRegistry) {
@@ -115,28 +122,16 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette) {
   //     });
   // }
 
-  requestAPI<any>('get-example')
-    .then(data => {
-      console.log(data);
-    })
-    .catch(reason => {
-      console.error(
-        `The jupyterlab_arpresent server extension appears to be missing.\n${reason}`
-      );
-    });
-
-  // Define a widget creator function
-  const newWidget = () => {
-    const content = new APODWidget();
-    const widget = new MainAreaWidget({ content });
-    widget.id = 'apod-jupyterlab';
-    widget.title.label = 'Astronomy Picture';
-    widget.title.closable = true;
-    return widget;
-  };
-
-  // Create a single widget
-  let widget = newWidget();
+  // requestAPI<any>('get-example')
+  //   .then(data => {
+  //     console.log(data);
+  //   })
+  //   .catch(reason => {
+  //     console.error(
+  //       `The jupyterlab_arpresent server extension appears to be missing.\n${reason}`
+  //     );
+  //   });
+  let widget: MainAreaWidget<APODWidget>;
 
   // Add an application command
   const command: string = 'apod:open';
@@ -144,8 +139,16 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette) {
     label: 'Random Astronomy Picture',
     execute: () => {
       // Regenerate the widget if disposed
-      if (widget.isDisposed) {
-        widget = newWidget();
+      if (!widget || widget.isDisposed) {
+        const content = new APODWidget();
+        widget = new MainAreaWidget({ content });
+        widget.id = 'apod-jupyterlab';
+        widget.title.label = 'Astronomy Picture';
+        widget.title.closable = true;
+      }
+      if (!tracker.has(widget)) {
+        // Track the state of the widget for later restoration
+        tracker.add(widget);
       }
       if (!widget.isAttached) {
         // Attach the widget to the main work area if it's not there
@@ -160,6 +163,17 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette) {
 
   // Add the command to the palette.
   palette.addItem({ command, category: 'Tutorial' });
+
+  // Track and restore the widget state
+  const tracker = new WidgetTracker<MainAreaWidget<APODWidget>>({
+    namespace: 'apod'
+  });
+  if (restorer) {
+    restorer.restore(tracker, {
+      command,
+      name: () => 'apod'
+    });
+  }
 }
 
 /**
@@ -170,7 +184,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
   description: 'Video presentation over WebRTC with AR capabilities.',
   autoStart: true,
   requires: [ICommandPalette],
-  optional: [ISettingRegistry],
+  optional: [ILayoutRestorer, ISettingRegistry],
   activate: activate
 };
 
