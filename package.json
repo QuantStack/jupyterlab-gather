@@ -57,10 +57,12 @@
         "watch:labextension": "jupyter labextension watch ."
     },
     "dependencies": {
-        "@jupyterlab/application": "^4.0.0",
-        "@jupyterlab/settingregistry": "^4.0.0",
+        "@jupyterlab/application": "^4.1.4",
+        "@jupyterlab/apputils": "^4.2.4",
         "@jupyterlab/coreutils": "^6.0.0",
-        "@jupyterlab/services": "^7.0.0"
+        "@jupyterlab/services": "^7.0.0",
+        "@jupyterlab/settingregistry": "^4.0.0",
+        "@lumino/widgets": "^2.3.1"
     },
     "devDependencies": {
         "@jupyterlab/builder": "^4.0.0",
@@ -100,14 +102,14 @@
     },
     "jupyterlab": {
         "discovery": {
-        "server": {
-            "managers": [
-                "pip"
-            ],
-            "base": {
-                "name": "jupyterlab_arpresent"
+            "server": {
+                "managers": [
+                    "pip"
+                ],
+                "base": {
+                    "name": "jupyterlab_arpresent"
+                }
             }
-        }
         },
         "extension": true,
         "outputDir": "jupyterlab_arpresent/labextension",
