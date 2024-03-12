@@ -1,18 +1,15 @@
 //@ts-expect-error AR.js doesn't have type definitions
 import * as THREEx from '@ar-js-org/ar.js/three.js/build/ar-threex.js';
-import { ILayoutRestorer, JupyterFrontEnd } from '@jupyterlab/application';
-import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
-import { Widget } from '@lumino/widgets';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
-class ArPresentWidget extends Widget {
+class ArCube {
   /**
    * Construct a new arpresent widget.
    */
-  constructor() {
-    super();
+  constructor(node: HTMLElement) {
+    this.node = node;
+
     this.initialize();
     // this.animate();
 
@@ -67,6 +64,7 @@ class ArPresentWidget extends Widget {
   webcamFromArjs: HTMLElement | null;
   deltaTime: number;
   totalTime: number;
+  node: HTMLElement;
 
   initialize() {
     this.scene = new THREE.Scene();
@@ -339,56 +337,4 @@ class ArPresentWidget extends Widget {
   }
 }
 
-export default function activate(
-  app: JupyterFrontEnd,
-  palette: ICommandPalette,
-  settingRegistry: ISettingRegistry | null,
-  restorer: ILayoutRestorer | null
-) {
-  console.log('JupyterLab extension jupyterlab_arpresent is activated!');
-
-  let widget: MainAreaWidget<ArPresentWidget>;
-
-  // Add an application command
-  const command: string = 'arpresent:open';
-  app.commands.addCommand(command, {
-    label: 'AR Presentation',
-    execute: () => {
-      // Regenerate the widget if disposed
-      if (!widget || widget.isDisposed) {
-        const content = new ArPresentWidget();
-        widget = new MainAreaWidget({ content });
-        widget.id = 'arpresent-jupyterlab';
-        widget.title.label = 'AR Presentation';
-        widget.title.closable = true;
-      }
-      // if (!tracker.has(widget)) {
-      //   // Track the state of the widget for later restoration
-      //   tracker.add(widget);
-      // }
-      if (!widget.isAttached) {
-        // Attach the widget to the main work area if it's not there
-        app.shell.add(widget, 'main');
-      }
-
-      widget.content.animate();
-      // Activate the widget
-      app.shell.activateById(widget.id);
-    }
-  });
-
-  // Add the command to the palette.
-  palette.addItem({ command, category: 'Tutorial' });
-
-  // Track and restore the widget state
-  // const tracker = new WidgetTracker<MainAreaWidget<ArPresent>>({
-  //   namespace: 'arpresent'
-  // });
-  // if (restorer) {
-  //   restorer.restore(tracker, {
-  //     command,
-  //     name: () => 'arpresent'
-  //   });
-  // }
-}
-// export default ArPresentWidget;
+export default ArCube;

@@ -4,7 +4,8 @@ import {
 } from '@jupyterlab/application';
 import { ICommandPalette } from '@jupyterlab/apputils';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
-import activate from './arCube';
+import activate from './arPresentWidget';
+
 /**
  * Activate the arpresent widget extension.
  */
