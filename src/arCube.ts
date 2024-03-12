@@ -24,47 +24,47 @@ class ArCube {
 
   clock: THREE.Clock;
   scene: THREE.Scene;
-  ambientLight: THREE.AmbientLight;
   camera: THREE.Camera;
   arToolkitSource: any;
   arToolkitContext: any;
-  markerControls: any;
   markerRootArray: THREE.Group[];
   markerGroupArray: THREE.Group[];
   patternArray: string[];
-  rotationArray: THREE.Vector3[];
-  markerRoot: THREE.Group;
-  markerGroup: THREE.Group;
   sceneGroup: THREE.Group;
-  pointLight: THREE.PointLight;
-  loader: THREE.TextureLoader;
-  stageMesh: THREE.MeshBasicMaterial;
-  stage: THREE.Mesh;
   edgeGroup: THREE.Group;
-  edgeGeometry: THREE.CylinderGeometry;
-  edgeCenters: THREE.Vector3[];
-  edgeRotations: THREE.Vector3[];
   gltfLoader: GLTFLoader;
   gltfModel: THREE.Group;
-  okToLoadModel: boolean;
   animations: THREE.AnimationClip[] | undefined;
   mixer: THREE.AnimationMixer;
   renderer: THREE.WebGLRenderer;
-  animationRequestId: number | undefined;
   mixerUpdateDelta: number;
-  now: number;
-  then: number;
-  elapsed: number;
-  readonly fpsInterval: number;
   // observer: IntersectionObserver;
-  existingWebcam: any;
-  newWebcam: HTMLVideoElement;
+  existingWebcam: HTMLVideoElement | null;
+  newWebcam: HTMLVideoElement | undefined;
   webcam_loaded: Promise<void>;
   resolve: any;
-  webcamFromArjs: HTMLElement | null;
   deltaTime: number;
   totalTime: number;
-  node: HTMLElement;
+  readonly markerControls: any;
+  readonly ambientLight: THREE.AmbientLight;
+  readonly rotationArray: THREE.Vector3[];
+  readonly markerRoot: THREE.Group;
+  readonly markerGroup: THREE.Group;
+  readonly pointLight: THREE.PointLight;
+  readonly loader: THREE.TextureLoader;
+  readonly stageMesh: THREE.MeshBasicMaterial;
+  readonly stage: THREE.Mesh;
+  readonly edgeGeometry: THREE.CylinderGeometry;
+  readonly edgeCenters: THREE.Vector3[];
+  readonly edgeRotations: THREE.Vector3[];
+  readonly okToLoadModel: boolean;
+  readonly animationRequestId: number | undefined;
+  readonly now: number;
+  readonly then: number;
+  readonly elapsed: number;
+  readonly fpsInterval: number;
+  //   readonly webcamFromArjs: HTMLElement | null;
+  readonly node: HTMLElement;
 
   initialize() {
     this.scene = new THREE.Scene();
@@ -323,12 +323,15 @@ class ArCube {
     }
   }
 
+  // TODO: Casting is ok?
   async setUpVideo() {
     await this.webcam_loaded;
     // Create new webcam element
-    this.existingWebcam = document.getElementById('arjs-video');
-    this.newWebcam = this.existingWebcam.cloneNode(true);
-    this.newWebcam.srcObject = this.existingWebcam.srcObject;
+    this.existingWebcam = document.getElementById(
+      'arjs-video'
+    ) as HTMLVideoElement;
+    this.newWebcam = this.existingWebcam?.cloneNode(true) as HTMLVideoElement;
+    this.newWebcam.srcObject = this.existingWebcam?.srcObject;
     this.newWebcam.id = 'webcamViewNew';
     this.newWebcam.style.display = '';
     this.newWebcam.style.zIndex = '-2';
