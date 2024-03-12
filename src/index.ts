@@ -21,14 +21,15 @@ class APODWidget extends Widget {
   constructor() {
     super();
 
-    this.addClass('my-apodWidget');
+    // this.addClass('my-apodWidget');
     // promise to track if AR.js has loaded the webcam
     this.webcam_loaded = new Promise(resolve => {
       this.resolve = resolve;
     });
 
-    window.addEventListener('arjs-video-loaded', e => {
+    window.addEventListener('arjs-video-loaded', (e: any) => {
       this.resolve();
+      e.detail.component.style.display = 'none';
     });
 
     // Set up three stuff
@@ -262,10 +263,10 @@ class APODWidget extends Widget {
     this.webcamFromArjs = document.getElementById('arjs-video');
 
     // Wait for AR.js to set up webcam feed before rendering view
-    if (!this.webcamFromArjs) {
-      // await this.webcam_loaded;
-      console.log('awaiting arjs video');
-    }
+    // if (!this.webcamFromArjs) {
+    //   // await this.webcam_loaded;
+    //   console.log('awaiting arjs video');
+    // }
 
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
@@ -278,6 +279,17 @@ class APODWidget extends Widget {
     this.renderer.domElement.style.top = '0px';
     this.renderer.domElement.style.left = '0px';
 
+    this.node.appendChild(this.renderer.domElement);
+
+    // // Create new webcam element
+    // this.existingWebcam = document.getElementById('arjs-video');
+    // this.newWebcam = this.existingWebcam.cloneNode(true);
+    // this.newWebcam.srcObject = this.existingWebcam.srcObject;
+    // this.newWebcam.id = 'webcamViewNew';
+    // this.newWebcam.style.display = '';
+    // this.node.appendChild(this.newWebcam);
+
+    this.setUpVideo();
     this.animate();
   }
 
@@ -360,14 +372,25 @@ class APODWidget extends Widget {
       }
     }
   }
+
+  async setUpVideo() {
+    await this.webcam_loaded;
+    // Create new webcam element
+    this.existingWebcam = document.getElementById('arjs-video');
+    this.newWebcam = this.existingWebcam.cloneNode(true);
+    this.newWebcam.srcObject = this.existingWebcam.srcObject;
+    this.newWebcam.id = 'webcamViewNew';
+    this.newWebcam.style.display = '';
+    this.newWebcam.style.zIndex = '0';
+    // this.newWebcam.classList.add("jl-vid");
+    this.node.appendChild(this.newWebcam);
+  }
 }
 window.addEventListener('markerFound', () => {
-  console.log('marker found lisener');
   console.log('Marker found');
 });
 
 window.addEventListener('markerLost', () => {
-  console.log('marker lost lisener');
   console.log('Marker lost');
 });
 
