@@ -60,7 +60,7 @@ class APODWidget extends Widget {
   gltfModel: THREE.Group;
   okToLoadModel: boolean;
   animations: THREE.AnimationClip[] | undefined;
-  mixer: any;
+  mixer: THREE.AnimationMixer;
   renderer: THREE.WebGLRenderer;
   animationRequestId: number | undefined;
   mixerUpdateDelta: number;
@@ -312,11 +312,47 @@ class APODWidget extends Widget {
       this.sceneGroup.add(edge);
     }
 
-    this.sceneGroup.add(
-      new THREE.Mesh(
-        new THREE.TorusKnotGeometry(0.5, 0.1),
-        new THREE.MeshNormalMaterial()
-      )
+    if (!this.gltfLoader) {
+      this.gltfLoader = new GLTFLoader();
+    }
+
+    // remove old model first
+    // if (this.gltfModel) {
+    //   this.removeFromScene(this.gltfModel);
+    // }
+
+    // load model
+    this.gltfLoader.load(
+      'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf',
+      gltf => {
+        const scale = 1.0;
+        this.gltfModel = gltf.scene;
+        this.gltfModel.scale.set(scale, scale, scale);
+        this.gltfModel.position.fromArray([0, 0, 0]);
+
+        console.log('gltf', gltf);
+
+        console.log('this.gltfModel', this.gltfModel);
+        this.animations = gltf.animations;
+        this.mixer = new THREE.AnimationMixer(this.gltfModel);
+
+        console.log('this.animations', this.animations);
+
+        if (this.animations) {
+          console.log('animatons playing');
+          this.animations.forEach(clip => {
+            this.mixer.clipAction(clip).play();
+          });
+        }
+
+        this.sceneGroup.add(this.gltfModel);
+      },
+      () => {
+        console.log('model loading');
+      },
+      error => {
+        console.log('Error loading model', error);
+      }
     );
 
     const pointLight = new THREE.PointLight(0xffffff, 1, 50);
@@ -331,9 +367,15 @@ class APODWidget extends Widget {
 
   animate() {
     window.requestAnimationFrame(this.animate.bind(this));
+
     this.deltaTime = this.clock.getDelta();
     this.totalTime += this.deltaTime;
+
     this.update();
+
+    this.mixerUpdateDelta = this.clock.getDelta();
+    this.mixer.update(this.mixerUpdateDelta);
+
     this.render();
   }
 
