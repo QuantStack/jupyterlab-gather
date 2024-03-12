@@ -21,7 +21,17 @@ class APODWidget extends Widget {
   constructor() {
     super();
     this.initialize();
-    this.animate();
+    // this.animate();
+    console.log('this.scene', this.scene);
+    console.log('this.camera', this.camera);
+
+    window.addEventListener('markerFound', () => {
+      console.log('Marker found');
+    });
+
+    window.addEventListener('markerLost', () => {
+      console.log('Marker lost');
+    });
   }
 
   clock: THREE.Clock;
@@ -320,7 +330,7 @@ class APODWidget extends Widget {
   }
 
   animate() {
-    requestAnimationFrame(this.animate.bind(this));
+    window.requestAnimationFrame(this.animate.bind(this));
     this.deltaTime = this.clock.getDelta();
     this.totalTime += this.deltaTime;
     this.update();
@@ -349,18 +359,11 @@ class APODWidget extends Widget {
     this.newWebcam.srcObject = this.existingWebcam.srcObject;
     this.newWebcam.id = 'webcamViewNew';
     this.newWebcam.style.display = '';
-    this.newWebcam.style.zIndex = '0';
+    this.newWebcam.style.zIndex = '-2';
     // this.newWebcam.classList.add("jl-vid");
     this.node.appendChild(this.newWebcam);
   }
 }
-window.addEventListener('markerFound', () => {
-  console.log('Marker found');
-});
-
-window.addEventListener('markerLost', () => {
-  console.log('Marker lost');
-});
 
 /**
  * Activate the APOD widget extension.
@@ -373,32 +376,6 @@ function activate(
 ) {
   console.log('JupyterLab extension jupyterlab_apod is activated!');
 
-  // if (settingRegistry) {
-  //   settingRegistry
-  //     .load(plugin.id)
-  //     .then(settings => {
-  //       console.log(
-  //         'jupyterlab_arpresent settings loaded:',
-  //         settings.composite
-  //       );
-  //     })
-  //     .catch(reason => {
-  //       console.error(
-  //         'Failed to load settings for jupyterlab_arpresent.',
-  //         reason
-  //       );
-  //     });
-  // }
-
-  // requestAPI<any>('get-example')
-  //   .then(data => {
-  //     console.log(data);
-  //   })
-  //   .catch(reason => {
-  //     console.error(
-  //       `The jupyterlab_arpresent server extension appears to be missing.\n${reason}`
-  //     );
-  //   });
   let widget: MainAreaWidget<APODWidget>;
 
   // Add an application command
@@ -424,6 +401,7 @@ function activate(
       }
       // Refresh the picture in the widget
       // widget.content.updateAPODImage();
+      widget.content.animate();
       // Activate the widget
       app.shell.activateById(widget.id);
     }
