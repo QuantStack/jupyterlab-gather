@@ -14,16 +14,14 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { Widget } from '@lumino/widgets';
 
-class APODWidget extends Widget {
+class ArPresentWidget extends Widget {
   /**
-   * Construct a new APOD widget.
+   * Construct a new arpresent widget.
    */
   constructor() {
     super();
     this.initialize();
     // this.animate();
-    console.log('this.scene', this.scene);
-    console.log('this.camera', this.camera);
 
     window.addEventListener('markerFound', () => {
       console.log('Marker found');
@@ -90,7 +88,7 @@ class APODWidget extends Widget {
       this.resolve();
     });
 
-    const ambientLight = new THREE.AmbientLight(0xcccccc, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     this.scene.add(ambientLight);
 
     this.camera = new THREE.Camera();
@@ -194,74 +192,22 @@ class APODWidget extends Widget {
 
     this.sceneGroup = new THREE.Group();
     // a 1x1x1 cube model with scale factor 1.25 fills up the physical cube
-    this.sceneGroup.scale.set(1.25 / 2, 1.25 / 2, 1.25 / 2);
-
-    const loader = new THREE.TextureLoader();
-
-    /*
-	// a simple cube
-	let materialArray = [
-		new THREE.MeshBasicMaterial( { map: loader.load("images/xpos.png") } ),
-		new THREE.MeshBasicMaterial( { map: loader.load("images/xneg.png") } ),
-		new THREE.MeshBasicMaterial( { map: loader.load("images/ypos.png") } ),
-		new THREE.MeshBasicMaterial( { map: loader.load("images/yneg.png") } ),
-		new THREE.MeshBasicMaterial( { map: loader.load("images/zpos.png") } ),
-		new THREE.MeshBasicMaterial( { map: loader.load("images/zneg.png") } ),
-	];
-	let mesh = new THREE.Mesh( new THREE.CubeGeometry(1,1,1), materialArray );
-	sceneGroup.add( mesh );
-	*/
-
-    // let tileTexture = loader.load('images/tiles.jpg');
+    this.sceneGroup.scale.set(1.75 / 2, 1.75 / 2, 1.75 / 2);
 
     // reversed cube
     this.sceneGroup.add(
       new THREE.Mesh(
         new THREE.BoxGeometry(2, 2, 2),
         new THREE.MeshBasicMaterial({
-          // map: tileTexture,
           color: '#1a1b26',
           side: THREE.BackSide
         })
       )
     );
 
-    // cube vertices
-
-    const sphereGeometry = new THREE.SphereGeometry(0.2, 6, 6);
-
-    const sphereCenters = [
-      new THREE.Vector3(-1, -1, -1),
-      new THREE.Vector3(-1, -1, 1),
-      new THREE.Vector3(-1, 1, -1),
-      new THREE.Vector3(-1, 1, 1),
-      new THREE.Vector3(1, -1, -1),
-      new THREE.Vector3(1, -1, 1),
-      new THREE.Vector3(1, 1, -1),
-      new THREE.Vector3(1, 1, 1)
-    ];
-
-    const sphereColors = [
-      0x444444, 0x0000ff, 0x00ff00, 0x00ffff, 0xff0000, 0xff00ff, 0xffff00,
-      0xffffff
-    ];
-
-    for (let i = 0; i < 8; i++) {
-      const sphereMesh = new THREE.Mesh(
-        sphereGeometry,
-        new THREE.MeshLambertMaterial({
-          // map: tileTexture,
-
-          color: sphereColors[i]
-        })
-      );
-      sphereMesh.position.copy(sphereCenters[i]);
-      this.sceneGroup.add(sphereMesh);
-    }
-
     // cube edges
-
-    const edgeGeometry = new THREE.CylinderGeometry(0.05, 0.05, 2, 32);
+    this.edgeGroup = new THREE.Group();
+    const edgeGeometry = new THREE.CylinderGeometry(0.03, 0.03, 2, 32);
 
     const edgeCenters = [
       new THREE.Vector3(0, -1, -1),
@@ -293,24 +239,20 @@ class APODWidget extends Widget {
       new THREE.Vector3(Math.PI / 2, 0, 0)
     ];
 
-    const edgeColors = [
-      0x880000, 0x880000, 0x880000, 0x880000, 0x008800, 0x008800, 0x008800,
-      0x008800, 0x000088, 0x000088, 0x000088, 0x000088
-    ];
-
     for (let i = 0; i < 12; i++) {
       const edge = new THREE.Mesh(
         edgeGeometry,
         new THREE.MeshLambertMaterial({
-          // map: tileTexture,
-          color: edgeColors[i]
+          color: '#262626'
         })
       );
       edge.position.copy(edgeCenters[i]);
       edge.rotation.setFromVector3(edgeRotations[i]);
 
-      this.sceneGroup.add(edge);
+      this.edgeGroup.add(edge);
     }
+
+    this.sceneGroup.add(this.edgeGroup);
 
     if (!this.gltfLoader) {
       this.gltfLoader = new GLTFLoader();
@@ -328,18 +270,12 @@ class APODWidget extends Widget {
         const scale = 1.0;
         this.gltfModel = gltf.scene;
         this.gltfModel.scale.set(scale, scale, scale);
-        this.gltfModel.position.fromArray([0, 0, 0]);
+        this.gltfModel.position.fromArray([0, -1, 0]);
 
-        console.log('gltf', gltf);
-
-        console.log('this.gltfModel', this.gltfModel);
         this.animations = gltf.animations;
         this.mixer = new THREE.AnimationMixer(this.gltfModel);
 
-        console.log('this.animations', this.animations);
-
         if (this.animations) {
-          console.log('animatons playing');
           this.animations.forEach(clip => {
             this.mixer.clipAction(clip).play();
           });
@@ -358,6 +294,7 @@ class APODWidget extends Widget {
     const pointLight = new THREE.PointLight(0xffffff, 1, 50);
     pointLight.position.set(0.5, 3, 2);
     this.scene.add(pointLight);
+
     this.setUpVideo();
   }
 
@@ -373,8 +310,10 @@ class APODWidget extends Widget {
 
     this.update();
 
-    this.mixerUpdateDelta = this.clock.getDelta();
-    this.mixer.update(this.mixerUpdateDelta);
+    if (this.mixer) {
+      this.mixerUpdateDelta = this.clock.getDelta();
+      this.mixer.update(this.mixerUpdateDelta);
+    }
 
     this.render();
   }
@@ -408,7 +347,7 @@ class APODWidget extends Widget {
 }
 
 /**
- * Activate the APOD widget extension.
+ * Activate the arpresent widget extension.
  */
 function activate(
   app: JupyterFrontEnd,
@@ -416,21 +355,21 @@ function activate(
   settingRegistry: ISettingRegistry | null,
   restorer: ILayoutRestorer | null
 ) {
-  console.log('JupyterLab extension jupyterlab_apod is activated!');
+  console.log('JupyterLab extension jupyterlab_arpresent is activated!');
 
-  let widget: MainAreaWidget<APODWidget>;
+  let widget: MainAreaWidget<ArPresentWidget>;
 
   // Add an application command
-  const command: string = 'apod:open';
+  const command: string = 'arpresent:open';
   app.commands.addCommand(command, {
-    label: 'Random Astronomy Picture',
+    label: 'AR Presentation',
     execute: () => {
       // Regenerate the widget if disposed
       if (!widget || widget.isDisposed) {
-        const content = new APODWidget();
+        const content = new ArPresentWidget();
         widget = new MainAreaWidget({ content });
-        widget.id = 'apod-jupyterlab';
-        widget.title.label = 'Astronomy Picture';
+        widget.id = 'arpresent-jupyterlab';
+        widget.title.label = 'AR Presentation';
         widget.title.closable = true;
       }
       // if (!tracker.has(widget)) {
@@ -441,8 +380,7 @@ function activate(
         // Attach the widget to the main work area if it's not there
         app.shell.add(widget, 'main');
       }
-      // Refresh the picture in the widget
-      // widget.content.updateAPODImage();
+
       widget.content.animate();
       // Activate the widget
       app.shell.activateById(widget.id);
@@ -453,13 +391,13 @@ function activate(
   palette.addItem({ command, category: 'Tutorial' });
 
   // Track and restore the widget state
-  // const tracker = new WidgetTracker<MainAreaWidget<APODWidget>>({
-  //   namespace: 'apod'
+  // const tracker = new WidgetTracker<MainAreaWidget<ArPresent>>({
+  //   namespace: 'arpresent'
   // });
   // if (restorer) {
   //   restorer.restore(tracker, {
   //     command,
-  //     name: () => 'apod'
+  //     name: () => 'arpresent'
   //   });
   // }
 }
