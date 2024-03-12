@@ -20,301 +20,32 @@ class APODWidget extends Widget {
    */
   constructor() {
     super();
-
-    // this.addClass('my-apodWidget');
-    // promise to track if AR.js has loaded the webcam
-    this.webcam_loaded = new Promise(resolve => {
-      this.resolve = resolve;
-    });
-
-    window.addEventListener('arjs-video-loaded', (e: any) => {
-      this.resolve();
-      e.detail.component.style.display = 'none';
-    });
-
-    // Set up three stuff
-    console.log('Set up three stuff');
-    this.clock = new THREE.Clock();
-    this.scene = new THREE.Scene();
-
-    // TODO: Add this as a python option
-    // this.scene.background = new THREE.TextureLoader().load(blueBg);
-
-    this.ambientLight = new THREE.AmbientLight(0x404040, 0.5);
-    this.scene.add(this.ambientLight);
-
-    this.camera = new THREE.Camera();
-    this.scene.add(this.camera);
-
-    // Set up source stuff
-    console.log('Set up source stuff');
-    this.arToolkitSource = new THREEx.ArToolkitSource({
-      sourceType: 'webcam'
-      // source height/width used to set ideal in userMediaConstraints
-      // sourceWidth: this.get('width'),
-      // sourceHeight: this.get('height'),
-      // displayWidth: this.get('width'),
-      // displayHeight: this.get('height')
-    });
-
-    // TODO: resize? Height of cell doesn't change on resize, so to maintain aspect ratio, width of video shouldn't change either
-    this.arToolkitSource.init();
-
-    // Set up context stuff
-    console.log('Set up context stuff');
-    this.arToolkitContext = new THREEx.ArToolkitContext({
-      cameraParametersUrl:
-        THREEx.ArToolkitContext.baseURL + '../data/data/camera_para.dat',
-      detectionMode: 'mono'
-    });
-
-    // copy projection matrix to camera when initialization complete
-    this.arToolkitContext.init(() => {
-      this.camera.projectionMatrix.copy(
-        this.arToolkitContext.getProjectionMatrix()
-      );
-    });
-
-    // Set up marker roots
-    console.log('Set up marker roots');
-    this.markerRootArray = [];
-    this.markerGroupArray = [];
-
-    this.patternArray = [
-      'letterA',
-      'letterB',
-      'letterC',
-      'letterD',
-      'letterF',
-      'kanji'
-    ];
-
-    this.rotationArray = [
-      new THREE.Vector3(-Math.PI / 2, 0, 0),
-      new THREE.Vector3(0, -Math.PI / 2, Math.PI / 2),
-      new THREE.Vector3(Math.PI / 2, 0, Math.PI),
-      new THREE.Vector3(-Math.PI / 2, Math.PI / 2, 0),
-      new THREE.Vector3(Math.PI, 0, 0),
-      new THREE.Vector3(0, 0, 0)
-    ];
-
-    for (let i = 0; i < 6; i++) {
-      this.markerRoot = new THREE.Group();
-
-      this.markerRootArray.push(this.markerRoot);
-
-      this.scene.add(this.markerRoot);
-
-      this.markerControls = new THREEx.ArMarkerControls(
-        this.arToolkitContext,
-        this.markerRoot,
-        {
-          type: 'pattern',
-          patternUrl:
-            THREEx.ArToolkitContext.baseURL +
-            'examples/marker-training/examples/pattern-files/pattern-' +
-            this.patternArray[i] +
-            '.patt'
-        }
-      );
-
-      this.markerGroup = new THREE.Group();
-      this.markerGroupArray.push(this.markerGroup);
-
-      this.markerGroup.position.y = -1.25 / 2;
-      this.markerGroup.rotation.setFromVector3(this.rotationArray[i]);
-
-      this.markerRoot.add(this.markerGroup);
-    }
-
-    // Set up scene stuff
-    console.log('Set up scene stuff');
-    this.sceneGroup = new THREE.Group();
-
-    // a 1x1x1 cube model with scale factor 1.25 fills up the physical cube
-    this.sceneGroup.scale.set(1.75 / 2, 1.75 / 2, 1.75 / 2);
-
-    // Build stage
-    console.log('Build Stage');
-    this.loader = new THREE.TextureLoader();
-
-    // TODO: remove old model first
-    // if (this.stage) {
-    //   this.removeFromScene(this.stage);
-    // }
-
-    // reversed cube
-    this.stageMesh = new THREE.MeshBasicMaterial({
-      // map: this.stageTexture,
-      color: '#1a1b26',
-      side: THREE.BackSide
-    });
-
-    this.stage = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), this.stageMesh);
-    this.sceneGroup.add(this.stage);
-
-    // Cube edges
-    console.log('Cube edges');
-    this.edgeGroup = new THREE.Group();
-
-    this.edgeGeometry = new THREE.CylinderGeometry(0.03, 0.03, 2, 32);
-
-    this.edgeCenters = [
-      new THREE.Vector3(0, -1, -1),
-      new THREE.Vector3(0, 1, -1),
-      new THREE.Vector3(0, -1, 1),
-      new THREE.Vector3(0, 1, 1),
-      new THREE.Vector3(-1, 0, -1),
-      new THREE.Vector3(1, 0, -1),
-      new THREE.Vector3(-1, 0, 1),
-      new THREE.Vector3(1, 0, 1),
-      new THREE.Vector3(-1, -1, 0),
-      new THREE.Vector3(1, -1, 0),
-      new THREE.Vector3(-1, 1, 0),
-      new THREE.Vector3(1, 1, 0)
-    ];
-
-    this.edgeRotations = [
-      new THREE.Vector3(0, 0, Math.PI / 2),
-      new THREE.Vector3(0, 0, Math.PI / 2),
-      new THREE.Vector3(0, 0, Math.PI / 2),
-      new THREE.Vector3(0, 0, Math.PI / 2),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(Math.PI / 2, 0, 0),
-      new THREE.Vector3(Math.PI / 2, 0, 0),
-      new THREE.Vector3(Math.PI / 2, 0, 0),
-      new THREE.Vector3(Math.PI / 2, 0, 0)
-    ];
-
-    for (let i = 0; i < 12; i++) {
-      const edge = new THREE.Mesh(
-        this.edgeGeometry,
-        new THREE.MeshLambertMaterial({
-          color: 0x262626
-        })
-      );
-
-      edge.position.copy(this.edgeCenters[i]);
-      edge.rotation.setFromVector3(this.edgeRotations[i]);
-
-      this.edgeGroup.add(edge);
-    }
-
-    this.sceneGroup.add(this.edgeGroup);
-
-    // Load model
-    console.log('Load model');
-    //TODO: Fix this
-    this.gltfLoader = new GLTFLoader();
-    // if (!this.gltfLoader) {
-    // }
-
-    // remove old model first
-    if (this.gltfModel) {
-      //this.removeFromScene(this.gltfModel);
-      console.log('This is where remove should go');
-    }
-
-    // load model
-    this.gltfLoader.load(
-      'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf',
-      gltf => {
-        const scale = 1.0;
-        this.gltfModel = gltf.scene;
-        this.gltfModel.scale.set(scale, scale, scale);
-        this.gltfModel.position.fromArray([0, 0, 0]);
-
-        console.log('gltf', gltf);
-
-        console.log('this.gltfModel', this.gltfModel);
-        this.animations = gltf.animations;
-        // this.mixer = new THREE.AnimationMixer(this.gltfModel);
-
-        if (this.animations) {
-          this.animations.forEach(clip => {
-            this.mixer.clipAction(clip).play();
-          });
-        }
-
-        this.sceneGroup.add(this.gltfModel);
-      },
-      () => {
-        console.log('model loading');
-      },
-      error => {
-        console.log('Error loading model', error);
-      }
-    );
-
-    // fancy light
-    this.pointLight = new THREE.PointLight(0xffffff, 1, 50);
-    this.pointLight.position.set(0.5, 3, 2);
-    this.scene.add(this.pointLight);
-
-    // View Stuff
-    // start time for FPS limit
-    this.then = performance.now();
-    this.fpsInterval = 1000 / 60;
-
-    // Check if webcam feed already exists
-    this.webcamFromArjs = document.getElementById('arjs-video');
-
-    // Wait for AR.js to set up webcam feed before rendering view
-    // if (!this.webcamFromArjs) {
-    //   // await this.webcam_loaded;
-    //   console.log('awaiting arjs video');
-    // }
-
-    this.renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: true
-    });
-
-    this.renderer.setClearColor(new THREE.Color('lightgrey'), 0);
-    this.renderer.setSize(640, 480);
-    this.renderer.domElement.style.position = 'absolute';
-    this.renderer.domElement.style.top = '0px';
-    this.renderer.domElement.style.left = '0px';
-
-    this.node.appendChild(this.renderer.domElement);
-
-    // // Create new webcam element
-    // this.existingWebcam = document.getElementById('arjs-video');
-    // this.newWebcam = this.existingWebcam.cloneNode(true);
-    // this.newWebcam.srcObject = this.existingWebcam.srcObject;
-    // this.newWebcam.id = 'webcamViewNew';
-    // this.newWebcam.style.display = '';
-    // this.node.appendChild(this.newWebcam);
-
-    this.setUpVideo();
+    this.initialize();
     this.animate();
   }
 
-  readonly clock: THREE.Clock;
-  readonly scene: THREE.Scene;
-  readonly ambientLight: THREE.AmbientLight;
-  readonly camera: THREE.Camera;
+  clock: THREE.Clock;
+  scene: THREE.Scene;
+  ambientLight: THREE.AmbientLight;
+  camera: THREE.Camera;
   arToolkitSource: any;
   arToolkitContext: any;
   markerControls: any;
-  readonly markerRootArray: THREE.Group[];
-  readonly markerGroupArray: THREE.Group[];
-  readonly patternArray: string[];
-  readonly rotationArray: THREE.Vector3[];
+  markerRootArray: THREE.Group[];
+  markerGroupArray: THREE.Group[];
+  patternArray: string[];
+  rotationArray: THREE.Vector3[];
   markerRoot: THREE.Group;
   markerGroup: THREE.Group;
-  readonly sceneGroup: THREE.Group;
-  readonly pointLight: THREE.PointLight;
-  readonly loader: THREE.TextureLoader;
-  readonly stageMesh: THREE.MeshBasicMaterial;
-  readonly stage: THREE.Mesh;
-  readonly edgeGroup: THREE.Group;
-  readonly edgeGeometry: THREE.CylinderGeometry;
-  readonly edgeCenters: THREE.Vector3[];
-  readonly edgeRotations: THREE.Vector3[];
+  sceneGroup: THREE.Group;
+  pointLight: THREE.PointLight;
+  loader: THREE.TextureLoader;
+  stageMesh: THREE.MeshBasicMaterial;
+  stage: THREE.Mesh;
+  edgeGroup: THREE.Group;
+  edgeGeometry: THREE.CylinderGeometry;
+  edgeCenters: THREE.Vector3[];
+  edgeRotations: THREE.Vector3[];
   gltfLoader: GLTFLoader;
   gltfModel: any;
   okToLoadModel: boolean;
@@ -334,44 +65,260 @@ class APODWidget extends Widget {
   resolve: any;
   webcamFromArjs: HTMLElement | null;
 
-  animate() {
-    this.animationRequestId = window.requestAnimationFrame(
-      this.animate.bind(this)
-    );
+  initialize() {
+    this.scene = new THREE.Scene();
 
-    this.mixerUpdateDelta = this.clock.getDelta();
+    // promise to track if AR.js has loaded the webcam
+    this.webcam_loaded = new Promise(resolve => {
+      this.resolve = resolve;
+    });
 
-    this.now = performance.now();
+    window.addEventListener('arjs-video-loaded', e => {
+      this.resolve();
+    });
 
-    // time elapsed since last frame
-    // TODO: I think I can use getDelta from the three clock here maybe?
-    this.elapsed = this.now - this.then;
+    const ambientLight = new THREE.AmbientLight(0xcccccc, 0.5);
+    this.scene.add(ambientLight);
 
-    // if enough time has passed to render the next frame
-    if (this.elapsed > this.fpsInterval) {
-      this.then = this.now - (this.elapsed % this.fpsInterval);
+    this.camera = new THREE.Camera();
+    this.scene.add(this.camera);
 
-      this.update();
-      // this.mixer.update(this.mixerUpdateDelta);
+    this.renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true
+    });
+    this.renderer.setClearColor(new THREE.Color('lightgrey'), 0);
+    this.renderer.setSize(640, 480);
+    this.renderer.domElement.style.position = 'absolute';
+    this.renderer.domElement.style.top = '0px';
+    this.renderer.domElement.style.left = '0px';
+    this.node.appendChild(this.renderer.domElement);
 
-      this.renderer.render(this.scene, this.camera);
-    }
-  }
+    this.clock = new THREE.Clock();
+    const deltaTime = 0;
+    const totalTime = 0;
 
-  update() {
-    // update artoolkit on every frame
-    if (this.arToolkitSource.ready !== false) {
-      this.arToolkitContext.update(this.arToolkitSource.domElement);
-    }
+    ////////////////////////////////////////////////////////////
+    // setup arToolkitSource
+    ////////////////////////////////////////////////////////////
+
+    this.arToolkitSource = new THREEx.ArToolkitSource({
+      sourceType: 'webcam'
+    });
+
+    this.arToolkitSource.init();
+
+    ////////////////////////////////////////////////////////////
+    // setup arToolkitContext
+    ////////////////////////////////////////////////////////////
+
+    // create atToolkitContext
+    this.arToolkitContext = new THREEx.ArToolkitContext({
+      cameraParametersUrl:
+        THREEx.ArToolkitContext.baseURL + '../data/data/camera_para.dat',
+      detectionMode: 'mono'
+    });
+
+    // copy projection matrix to camera when initialization complete
+    this.arToolkitContext.init(() => {
+      this.camera.projectionMatrix.copy(
+        this.arToolkitContext.getProjectionMatrix()
+      );
+    });
+
+    ////////////////////////////////////////////////////////////
+    // setup markerRoots
+    ////////////////////////////////////////////////////////////
+
+    this.markerRootArray = [];
+    this.markerGroupArray = [];
+    this.patternArray = [
+      'letterA',
+      'letterB',
+      'letterC',
+      'letterD',
+      'letterF',
+      'kanji'
+    ];
+
+    const rotationArray = [
+      new THREE.Vector3(-Math.PI / 2, 0, 0),
+      new THREE.Vector3(0, -Math.PI / 2, Math.PI / 2),
+      new THREE.Vector3(Math.PI / 2, 0, Math.PI),
+      new THREE.Vector3(-Math.PI / 2, Math.PI / 2, 0),
+      new THREE.Vector3(Math.PI, 0, 0),
+      new THREE.Vector3(0, 0, 0)
+    ];
 
     for (let i = 0; i < 6; i++) {
-      if (this.markerRootArray[i].visible) {
-        this.markerGroupArray[i].add(this.sceneGroup);
-        // console.log("visible: " + this.model.patternArray[i]);
-        break;
-      }
+      const markerRoot = new THREE.Group();
+      this.markerRootArray.push(markerRoot);
+      this.scene.add(markerRoot);
+      const markerControls = new THREEx.ArMarkerControls(
+        this.arToolkitContext,
+        markerRoot,
+        {
+          type: 'pattern',
+          patternUrl:
+            THREEx.ArToolkitContext.baseURL +
+            'examples/marker-training/examples/pattern-files/pattern-' +
+            this.patternArray[i] +
+            '.patt'
+        }
+      );
+
+      let markerGroup = new THREE.Group();
+      this.markerGroupArray.push(markerGroup);
+      markerGroup.position.y = -1.25 / 2;
+      markerGroup.rotation.setFromVector3(rotationArray[i]);
+
+      markerRoot.add(markerGroup);
     }
+
+    ////////////////////////////////////////////////////////////
+    // setup scene
+    ////////////////////////////////////////////////////////////
+
+    this.sceneGroup = new THREE.Group();
+    // a 1x1x1 cube model with scale factor 1.25 fills up the physical cube
+    this.sceneGroup.scale.set(1.25 / 2, 1.25 / 2, 1.25 / 2);
+
+    let loader = new THREE.TextureLoader();
+
+    /*
+	// a simple cube
+	let materialArray = [
+		new THREE.MeshBasicMaterial( { map: loader.load("images/xpos.png") } ),
+		new THREE.MeshBasicMaterial( { map: loader.load("images/xneg.png") } ),
+		new THREE.MeshBasicMaterial( { map: loader.load("images/ypos.png") } ),
+		new THREE.MeshBasicMaterial( { map: loader.load("images/yneg.png") } ),
+		new THREE.MeshBasicMaterial( { map: loader.load("images/zpos.png") } ),
+		new THREE.MeshBasicMaterial( { map: loader.load("images/zneg.png") } ),
+	];
+	let mesh = new THREE.Mesh( new THREE.CubeGeometry(1,1,1), materialArray );
+	sceneGroup.add( mesh );
+	*/
+
+    // let tileTexture = loader.load('images/tiles.jpg');
+
+    // reversed cube
+    this.sceneGroup.add(
+      new THREE.Mesh(
+        new THREE.BoxGeometry(2, 2, 2),
+        new THREE.MeshBasicMaterial({
+          // map: tileTexture,
+          color: '#1a1b26',
+          side: THREE.BackSide
+        })
+      )
+    );
+
+    // cube vertices
+
+    let sphereGeometry = new THREE.SphereGeometry(0.2, 6, 6);
+
+    let sphereCenters = [
+      new THREE.Vector3(-1, -1, -1),
+      new THREE.Vector3(-1, -1, 1),
+      new THREE.Vector3(-1, 1, -1),
+      new THREE.Vector3(-1, 1, 1),
+      new THREE.Vector3(1, -1, -1),
+      new THREE.Vector3(1, -1, 1),
+      new THREE.Vector3(1, 1, -1),
+      new THREE.Vector3(1, 1, 1)
+    ];
+
+    let sphereColors = [
+      0x444444, 0x0000ff, 0x00ff00, 0x00ffff, 0xff0000, 0xff00ff, 0xffff00,
+      0xffffff
+    ];
+
+    for (let i = 0; i < 8; i++) {
+      let sphereMesh = new THREE.Mesh(
+        sphereGeometry,
+        new THREE.MeshLambertMaterial({
+          // map: tileTexture,
+
+          color: sphereColors[i]
+        })
+      );
+      sphereMesh.position.copy(sphereCenters[i]);
+      this.sceneGroup.add(sphereMesh);
+    }
+
+    // cube edges
+
+    let edgeGeometry = new THREE.CylinderGeometry(0.05, 0.05, 2, 32);
+
+    let edgeCenters = [
+      new THREE.Vector3(0, -1, -1),
+      new THREE.Vector3(0, 1, -1),
+      new THREE.Vector3(0, -1, 1),
+      new THREE.Vector3(0, 1, 1),
+      new THREE.Vector3(-1, 0, -1),
+      new THREE.Vector3(1, 0, -1),
+      new THREE.Vector3(-1, 0, 1),
+      new THREE.Vector3(1, 0, 1),
+      new THREE.Vector3(-1, -1, 0),
+      new THREE.Vector3(1, -1, 0),
+      new THREE.Vector3(-1, 1, 0),
+      new THREE.Vector3(1, 1, 0)
+    ];
+
+    let edgeRotations = [
+      new THREE.Vector3(0, 0, Math.PI / 2),
+      new THREE.Vector3(0, 0, Math.PI / 2),
+      new THREE.Vector3(0, 0, Math.PI / 2),
+      new THREE.Vector3(0, 0, Math.PI / 2),
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(Math.PI / 2, 0, 0),
+      new THREE.Vector3(Math.PI / 2, 0, 0),
+      new THREE.Vector3(Math.PI / 2, 0, 0),
+      new THREE.Vector3(Math.PI / 2, 0, 0)
+    ];
+
+    let edgeColors = [
+      0x880000, 0x880000, 0x880000, 0x880000, 0x008800, 0x008800, 0x008800,
+      0x008800, 0x000088, 0x000088, 0x000088, 0x000088
+    ];
+
+    for (let i = 0; i < 12; i++) {
+      let edge = new THREE.Mesh(
+        edgeGeometry,
+        new THREE.MeshLambertMaterial({
+          // map: tileTexture,
+          color: edgeColors[i]
+        })
+      );
+      edge.position.copy(edgeCenters[i]);
+      edge.rotation.setFromVector3(edgeRotations[i]);
+
+      this.sceneGroup.add(edge);
+    }
+
+    this.sceneGroup.add(
+      new THREE.Mesh(
+        new THREE.TorusKnotGeometry(0.5, 0.1),
+        new THREE.MeshNormalMaterial()
+      )
+    );
+
+    let pointLight = new THREE.PointLight(0xffffff, 1, 50);
+    pointLight.position.set(0.5, 3, 2);
+    this.scene.add(pointLight);
+    this.setUpVideo();
   }
+
+  render() {
+    this.renderer.render(this.scene, this.camera);
+  }
+
+  animate() {}
+
+  update() {}
 
   async setUpVideo() {
     await this.webcam_loaded;
