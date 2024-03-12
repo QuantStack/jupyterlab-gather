@@ -47,7 +47,7 @@ class APODWidget extends Widget {
   edgeCenters: THREE.Vector3[];
   edgeRotations: THREE.Vector3[];
   gltfLoader: GLTFLoader;
-  gltfModel: any;
+  gltfModel: THREE.Group;
   okToLoadModel: boolean;
   animations: THREE.AnimationClip[] | undefined;
   mixer: any;
@@ -60,10 +60,12 @@ class APODWidget extends Widget {
   readonly fpsInterval: number;
   // observer: IntersectionObserver;
   existingWebcam: any;
-  newWebcam: any;
-  webcam_loaded: any;
+  newWebcam: HTMLVideoElement;
+  webcam_loaded: Promise<void>;
   resolve: any;
   webcamFromArjs: HTMLElement | null;
+  deltaTime: number;
+  totalTime: number;
 
   initialize() {
     this.scene = new THREE.Scene();
@@ -73,7 +75,8 @@ class APODWidget extends Widget {
       this.resolve = resolve;
     });
 
-    window.addEventListener('arjs-video-loaded', e => {
+    window.addEventListener('arjs-video-loaded', (e: any) => {
+      e.detail.component.style.display = 'none';
       this.resolve();
     });
 
@@ -95,8 +98,8 @@ class APODWidget extends Widget {
     this.node.appendChild(this.renderer.domElement);
 
     this.clock = new THREE.Clock();
-    const deltaTime = 0;
-    const totalTime = 0;
+    this.deltaTime = 0;
+    this.totalTime = 0;
 
     ////////////////////////////////////////////////////////////
     // setup arToolkitSource
@@ -167,7 +170,7 @@ class APODWidget extends Widget {
         }
       );
 
-      let markerGroup = new THREE.Group();
+      const markerGroup = new THREE.Group();
       this.markerGroupArray.push(markerGroup);
       markerGroup.position.y = -1.25 / 2;
       markerGroup.rotation.setFromVector3(rotationArray[i]);
@@ -183,7 +186,7 @@ class APODWidget extends Widget {
     // a 1x1x1 cube model with scale factor 1.25 fills up the physical cube
     this.sceneGroup.scale.set(1.25 / 2, 1.25 / 2, 1.25 / 2);
 
-    let loader = new THREE.TextureLoader();
+    const loader = new THREE.TextureLoader();
 
     /*
 	// a simple cube
@@ -215,9 +218,9 @@ class APODWidget extends Widget {
 
     // cube vertices
 
-    let sphereGeometry = new THREE.SphereGeometry(0.2, 6, 6);
+    const sphereGeometry = new THREE.SphereGeometry(0.2, 6, 6);
 
-    let sphereCenters = [
+    const sphereCenters = [
       new THREE.Vector3(-1, -1, -1),
       new THREE.Vector3(-1, -1, 1),
       new THREE.Vector3(-1, 1, -1),
@@ -228,13 +231,13 @@ class APODWidget extends Widget {
       new THREE.Vector3(1, 1, 1)
     ];
 
-    let sphereColors = [
+    const sphereColors = [
       0x444444, 0x0000ff, 0x00ff00, 0x00ffff, 0xff0000, 0xff00ff, 0xffff00,
       0xffffff
     ];
 
     for (let i = 0; i < 8; i++) {
-      let sphereMesh = new THREE.Mesh(
+      const sphereMesh = new THREE.Mesh(
         sphereGeometry,
         new THREE.MeshLambertMaterial({
           // map: tileTexture,
@@ -248,9 +251,9 @@ class APODWidget extends Widget {
 
     // cube edges
 
-    let edgeGeometry = new THREE.CylinderGeometry(0.05, 0.05, 2, 32);
+    const edgeGeometry = new THREE.CylinderGeometry(0.05, 0.05, 2, 32);
 
-    let edgeCenters = [
+    const edgeCenters = [
       new THREE.Vector3(0, -1, -1),
       new THREE.Vector3(0, 1, -1),
       new THREE.Vector3(0, -1, 1),
@@ -265,7 +268,7 @@ class APODWidget extends Widget {
       new THREE.Vector3(1, 1, 0)
     ];
 
-    let edgeRotations = [
+    const edgeRotations = [
       new THREE.Vector3(0, 0, Math.PI / 2),
       new THREE.Vector3(0, 0, Math.PI / 2),
       new THREE.Vector3(0, 0, Math.PI / 2),
@@ -280,13 +283,13 @@ class APODWidget extends Widget {
       new THREE.Vector3(Math.PI / 2, 0, 0)
     ];
 
-    let edgeColors = [
+    const edgeColors = [
       0x880000, 0x880000, 0x880000, 0x880000, 0x008800, 0x008800, 0x008800,
       0x008800, 0x000088, 0x000088, 0x000088, 0x000088
     ];
 
     for (let i = 0; i < 12; i++) {
-      let edge = new THREE.Mesh(
+      const edge = new THREE.Mesh(
         edgeGeometry,
         new THREE.MeshLambertMaterial({
           // map: tileTexture,
@@ -306,7 +309,7 @@ class APODWidget extends Widget {
       )
     );
 
-    let pointLight = new THREE.PointLight(0xffffff, 1, 50);
+    const pointLight = new THREE.PointLight(0xffffff, 1, 50);
     pointLight.position.set(0.5, 3, 2);
     this.scene.add(pointLight);
     this.setUpVideo();
@@ -316,9 +319,27 @@ class APODWidget extends Widget {
     this.renderer.render(this.scene, this.camera);
   }
 
-  animate() {}
+  animate() {
+    requestAnimationFrame(this.animate.bind(this));
+    this.deltaTime = this.clock.getDelta();
+    this.totalTime += this.deltaTime;
+    this.update();
+    this.render();
+  }
 
-  update() {}
+  update() {
+    // update artoolkit on every frame
+    if (this.arToolkitSource.ready !== false) {
+      this.arToolkitContext.update(this.arToolkitSource.domElement);
+    }
+    for (let i = 0; i < 6; i++) {
+      if (this.markerRootArray[i].visible) {
+        this.markerGroupArray[i].add(this.sceneGroup);
+        console.log('visible: ' + this.patternArray[i]);
+        break;
+      }
+    }
+  }
 
   async setUpVideo() {
     await this.webcam_loaded;
