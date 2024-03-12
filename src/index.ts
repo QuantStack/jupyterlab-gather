@@ -3,11 +3,7 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-import {
-  ICommandPalette,
-  MainAreaWidget,
-  WidgetTracker
-} from '@jupyterlab/apputils';
+import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
 import * as THREE from 'three';
 
 //@ts-expect-error AR.js doesn't have type definitions
@@ -141,10 +137,10 @@ class APODWidget extends Widget {
     console.log('Build Stage');
     this.loader = new THREE.TextureLoader();
 
-    // remove old model first
-    if (this.stage) {
-      this.removeFromScene(this.stage);
-    }
+    // TODO: remove old model first
+    // if (this.stage) {
+    //   this.removeFromScene(this.stage);
+    // }
 
     // reversed cube
     this.stageMesh = new THREE.MeshBasicMaterial({
@@ -193,7 +189,7 @@ class APODWidget extends Widget {
     ];
 
     for (let i = 0; i < 12; i++) {
-      let edge = new THREE.Mesh(
+      const edge = new THREE.Mesh(
         this.edgeGeometry,
         new THREE.MeshLambertMaterial({
           color: 0x262626
@@ -210,9 +206,10 @@ class APODWidget extends Widget {
 
     // Load model
     console.log('Load model');
-    if (!this.gltfLoader) {
-      this.gltfLoader = new GLTFLoader();
-    }
+    //TODO: Fix this
+    this.gltfLoader = new GLTFLoader();
+    // if (!this.gltfLoader) {
+    // }
 
     // remove old model first
     if (this.gltfModel) {
@@ -222,18 +219,18 @@ class APODWidget extends Widget {
 
     // load model
     this.gltfLoader.load(
-      this.get('model_url'),
+      'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf',
       gltf => {
-        let scale = this.get('scale');
+        const scale = 1.0;
         this.gltfModel = gltf.scene;
         this.gltfModel.scale.set(scale, scale, scale);
-        this.gltfModel.position.fromArray(this.get('position'));
+        this.gltfModel.position.fromArray([0, 0, 0]);
 
         console.log('gltf', gltf);
 
         console.log('this.gltfModel', this.gltfModel);
         this.animations = gltf.animations;
-        this.mixer = new THREE.AnimationMixer(this.gltfModel);
+        // this.mixer = new THREE.AnimationMixer(this.gltfModel);
 
         if (this.animations) {
           this.animations.forEach(clip => {
@@ -259,14 +256,15 @@ class APODWidget extends Widget {
     // View Stuff
     // start time for FPS limit
     this.then = performance.now();
-    this.fpsInterval = 1000 / this.model.get('fps_limit');
+    this.fpsInterval = 1000 / 60;
 
     // Check if webcam feed already exists
     this.webcamFromArjs = document.getElementById('arjs-video');
 
     // Wait for AR.js to set up webcam feed before rendering view
     if (!this.webcamFromArjs) {
-      await this.model.webcam_loaded;
+      // await this.webcam_loaded;
+      console.log('awaiting arjs video');
     }
 
     this.renderer = new THREE.WebGLRenderer({
@@ -275,7 +273,7 @@ class APODWidget extends Widget {
     });
 
     this.renderer.setClearColor(new THREE.Color('lightgrey'), 0);
-    this.renderer.setSize(this.model.get('width'), this.model.get('height'));
+    this.renderer.setSize(640, 480);
     this.renderer.domElement.style.position = 'absolute';
     this.renderer.domElement.style.top = '0px';
     this.renderer.domElement.style.left = '0px';
@@ -322,13 +320,14 @@ class APODWidget extends Widget {
   newWebcam: any;
   webcam_loaded: any;
   resolve: any;
+  webcamFromArjs: HTMLElement | null;
 
   animate() {
     this.animationRequestId = window.requestAnimationFrame(
       this.animate.bind(this)
     );
 
-    this.mixerUpdateDelta = this.model.clock.getDelta();
+    this.mixerUpdateDelta = this.clock.getDelta();
 
     this.now = performance.now();
 
@@ -341,20 +340,21 @@ class APODWidget extends Widget {
       this.then = this.now - (this.elapsed % this.fpsInterval);
 
       this.update();
-      this.model.mixer.update(this.mixerUpdateDelta);
+      // this.mixer.update(this.mixerUpdateDelta);
 
-      this.renderer.render(this.model.scene, this.model.camera);
+      this.renderer.render(this.scene, this.camera);
     }
   }
 
   update() {
     // update artoolkit on every frame
-    if (this.model.arToolkitSource.ready !== false)
-      this.model.arToolkitContext.update(this.model.arToolkitSource.domElement);
+    if (this.arToolkitSource.ready !== false) {
+      this.arToolkitContext.update(this.arToolkitSource.domElement);
+    }
 
     for (let i = 0; i < 6; i++) {
-      if (this.model.markerRootArray[i].visible) {
-        this.model.markerGroupArray[i].add(this.model.sceneGroup);
+      if (this.markerRootArray[i].visible) {
+        this.markerGroupArray[i].add(this.sceneGroup);
         // console.log("visible: " + this.model.patternArray[i]);
         break;
       }
@@ -382,22 +382,22 @@ function activate(
 ) {
   console.log('JupyterLab extension jupyterlab_apod is activated!');
 
-  if (settingRegistry) {
-    settingRegistry
-      .load(plugin.id)
-      .then(settings => {
-        console.log(
-          'jupyterlab_arpresent settings loaded:',
-          settings.composite
-        );
-      })
-      .catch(reason => {
-        console.error(
-          'Failed to load settings for jupyterlab_arpresent.',
-          reason
-        );
-      });
-  }
+  // if (settingRegistry) {
+  //   settingRegistry
+  //     .load(plugin.id)
+  //     .then(settings => {
+  //       console.log(
+  //         'jupyterlab_arpresent settings loaded:',
+  //         settings.composite
+  //       );
+  //     })
+  //     .catch(reason => {
+  //       console.error(
+  //         'Failed to load settings for jupyterlab_arpresent.',
+  //         reason
+  //       );
+  //     });
+  // }
 
   // requestAPI<any>('get-example')
   //   .then(data => {
@@ -423,16 +423,16 @@ function activate(
         widget.title.label = 'Astronomy Picture';
         widget.title.closable = true;
       }
-      if (!tracker.has(widget)) {
-        // Track the state of the widget for later restoration
-        tracker.add(widget);
-      }
+      // if (!tracker.has(widget)) {
+      //   // Track the state of the widget for later restoration
+      //   tracker.add(widget);
+      // }
       if (!widget.isAttached) {
         // Attach the widget to the main work area if it's not there
         app.shell.add(widget, 'main');
       }
       // Refresh the picture in the widget
-      widget.content.updateAPODImage();
+      // widget.content.updateAPODImage();
       // Activate the widget
       app.shell.activateById(widget.id);
     }
@@ -442,15 +442,15 @@ function activate(
   palette.addItem({ command, category: 'Tutorial' });
 
   // Track and restore the widget state
-  const tracker = new WidgetTracker<MainAreaWidget<APODWidget>>({
-    namespace: 'apod'
-  });
-  if (restorer) {
-    restorer.restore(tracker, {
-      command,
-      name: () => 'apod'
-    });
-  }
+  // const tracker = new WidgetTracker<MainAreaWidget<APODWidget>>({
+  //   namespace: 'apod'
+  // });
+  // if (restorer) {
+  //   restorer.restore(tracker, {
+  //     command,
+  //     name: () => 'apod'
+  //   });
+  // }
 }
 
 /**
