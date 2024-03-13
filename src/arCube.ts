@@ -260,7 +260,7 @@ class ArCube {
 
     // load model
     this.gltfLoader.load(
-      'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf',
+      'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf',
       gltf => {
         const scale = 1.0;
         this.gltfModel = gltf.scene;
