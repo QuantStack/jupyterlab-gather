@@ -1,28 +1,32 @@
 import {
+  HMSPeer,
   HMSReactiveStore,
   selectIsConnectedToRoom,
   selectIsLocalAudioEnabled,
   selectIsLocalVideoEnabled,
   selectPeers
 } from '@100mslive/hms-video-store';
+import { IHMSActions } from '@100mslive/hms-video-store/dist/IHMSActions';
+import { IHMSStoreReadOnly } from '@100mslive/hms-video-store/dist/IHMSStore';
 
 class VideoPresentation {
   constructor(node: HTMLElement) {
     this.node = node;
+
     // Initialize HMS Store
     this.hmsManager = new HMSReactiveStore();
     this.hmsManager.triggerOnSubscribe();
     this.hmsStore = this.hmsManager.getStore();
-    this.hmsActions = this.hmsManager.getHMSActions();
+    this.hmsActions = this.hmsManager.getActions();
 
     this.buildHtml(node);
     // this.initialize();
   }
 
   node: HTMLElement;
-  hmsManager: any;
-  hmsStore: any;
-  hmsActions: any;
+  hmsManager: HMSReactiveStore;
+  hmsStore: IHMSStoreReadOnly;
+  hmsActions: IHMSActions;
   form: any;
   joinBtn: any;
   conference: any;
@@ -35,6 +39,7 @@ class VideoPresentation {
   initialize() {
     // Joining the room
     this.joinBtn.onclick = async () => {
+      console.log('Clicking join');
       const userName = (this.node.querySelector('#name') as HTMLInputElement)
         .value;
       const roomCode = (
@@ -56,7 +61,7 @@ class VideoPresentation {
     this.leaveBtn.onclick = this.leaveRoom;
 
     // Reactive state - renderPeers is called whenever there is a change in the peer-list
-    this.hmsStore.subscribe(this.renderPeers, selectPeers);
+    this.hmsStore.subscribe(this.renderPeers.bind(this), selectPeers);
 
     // Mute and unmute audio
     this.muteAudio.onclick = () => {
@@ -67,6 +72,7 @@ class VideoPresentation {
 
     // Mute and unmute video
     this.muteVideo.onclick = () => {
+      console.log('Clicking mute');
       const videoEnabled = !this.hmsStore.getState(selectIsLocalVideoEnabled);
       this.hmsActions.setLocalVideoEnabled(videoEnabled);
       this.muteVideo.textContent = videoEnabled ? 'Hide' : 'Unhide';
@@ -75,10 +81,15 @@ class VideoPresentation {
     };
 
     // Listen to the connection state
-    this.hmsStore.subscribe(this.onConnection, selectIsConnectedToRoom);
+    console.log('subscribeing');
+    this.hmsStore.subscribe(
+      this.onConnection.bind(this),
+      selectIsConnectedToRoom
+    );
   }
 
   async leaveRoom() {
+    console.log('leaving room');
     await this.hmsActions.leave();
     this.peersContainer.innerHTML = '';
   }
@@ -91,7 +102,7 @@ class VideoPresentation {
   }
 
   // Render a single peer
-  renderPeer(peer: { name: any; videoTrack: any }) {
+  renderPeer(peer: HMSPeer) {
     const peerTileDiv = this.createElementWithClass('div', 'peer-tile');
     const videoElement = this.createElementWithClass('video', 'peer-video');
     const peerTileName = this.createElementWithClass('span', 'peer-name');
@@ -99,7 +110,8 @@ class VideoPresentation {
     videoElement.muted = true;
     videoElement.playsinline = true;
     peerTileName.textContent = peer.name;
-    this.hmsActions.attachVideo(peer.videoTrack, videoElement);
+    //TODO: Fix TS
+    this.hmsActions.attachVideo(peer.videoTrack!, videoElement);
     peerTileDiv.append(videoElement);
     peerTileDiv.append(peerTileName);
     return peerTileDiv;
@@ -107,10 +119,12 @@ class VideoPresentation {
 
   // Display a tile for each peer in the peer list
   renderPeers() {
+    console.log('rendering peers');
     this.peersContainer.innerHTML = '';
     const peers = this.hmsStore.getState(selectPeers);
+    console.log('peers', peers);
 
-    peers.forEach((peer: { name: any; videoTrack: any }) => {
+    peers.forEach(peer => {
       if (peer.videoTrack) {
         this.peersContainer.append(this.renderPeer(peer));
       }
@@ -118,7 +132,13 @@ class VideoPresentation {
   }
 
   // Showing the required elements on connection/disconnection
-  onConnection(isConnected: any) {
+  onConnection(isConnected: any, prevConnectd: any) {
+    console.log(
+      'speaker changed from - ',
+      prevConnectd,
+      ', to - ',
+      isConnected
+    );
     if (isConnected) {
       this.form.classList.add('hide');
       this.conference.classList.remove('hide');
@@ -258,11 +278,8 @@ class VideoPresentation {
       this.muteAudio = document.getElementById('mute-aud');
       this.muteVideo = document.getElementById('mute-vid');
       this.controls = document.getElementById('controls');
-      console.log('this.joinBtn2', this.joinBtn);
       this.initialize();
     }, 2000);
-
-    console.log('this.joinBtn', this.joinBtn);
   }
 }
 
