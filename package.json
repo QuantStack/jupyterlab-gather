@@ -58,6 +58,7 @@
     },
     "dependencies": {
         "@100mslive/hms-video-store": "^0.12.1",
+        "@ar-js-org/ar.js": "^3.4.5",
         "@jupyterlab/application": "^4.1.4",
         "@jupyterlab/apputils": "^4.2.4",
         "@jupyterlab/coreutils": "^6.0.0",

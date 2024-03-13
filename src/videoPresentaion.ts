@@ -19,6 +19,8 @@ class VideoPresentation {
     this.hmsStore = this.hmsManager.getStore();
     this.hmsActions = this.hmsManager.getActions();
 
+    this.peerCount = 0;
+
     this.buildHtml(node);
     // this.initialize();
   }
@@ -35,6 +37,7 @@ class VideoPresentation {
   muteAudio: any;
   muteVideo: any;
   controls: any;
+  peerCount: number;
 
   initialize() {
     // Joining the room
@@ -103,17 +106,22 @@ class VideoPresentation {
 
   // Render a single peer
   renderPeer(peer: HMSPeer) {
+    this.peerCount++;
     const peerTileDiv = this.createElementWithClass('div', 'peer-tile');
     const videoElement = this.createElementWithClass('video', 'peer-video');
     const peerTileName = this.createElementWithClass('span', 'peer-name');
+    const peerCanvas = this.createElementWithClass('canvas', 'peer-canvas');
+    peerCanvas.id = 'target';
     videoElement.autoplay = true;
     videoElement.muted = true;
     videoElement.playsinline = true;
+    videoElement.id = `peer-video-${this.peerCount}`;
     peerTileName.textContent = peer.name;
     //TODO: Fix TS
     this.hmsActions.attachVideo(peer.videoTrack!, videoElement);
     peerTileDiv.append(videoElement);
     peerTileDiv.append(peerTileName);
+    peerTileDiv.append(peerCanvas);
     return peerTileDiv;
   }
 

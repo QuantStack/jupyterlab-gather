@@ -85,16 +85,20 @@ class ArCube {
     this.camera = new THREE.Camera();
     this.scene.add(this.camera);
 
+    const canvas = document.getElementById('target');
+    console.log('vid', canvas);
+
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
-      alpha: true
+      alpha: true,
+      canvas: canvas!
     });
     this.renderer.setClearColor(new THREE.Color('lightgrey'), 0);
-    this.renderer.setSize(640, 480);
-    this.renderer.domElement.style.position = 'absolute';
+    // this.renderer.setSize(640, 480);
+    // this.renderer.domElement.style.position = 'absolute';
     this.renderer.domElement.style.top = '0px';
     this.renderer.domElement.style.left = '0px';
-    this.node.appendChild(this.renderer.domElement);
+    // this.node.appendChild(this.renderer.domElement);
 
     this.clock = new THREE.Clock();
     this.deltaTime = 0;
@@ -286,7 +290,7 @@ class ArCube {
     pointLight.position.set(0.5, 3, 2);
     this.scene.add(pointLight);
 
-    this.setUpVideo();
+    // this.setUpVideo();
   }
 
   render() {
@@ -322,6 +326,12 @@ class ArCube {
       }
     }
   }
+
+  // attachToVideo() {
+  //   const vid = document.getElementById('target');
+  //   console.log('vid', vid);
+  //   vid!.appendChild(this.renderer.domElement);
+  // }
 
   // TODO: Casting is ok?
   async setUpVideo() {

@@ -113,6 +113,18 @@ form h2,
   border-radius: 40%;
   object-fit: cover;
   margin-bottom: 10px;
+  position: absolute;
+  z-index: 0;
+}
+
+.peer-canvas {
+  height: 250px;
+  width: 250px;
+  border-radius: 40%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  position: absolute;
+  z-index: 2;
 }
 
 .local.peer-video {
@@ -126,6 +138,7 @@ form h2,
 
 .peer-tile {
   padding: 10px;
+  position: relative;
 }
 
 .control-bar {

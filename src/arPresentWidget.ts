@@ -3,6 +3,7 @@ import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
 
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { Widget } from '@lumino/widgets';
+import ArCube from './arCube';
 import VideoPresentation from './videoPresentaion';
 
 class ArPresentWidget extends Widget {
@@ -27,8 +28,8 @@ export default function activate(
   let widget: MainAreaWidget<ArPresentWidget>;
 
   // Add an application command
-  const command: string = 'arpresent:open';
-  app.commands.addCommand(command, {
+  const arPresentCommand: string = 'arpresent:open';
+  app.commands.addCommand(arPresentCommand, {
     label: 'AR Presentation',
     execute: () => {
       // Regenerate the widget if disposed
@@ -55,8 +56,19 @@ export default function activate(
     }
   });
 
+  const arStartCommand: string = 'arpresent:start';
+  app.commands.addCommand(arStartCommand, {
+    label: 'Start AR',
+    execute: () => {
+      const arCube = new ArCube(widget.node);
+      arCube.animate();
+      // arCube.attachToVideo();
+    }
+  });
+
   // Add the command to the palette.
-  palette.addItem({ command, category: 'Tutorial' });
+  palette.addItem({ command: arPresentCommand, category: 'Tutorial' });
+  palette.addItem({ command: arStartCommand, category: 'Tutorial' });
 
   // Track and restore the widget state
   // const tracker = new WidgetTracker<MainAreaWidget<ArPresent>>({
