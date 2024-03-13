@@ -57,12 +57,14 @@
         "watch:labextension": "jupyter labextension watch ."
     },
     "dependencies": {
+        "@100mslive/hms-video-store": "^0.12.1",
         "@jupyterlab/application": "^4.1.4",
         "@jupyterlab/apputils": "^4.2.4",
         "@jupyterlab/coreutils": "^6.0.0",
         "@jupyterlab/services": "^7.0.0",
         "@jupyterlab/settingregistry": "^4.0.0",
-        "@lumino/widgets": "^2.3.1"
+        "@lumino/widgets": "^2.3.1",
+        "three": "^0.162.0"
     },
     "devDependencies": {
         "@jupyterlab/builder": "^4.0.0",
@@ -71,6 +73,8 @@
         "@types/json-schema": "^7.0.11",
         "@types/react": "^18.0.26",
         "@types/react-addons-linked-state-mixin": "^0.14.22",
+        "@types/three": "^0.162.0",
+        "@types/ua-parser-js": "^0.7.39",
         "@typescript-eslint/eslint-plugin": "^6.1.0",
         "@typescript-eslint/parser": "^6.1.0",
         "css-loader": "^6.7.1",

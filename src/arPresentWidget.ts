@@ -3,15 +3,17 @@ import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
 
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { Widget } from '@lumino/widgets';
-import ArCube from './arCube';
+import VideoPresentation from './videoPresentaion';
 
 class ArPresentWidget extends Widget {
   constructor() {
     super();
-    this.arCube = new ArCube(this.node);
+    // this.arCube = new ArCube(this.node);
+    this.videoPresentation = new VideoPresentation(this.node);
   }
 
-  arCube: ArCube;
+  // arCube: ArCube;
+  videoPresentation: VideoPresentation;
 }
 
 export default function activate(
@@ -46,7 +48,8 @@ export default function activate(
         app.shell.add(widget, 'main');
       }
 
-      widget.content.arCube.animate();
+      // widget.content.arCube.animate();
+
       // Activate the widget
       app.shell.activateById(widget.id);
     }
