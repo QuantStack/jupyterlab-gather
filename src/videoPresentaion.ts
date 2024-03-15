@@ -4,10 +4,12 @@ import {
   selectIsConnectedToRoom,
   selectIsLocalAudioEnabled,
   selectIsLocalVideoEnabled,
+  selectIsLocalVideoPluginPresent,
   selectPeers
 } from '@100mslive/hms-video-store';
 import { IHMSActions } from '@100mslive/hms-video-store/dist/IHMSActions';
 import { IHMSStoreReadOnly } from '@100mslive/hms-video-store/dist/IHMSStore';
+import ArCubePlugin from './arCubePlugin';
 
 class VideoPresentation {
   constructor(node: HTMLElement) {
@@ -20,6 +22,7 @@ class VideoPresentation {
     this.hmsActions = this.hmsManager.getActions();
 
     this.peerCount = 0;
+    this.grayScalePlugin = new ArCubePlugin();
 
     this.buildHtml(node);
     // this.initialize();
@@ -34,10 +37,37 @@ class VideoPresentation {
   conference: any;
   peersContainer: any;
   leaveBtn: any;
+  grayScaleBtn: any;
   muteAudio: any;
   muteVideo: any;
   controls: any;
   peerCount: number;
+  grayScalePlugin: ArCubePlugin;
+
+  pluginButton(plugin: any, name: string) {
+    const isPluginLoaded = this.hmsStore.getState(
+      selectIsLocalVideoPluginPresent(plugin.getName())
+    );
+
+    const togglePluginState = async () => {
+      if (!isPluginLoaded) {
+        await this.hmsActions.addPluginToVideoTrack(plugin);
+      } else {
+        await this.hmsActions.removePluginFromVideoTrack(plugin);
+      }
+    };
+
+    // Create leave button element
+    const grayscaleButton = document.createElement('button');
+    grayscaleButton.id = 'grayscale-btn';
+    grayscaleButton.classList.add('btn-primary', 'hide');
+    grayscaleButton.textContent = `${isPluginLoaded ? 'Remove' : 'Add'} ${name}`;
+    grayscaleButton.onclick = togglePluginState;
+
+    console.log('grayscaleButton', grayscaleButton);
+
+    return grayscaleButton;
+  }
 
   initialize() {
     // Joining the room
@@ -60,8 +90,8 @@ class VideoPresentation {
     };
 
     // Cleanup if user refreshes the tab or navigates away
-    window.onunload = window.onbeforeunload = this.leaveRoom;
-    this.leaveBtn.onclick = this.leaveRoom;
+    window.onunload = window.onbeforeunload = this.leaveRoom.bind(this);
+    this.leaveBtn.onclick = this.leaveRoom.bind(this);
 
     // Reactive state - renderPeers is called whenever there is a change in the peer-list
     this.hmsStore.subscribe(this.renderPeers.bind(this), selectPeers);
@@ -151,11 +181,13 @@ class VideoPresentation {
       this.form.classList.add('hide');
       this.conference.classList.remove('hide');
       this.leaveBtn.classList.remove('hide');
+      this.grayScaleBtn.classList.remove('hide');
       this.controls.classList.remove('hide');
     } else {
       this.form.classList.remove('hide');
       this.conference.classList.add('hide');
       this.leaveBtn.classList.add('hide');
+      this.grayScaleBtn.classList.add('hide');
       this.controls.classList.add('hide');
     }
   }
@@ -166,14 +198,23 @@ class VideoPresentation {
     // Create header element
     const header = document.createElement('header');
 
-    // Create button element
-    const button = document.createElement('button');
-    button.id = 'leave-btn';
-    button.classList.add('btn-danger', 'hide');
-    button.textContent = 'Leave Room';
+    // Create leave button element
+    const leaveButton = document.createElement('button');
+    leaveButton.id = 'leave-btn';
+    leaveButton.classList.add('btn-danger', 'hide');
+    leaveButton.textContent = 'Leave Room';
+
+    // Create leave button element
+    const grayscaleButton = this.pluginButton(
+      this.grayScalePlugin,
+      'Grayscale'
+    );
+
+    console.log('grayscaleButton', grayscaleButton);
 
     // Append button to header
-    header.appendChild(button);
+    header.appendChild(leaveButton);
+    header.appendChild(grayscaleButton);
 
     // Append header to the body or any other parent element
     container.appendChild(header);
@@ -283,9 +324,12 @@ class VideoPresentation {
       this.conference = document.getElementById('conference');
       this.peersContainer = document.getElementById('peers-container');
       this.leaveBtn = document.getElementById('leave-btn');
+      this.grayScaleBtn = document.getElementById('grayscale-btn');
       this.muteAudio = document.getElementById('mute-aud');
       this.muteVideo = document.getElementById('mute-vid');
       this.controls = document.getElementById('controls');
+
+      console.log('this.grayScaleBtn', this.grayScaleBtn);
       this.initialize();
     }, 2000);
   }
