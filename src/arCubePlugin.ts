@@ -8,10 +8,10 @@ import {
 class ArCubePlugin implements HMSVideoPlugin {
   input: HTMLCanvasElement | null;
   output: HTMLCanvasElement | null;
-  outputCtx: CanvasRenderingContext2D | null;
+  //   outputCtx: CanvasRenderingContext2D | null;
 
   constructor() {
-    this.outputCtx = null;
+    // this.outputCtx = null;
     this.input = null;
     this.output = null;
   }
@@ -26,19 +26,23 @@ class ArCubePlugin implements HMSVideoPlugin {
       throw new Error('Plugin invalid input/output');
     }
 
+    console.log('output 1', output);
     this.input = input;
     this.output = output;
-    let imgData: any;
+    console.log('output 2', this.output);
+    // let imgData: any;
     // we don't want to change the dimensions so set the same width, height
     const width = input.width;
     const height = input.height;
     output.width = width;
     output.height = height;
     const inputCtx = input.getContext('2d');
+    console.log('inputCtx', inputCtx);
     const outputCtx = output.getContext('2d');
-    if (inputCtx) {
-      imgData = inputCtx.getImageData(0, 0, width, height);
-    }
+    console.log('outputCtx', outputCtx);
+
+    const imgData = inputCtx?.getImageData(0, 0, width, height);
+
     const pixels = imgData!.data;
     // pixels is an array of all the pixels with their RGBA values, the A stands for alpha
     // we will not actually be using alpha for this plugin, but we still need to skip it(hence the i+= 4)
@@ -52,9 +56,7 @@ class ArCubePlugin implements HMSVideoPlugin {
       pixels[i] = pixels[i + 1] = pixels[i + 2] = lightness;
     }
     // and finally now that we have the updated values for grayscale we put it on output
-    if (outputCtx) {
-      outputCtx.putImageData(imgData!, 0, 0);
-    }
+    outputCtx?.putImageData(imgData!, 0, 0);
   }
 
   getName() {
@@ -82,7 +84,7 @@ class ArCubePlugin implements HMSVideoPlugin {
   }
 
   getContextType() {
-    return HMSVideoPluginCanvasContextType.WEBGL;
+    return HMSVideoPluginCanvasContextType['2D'];
   }
 
   stop() {} // placeholder, nothing to stop

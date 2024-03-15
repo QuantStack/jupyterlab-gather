@@ -193,7 +193,6 @@ class VideoPresentation {
 
   updatePluginState(newState: any, prevState: any) {
     this.pluginState = newState;
-    console.log('speaker changed from - ', prevState, ', to - ', newState);
   }
 
   buildHtml(node: HTMLElement) {
