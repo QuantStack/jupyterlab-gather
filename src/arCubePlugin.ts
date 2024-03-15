@@ -20,13 +20,15 @@ class ArCubePlugin implements HMSVideoPlugin {
    * @param output {HTMLCanvasElement}
    */
   processVideoFrame(input: HTMLCanvasElement, output: HTMLCanvasElement) {
+    // console.log('input', input);
+    // console.log('output', output);
     if (!input || !output) {
       throw new Error('Plugin invalid input/output');
     }
 
     this.input = input;
     this.output = output;
-
+    let imgData: any;
     // we don't want to change the dimensions so set the same width, height
     const width = input.width;
     const height = input.height;
@@ -34,8 +36,10 @@ class ArCubePlugin implements HMSVideoPlugin {
     output.height = height;
     const inputCtx = input.getContext('2d');
     const outputCtx = output.getContext('2d');
-    const imgData = inputCtx!.getImageData(0, 0, width, height);
-    const pixels = imgData.data;
+    if (inputCtx) {
+      imgData = inputCtx.getImageData(0, 0, width, height);
+    }
+    const pixels = imgData!.data;
     // pixels is an array of all the pixels with their RGBA values, the A stands for alpha
     // we will not actually be using alpha for this plugin, but we still need to skip it(hence the i+= 4)
     for (let i = 0; i < pixels.length; i += 4) {
@@ -48,7 +52,9 @@ class ArCubePlugin implements HMSVideoPlugin {
       pixels[i] = pixels[i + 1] = pixels[i + 2] = lightness;
     }
     // and finally now that we have the updated values for grayscale we put it on output
-    outputCtx!.putImageData(imgData, 0, 0);
+    if (outputCtx) {
+      outputCtx.putImageData(imgData!, 0, 0);
+    }
   }
 
   getName() {

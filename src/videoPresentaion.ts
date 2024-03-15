@@ -22,6 +22,7 @@ class VideoPresentation {
     this.hmsActions = this.hmsManager.getActions();
 
     this.peerCount = 0;
+    this.pluginState = false;
     this.grayScalePlugin = new ArCubePlugin();
 
     this.buildHtml(node);
@@ -43,16 +44,15 @@ class VideoPresentation {
   controls: any;
   peerCount: number;
   grayScalePlugin: ArCubePlugin;
+  pluginState: boolean;
 
   pluginButton(plugin: any, name: string) {
-    const isPluginLoaded = this.hmsStore.getState(
-      selectIsLocalVideoPluginPresent(plugin.getName())
-    );
-
     const togglePluginState = async () => {
-      if (!isPluginLoaded) {
+      if (!this.pluginState) {
+        console.log('adding');
         await this.hmsActions.addPluginToVideoTrack(plugin);
       } else {
+        console.log('removing');
         await this.hmsActions.removePluginFromVideoTrack(plugin);
       }
     };
@@ -61,7 +61,7 @@ class VideoPresentation {
     const grayscaleButton = document.createElement('button');
     grayscaleButton.id = 'grayscale-btn';
     grayscaleButton.classList.add('btn-primary', 'hide');
-    grayscaleButton.textContent = `${isPluginLoaded ? 'Remove' : 'Add'} ${name}`;
+    grayscaleButton.textContent = `${this.pluginState ? 'Remove' : 'Add'} ${name}`;
     grayscaleButton.onclick = togglePluginState;
 
     console.log('grayscaleButton', grayscaleButton);
@@ -114,10 +114,14 @@ class VideoPresentation {
     };
 
     // Listen to the connection state
-    console.log('subscribeing');
     this.hmsStore.subscribe(
       this.onConnection.bind(this),
       selectIsConnectedToRoom
+    );
+
+    this.hmsStore.subscribe(
+      this.updatePluginState.bind(this),
+      selectIsLocalVideoPluginPresent(this.grayScalePlugin.getName())
     );
   }
 
@@ -147,8 +151,9 @@ class VideoPresentation {
     videoElement.playsinline = true;
     videoElement.id = `peer-video-${this.peerCount}`;
     peerTileName.textContent = peer.name;
-    //TODO: Fix TS
-    this.hmsActions.attachVideo(peer.videoTrack!, videoElement);
+    if (peer.videoTrack) {
+      this.hmsActions.attachVideo(peer.videoTrack, videoElement);
+    }
     peerTileDiv.append(videoElement);
     peerTileDiv.append(peerTileName);
     peerTileDiv.append(peerCanvas);
@@ -170,13 +175,7 @@ class VideoPresentation {
   }
 
   // Showing the required elements on connection/disconnection
-  onConnection(isConnected: any, prevConnectd: any) {
-    console.log(
-      'speaker changed from - ',
-      prevConnectd,
-      ', to - ',
-      isConnected
-    );
+  onConnection(isConnected: any, prevConnected: any) {
     if (isConnected) {
       this.form.classList.add('hide');
       this.conference.classList.remove('hide');
@@ -190,6 +189,11 @@ class VideoPresentation {
       this.grayScaleBtn.classList.add('hide');
       this.controls.classList.add('hide');
     }
+  }
+
+  updatePluginState(newState: any, prevState: any) {
+    this.pluginState = newState;
+    console.log('speaker changed from - ', prevState, ', to - ', newState);
   }
 
   buildHtml(node: HTMLElement) {
@@ -209,8 +213,6 @@ class VideoPresentation {
       this.grayScalePlugin,
       'Grayscale'
     );
-
-    console.log('grayscaleButton', grayscaleButton);
 
     // Append button to header
     header.appendChild(leaveButton);
@@ -329,9 +331,8 @@ class VideoPresentation {
       this.muteVideo = document.getElementById('mute-vid');
       this.controls = document.getElementById('controls');
 
-      console.log('this.grayScaleBtn', this.grayScaleBtn);
       this.initialize();
-    }, 2000);
+    }, 0);
   }
 }
 
