@@ -65,6 +65,7 @@ class ArCube {
   readonly fpsInterval: number;
   //   readonly webcamFromArjs: HTMLElement | null;
   readonly node: HTMLElement;
+  renderTarget: THREE.WebGLRenderTarget;
 
   initialize() {
     this.scene = new THREE.Scene();
@@ -86,7 +87,7 @@ class ArCube {
     this.scene.add(this.camera);
 
     const canvas = document.getElementById('target');
-    console.log('vid', canvas);
+    // console.log('vid', canvas);
 
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,

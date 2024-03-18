@@ -12,6 +12,7 @@ class ArCubePlugin implements HMSVideoPlugin {
   input: HTMLCanvasElement | null;
   output: HTMLCanvasElement | null;
   arCube: ArCube;
+  node: HTMLElement;
   //   outputCtx: CanvasRenderingContext2D | null;
 
   constructor() {
@@ -19,6 +20,44 @@ class ArCubePlugin implements HMSVideoPlugin {
     console.log('plugin constructor');
     this.input = null;
     this.output = null;
+  }
+
+  blendImages(imageDataBottom: ImageData, imageDataTop: ImageData) {
+    // Ensure the dimensions of both ImageData objects are the same
+    if (
+      imageDataBottom.width !== imageDataTop.width ||
+      imageDataBottom.height !== imageDataTop.height
+    ) {
+      throw new Error('ImageData dimensions must match');
+    }
+
+    // Create a new ImageData object for the blended image
+    const blendedImageData = new ImageData(
+      imageDataBottom.width,
+      imageDataBottom.height
+    );
+
+    // Blend pixel data from both ImageData objects
+    for (let i = 0; i < blendedImageData.data.length; i += 4) {
+      // Combine pixel values from both images using alpha blending
+      const alphaTop = imageDataTop.data[i + 3] / 255; // Alpha value of the top image
+      const alphaBottom = 1 - alphaTop; // Alpha value of the bottom image
+
+      // Blend RGB channels
+      blendedImageData.data[i] =
+        imageDataBottom.data[i] * alphaBottom + imageDataTop.data[i] * alphaTop;
+      blendedImageData.data[i + 1] =
+        imageDataBottom.data[i + 1] * alphaBottom +
+        imageDataTop.data[i + 1] * alphaTop;
+      blendedImageData.data[i + 2] =
+        imageDataBottom.data[i + 2] * alphaBottom +
+        imageDataTop.data[i + 2] * alphaTop;
+
+      // Preserve alpha channel
+      blendedImageData.data[i + 3] = 255; // Fully opaque
+    }
+
+    return blendedImageData;
   }
 
   /**
@@ -34,32 +73,49 @@ class ArCubePlugin implements HMSVideoPlugin {
 
     this.input = input;
     this.output = output;
-    console.log('output 2', this.output);
     // let imgData: any;
     // we don't want to change the dimensions so set the same width, height
     const width = input.width;
     const height = input.height;
     output.width = width;
     output.height = height;
+    const threeJsContext = this.arCube.renderer.getContext();
+    threeJsContext?.clear(threeJsContext.COLOR_BUFFER_BIT);
     const inputCtx = input.getContext('2d');
+    const inputImgData = inputCtx?.getImageData(0, 0, width, height);
+
+    const pixels = new Uint8Array(width * height * 4);
+
+    console.log('threeJsContext', threeJsContext);
+
+    threeJsContext?.readPixels(
+      0,
+      0,
+      width,
+      height,
+      threeJsContext.RGBA,
+      threeJsContext.UNSIGNED_BYTE,
+      pixels
+    );
+
+    console.log('test1');
+
+    const threeImageData = new ImageData(
+      new Uint8ClampedArray(pixels),
+      width,
+      height
+    );
+
+    console.log('pixels', pixels);
+
     const outputCtx = output.getContext('2d');
 
-    const imgData = inputCtx?.getImageData(0, 0, width, height);
-
-    const pixels = imgData!.data;
-    // pixels is an array of all the pixels with their RGBA values, the A stands for alpha
-    // we will not actually be using alpha for this plugin, but we still need to skip it(hence the i+= 4)
-    for (let i = 0; i < pixels.length; i += 4) {
-      const red = pixels[i];
-      const green = pixels[i + 1];
-      const blue = pixels[i + 2];
-      // the luma algorithm as we discussed above, floor because intensity is a number
-      const lightness = Math.floor(red * 0.299 + green * 0.587 + blue * 0.114);
-      // all of RGB is set to the calculated intensity value for grayscale
-      pixels[i] = pixels[i + 1] = pixels[i + 2] = lightness;
+    if (!inputImgData) {
+      console.log('fucked');
     }
-    // and finally now that we have the updated values for grayscale we put it on output
-    outputCtx?.putImageData(imgData!, 0, 0);
+    const blendedData = this.blendImages(inputImgData!, threeImageData);
+
+    outputCtx?.putImageData(blendedData, 0, 0);
   }
 
   getName() {
@@ -81,9 +137,10 @@ class ArCubePlugin implements HMSVideoPlugin {
   }
 
   async init() {
-    const node = hmsStore.getState(selectAppData('node'));
-    console.log('plugin node', node);
-    // this.arCube = new ArCube(node);
+    this.node = hmsStore.getState(selectAppData('node'));
+    console.log('plugin node', this.node);
+    this.arCube = new ArCube(this.node);
+    this.arCube.animate();
   } // placeholder, nothing to init
 
   getPluginType() {
