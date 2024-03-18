@@ -93,6 +93,7 @@ class ArCubePlugin implements HMSVideoPlugin {
     const inputImgData = inputCtx?.getImageData(0, 0, width, height);
 
     const pixels = new Uint8Array(width * height * 4);
+    // const pixels2 = new Uint8Array(width * height * 4);
 
     // console.log('threeJsContext', threeJsContext);
     // this.arCube.renderer.readRenderTargetPixels(
@@ -101,7 +102,7 @@ class ArCubePlugin implements HMSVideoPlugin {
     //   0,
     //   width,
     //   height,
-    //   pixels
+    //   pixels2
     // );
 
     threeJsContext?.readPixels(
@@ -119,19 +120,8 @@ class ArCubePlugin implements HMSVideoPlugin {
       width,
       height
     );
-    let foundNonZero = false;
-
-    console.log('pixels', pixels);
-
-    for (let i = 0; i < pixels.length; i++) {
-      if (pixels[i] !== 0) {
-        foundNonZero = true;
-        break;
-      }
-    }
 
     // console.log('threeImageData', threeImageData);
-    console.log('foundNonZero', foundNonZero);
     const outputCtx = output.getContext('2d');
 
     if (!inputImgData) {
