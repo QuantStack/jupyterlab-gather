@@ -1,6 +1,5 @@
 import {
   HMSPeer,
-  HMSReactiveStore,
   selectAppData,
   selectIsConnectedToRoom,
   selectIsLocalAudioEnabled,
@@ -8,9 +7,8 @@ import {
   selectIsLocalVideoPluginPresent,
   selectPeers
 } from '@100mslive/hms-video-store';
-import { IHMSActions } from '@100mslive/hms-video-store/dist/IHMSActions';
-import { IHMSStoreReadOnly } from '@100mslive/hms-video-store/dist/IHMSStore';
 import ArCubePlugin from './arCubePlugin';
+import { hmsActions, hmsManager, hmsStore } from './hms';
 
 class VideoPresentation {
   constructor(node: HTMLElement) {
@@ -18,11 +16,8 @@ class VideoPresentation {
     this.node = node;
 
     // Initialize HMS Store
-    this.hmsManager = new HMSReactiveStore();
-    this.hmsManager.triggerOnSubscribe();
-    this.hmsStore = this.hmsManager.getStore();
-    this.hmsActions = this.hmsManager.getActions();
-    this.hmsActions.initAppData(this.initAppData);
+    hmsManager.triggerOnSubscribe();
+    hmsActions.initAppData(this.initAppData);
 
     this.peerCount = 0;
     this.pluginState = false;
@@ -34,9 +29,9 @@ class VideoPresentation {
   }
 
   node: HTMLElement;
-  hmsManager: HMSReactiveStore;
-  hmsStore: IHMSStoreReadOnly;
-  hmsActions: IHMSActions;
+  // hmsManager: HMSReactiveStore;
+  // hmsStore: IHMSStoreReadOnly;
+  // hmsActions: IHMSActions;
   form: any;
   joinBtn: any;
   conference: any;
@@ -60,10 +55,10 @@ class VideoPresentation {
     const togglePluginState = async () => {
       if (!this.pluginState) {
         console.log('adding');
-        await this.hmsActions.addPluginToVideoTrack(plugin);
+        await hmsActions.addPluginToVideoTrack(plugin);
       } else {
         console.log('removing');
-        await this.hmsActions.removePluginFromVideoTrack(plugin);
+        await hmsActions.removePluginFromVideoTrack(plugin);
       }
     };
 
@@ -80,8 +75,8 @@ class VideoPresentation {
   }
 
   initialize() {
-    this.hmsActions.setAppData('node', this.node);
-    console.log('node', this.hmsStore.getState(selectAppData('node')));
+    hmsActions.setAppData('node', this.node);
+    console.log('video node', hmsStore.getState(selectAppData('node')));
 
     // Joining the room
     this.joinBtn.onclick = async () => {
@@ -92,11 +87,11 @@ class VideoPresentation {
         this.node.querySelector('#room-code') as HTMLInputElement
       ).value;
       // use room code to fetch auth token
-      const authToken = await this.hmsActions.getAuthTokenByRoomCode({
+      const authToken = await hmsActions.getAuthTokenByRoomCode({
         roomCode
       });
       // join room using username and auth token
-      this.hmsActions.join({
+      hmsActions.join({
         userName,
         authToken
       });
@@ -107,33 +102,30 @@ class VideoPresentation {
     this.leaveBtn.onclick = this.leaveRoom.bind(this);
 
     // Reactive state - renderPeers is called whenever there is a change in the peer-list
-    this.hmsStore.subscribe(this.renderPeers.bind(this), selectPeers);
+    hmsStore.subscribe(this.renderPeers.bind(this), selectPeers);
 
     // Mute and unmute audio
     this.muteAudio.onclick = () => {
-      const audioEnabled = !this.hmsStore.getState(selectIsLocalAudioEnabled);
-      this.hmsActions.setLocalAudioEnabled(audioEnabled);
+      const audioEnabled = !hmsStore.getState(selectIsLocalAudioEnabled);
+      hmsActions.setLocalAudioEnabled(audioEnabled);
       this.muteAudio.textContent = audioEnabled ? 'Mute' : 'Unmute';
     };
 
     // Mute and unmute video
     this.muteVideo.onclick = () => {
       console.log('Clicking mute');
-      const videoEnabled = !this.hmsStore.getState(selectIsLocalVideoEnabled);
-      this.hmsActions.setLocalVideoEnabled(videoEnabled);
+      const videoEnabled = !hmsStore.getState(selectIsLocalVideoEnabled);
+      hmsActions.setLocalVideoEnabled(videoEnabled);
       this.muteVideo.textContent = videoEnabled ? 'Hide' : 'Unhide';
       // Re-render video tile
       this.renderPeers();
     };
 
     // Listen to the connection state
-    this.hmsStore.subscribe(
-      this.onConnection.bind(this),
-      selectIsConnectedToRoom
-    );
+    hmsStore.subscribe(this.onConnection.bind(this), selectIsConnectedToRoom);
 
     // Listen to plugin state
-    this.hmsStore.subscribe(
+    hmsStore.subscribe(
       this.updatePluginState.bind(this),
       selectIsLocalVideoPluginPresent(this.grayScalePlugin.getName())
     );
@@ -141,7 +133,7 @@ class VideoPresentation {
 
   async leaveRoom() {
     console.log('leaving room');
-    await this.hmsActions.leave();
+    await hmsActions.leave();
     this.peersContainer.innerHTML = '';
   }
 
@@ -166,7 +158,7 @@ class VideoPresentation {
     videoElement.id = `peer-video-${this.peerCount}`;
     peerTileName.textContent = peer.name;
     if (peer.videoTrack) {
-      this.hmsActions.attachVideo(peer.videoTrack, videoElement);
+      hmsActions.attachVideo(peer.videoTrack, videoElement);
     }
     peerTileDiv.append(videoElement);
     peerTileDiv.append(peerTileName);
@@ -178,7 +170,7 @@ class VideoPresentation {
   renderPeers() {
     console.log('rendering peers');
     this.peersContainer.innerHTML = '';
-    const peers = this.hmsStore.getState(selectPeers);
+    const peers = hmsStore.getState(selectPeers);
     console.log('peers', peers);
 
     peers.forEach(peer => {
