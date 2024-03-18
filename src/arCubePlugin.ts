@@ -26,7 +26,6 @@ class ArCubePlugin implements HMSVideoPlugin {
       throw new Error('Plugin invalid input/output');
     }
 
-    console.log('output 1', output);
     this.input = input;
     this.output = output;
     console.log('output 2', this.output);
@@ -37,9 +36,7 @@ class ArCubePlugin implements HMSVideoPlugin {
     output.width = width;
     output.height = height;
     const inputCtx = input.getContext('2d');
-    console.log('inputCtx', inputCtx);
     const outputCtx = output.getContext('2d');
-    console.log('outputCtx', outputCtx);
 
     const imgData = inputCtx?.getImageData(0, 0, width, height);
 
