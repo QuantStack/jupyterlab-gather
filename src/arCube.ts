@@ -94,7 +94,8 @@ class ArCube {
       antialias: true,
       alpha: true,
       canvas: canvas!,
-      preserveDrawingBuffer: true
+      preserveDrawingBuffer: true,
+      premultipliedAlpha: false
     });
     this.renderer.setClearColor(new THREE.Color('lightgrey'), 0);
     // this.renderer.setSize(640, 480);
@@ -102,6 +103,14 @@ class ArCube {
     this.renderer.domElement.style.top = '0px';
     this.renderer.domElement.style.left = '0px';
     // this.node.appendChild(this.renderer.domElement);
+
+    this.renderTarget = new THREE.WebGLRenderTarget(
+      canvas?.clientWidth,
+      canvas?.clientHeight
+    );
+    console.log('renderTaret', this.renderTarget);
+
+    // this.renderer.setRenderTarget(this.renderTarget);
 
     this.clock = new THREE.Clock();
     this.deltaTime = 0;
@@ -299,6 +308,9 @@ class ArCube {
   }
 
   render() {
+    // this.renderer.setRenderTarget(this.renderTarget);
+    // this.renderer.render(this.scene, this.camera);
+    // this.renderer.setRenderTarget(null);
     this.renderer.render(this.scene, this.camera);
   }
 

@@ -6,6 +6,7 @@ import {
   selectAppData
 } from '@100mslive/hms-video-store';
 import * as THREE from 'three';
+import ArCube from './arCube';
 import { hmsStore } from './hms';
 
 class ArCubePlugin implements HMSVideoPlugin {
@@ -14,6 +15,7 @@ class ArCubePlugin implements HMSVideoPlugin {
   // arCube: ArCube;
   node: HTMLElement;
   renderer: THREE.WebGLRenderer;
+  arCube: ArCube;
   //   outputCtx: CanvasRenderingContext2D | null;
 
   constructor() {
@@ -84,7 +86,7 @@ class ArCubePlugin implements HMSVideoPlugin {
     output.width = width;
     output.height = height;
 
-    const threeJsContext = this.renderer.getContext();
+    const threeJsContext = this.arCube.renderer.getContext();
     // threeJsContext?.clear(threeJsContext.COLOR_BUFFER_BIT);
 
     const inputCtx = input.getContext('2d');
@@ -92,7 +94,15 @@ class ArCubePlugin implements HMSVideoPlugin {
 
     const pixels = new Uint8Array(width * height * 4);
 
-    console.log('threeJsContext', threeJsContext);
+    // console.log('threeJsContext', threeJsContext);
+    // this.arCube.renderer.readRenderTargetPixels(
+    //   this.arCube.renderTarget,
+    //   0,
+    //   0,
+    //   width,
+    //   height,
+    //   pixels
+    // );
 
     threeJsContext?.readPixels(
       0,
@@ -104,16 +114,24 @@ class ArCubePlugin implements HMSVideoPlugin {
       pixels
     );
 
-    console.log('test1');
-
     const threeImageData = new ImageData(
       new Uint8ClampedArray(pixels),
       width,
       height
     );
+    let foundNonZero = false;
 
     console.log('pixels', pixels);
 
+    for (let i = 0; i < pixels.length; i++) {
+      if (pixels[i] !== 0) {
+        foundNonZero = true;
+        break;
+      }
+    }
+
+    // console.log('threeImageData', threeImageData);
+    console.log('foundNonZero', foundNonZero);
     const outputCtx = output.getContext('2d');
 
     if (!inputImgData) {
@@ -144,11 +162,11 @@ class ArCubePlugin implements HMSVideoPlugin {
 
   async init() {
     this.node = hmsStore.getState(selectAppData('node'));
-    this.renderer = hmsStore.getState(selectAppData('renderer'));
-    console.log('this.renderer', this.renderer);
+    // this.renderer = hmsStore.getState(selectAppData('renderer'));
+    // console.log('this.renderer', this.renderer);
     console.log('plugin node', this.node);
-    // this.arCube = new ArCube(this.node);
-    // this.arCube.animate();
+    this.arCube = new ArCube(this.node);
+    this.arCube.animate();
   } // placeholder, nothing to init
 
   getPluginType() {
