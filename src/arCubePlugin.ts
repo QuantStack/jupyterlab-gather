@@ -4,10 +4,12 @@ import {
   HMSVideoPluginCanvasContextType,
   HMSVideoPluginType
 } from '@100mslive/hms-video-store';
+import ArCube from './arCube';
 
 class ArCubePlugin implements HMSVideoPlugin {
   input: HTMLCanvasElement | null;
   output: HTMLCanvasElement | null;
+  arCube: ArCube;
   //   outputCtx: CanvasRenderingContext2D | null;
 
   constructor() {
@@ -15,6 +17,7 @@ class ArCubePlugin implements HMSVideoPlugin {
     this.input = null;
     this.output = null;
   }
+
   /**
    * @param input {HTMLCanvasElement}
    * @param output {HTMLCanvasElement}
@@ -74,7 +77,9 @@ class ArCubePlugin implements HMSVideoPlugin {
     return browserResult;
   }
 
-  async init() {} // placeholder, nothing to init
+  async init() {
+    // this.arCube = new ArCube();
+  } // placeholder, nothing to init
 
   getPluginType() {
     return HMSVideoPluginType.TRANSFORM; // because we transform the image

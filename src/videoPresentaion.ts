@@ -1,6 +1,7 @@
 import {
   HMSPeer,
   HMSReactiveStore,
+  selectAppData,
   selectIsConnectedToRoom,
   selectIsLocalAudioEnabled,
   selectIsLocalVideoEnabled,
@@ -13,6 +14,7 @@ import ArCubePlugin from './arCubePlugin';
 
 class VideoPresentation {
   constructor(node: HTMLElement) {
+    console.log('constructor');
     this.node = node;
 
     // Initialize HMS Store
@@ -20,12 +22,14 @@ class VideoPresentation {
     this.hmsManager.triggerOnSubscribe();
     this.hmsStore = this.hmsManager.getStore();
     this.hmsActions = this.hmsManager.getActions();
+    this.hmsActions.initAppData(this.initAppData);
 
     this.peerCount = 0;
     this.pluginState = false;
     this.grayScalePlugin = new ArCubePlugin();
 
     this.buildHtml(node);
+
     // this.initialize();
   }
 
@@ -45,6 +49,12 @@ class VideoPresentation {
   peerCount: number;
   grayScalePlugin: ArCubePlugin;
   pluginState: boolean;
+
+  initAppData() {
+    const initialAppData = {
+      node: null
+    };
+  }
 
   pluginButton(plugin: any, name: string) {
     const togglePluginState = async () => {
@@ -70,6 +80,9 @@ class VideoPresentation {
   }
 
   initialize() {
+    this.hmsActions.setAppData('node', this.node);
+    console.log('node', this.hmsStore.getState(selectAppData('node')));
+
     // Joining the room
     this.joinBtn.onclick = async () => {
       console.log('Clicking join');
@@ -119,6 +132,7 @@ class VideoPresentation {
       selectIsConnectedToRoom
     );
 
+    // Listen to plugin state
     this.hmsStore.subscribe(
       this.updatePluginState.bind(this),
       selectIsLocalVideoPluginPresent(this.grayScalePlugin.getName())
