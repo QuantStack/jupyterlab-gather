@@ -66,6 +66,26 @@ class ArCubePlugin implements HMSVideoPlugin {
     return blendedImageData;
   }
 
+  flipImageDataVertically(imageData: ImageData) {
+    const width = imageData.width;
+    const height = imageData.height;
+    const flippedData = new Uint8ClampedArray(width * height * 4);
+
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const sourceIndex = (y * width + x) * 4;
+        const destIndex = ((height - y - 1) * width + x) * 4;
+
+        flippedData[destIndex] = imageData.data[sourceIndex];
+        flippedData[destIndex + 1] = imageData.data[sourceIndex + 1];
+        flippedData[destIndex + 2] = imageData.data[sourceIndex + 2];
+        flippedData[destIndex + 3] = imageData.data[sourceIndex + 3];
+      }
+    }
+
+    return new ImageData(flippedData, width, height);
+  }
+
   /**
    * @param input {HTMLCanvasElement}
    * @param output {HTMLCanvasElement}
@@ -127,8 +147,8 @@ class ArCubePlugin implements HMSVideoPlugin {
     if (!inputImgData) {
       console.log('fucked');
     }
-    const blendedData = this.blendImages(inputImgData!, threeImageData);
-
+    const flippedImage = this.flipImageDataVertically(threeImageData);
+    const blendedData = this.blendImages(inputImgData!, flippedImage);
     outputCtx?.putImageData(blendedData, 0, 0);
   }
 
