@@ -8,7 +8,7 @@ import {
   selectPeers
 } from '@100mslive/hms-video-store';
 import ArCubePlugin from './arCubePlugin';
-import { hmsActions, hmsManager, hmsStore } from './hms';
+import { hmsActions, hmsStore } from './hms';
 
 class VideoPresentation {
   constructor(node: HTMLElement) {
@@ -16,7 +16,6 @@ class VideoPresentation {
     this.node = node;
 
     // Initialize HMS Store
-    hmsManager.triggerOnSubscribe();
     hmsActions.initAppData(this.initAppData);
 
     this.peerCount = 0;
@@ -29,9 +28,6 @@ class VideoPresentation {
   }
 
   node: HTMLElement;
-  // hmsManager: HMSReactiveStore;
-  // hmsStore: IHMSStoreReadOnly;
-  // hmsActions: IHMSActions;
   form: any;
   joinBtn: any;
   conference: any;
@@ -76,7 +72,8 @@ class VideoPresentation {
 
   initialize() {
     hmsActions.setAppData('node', this.node);
-    console.log('video node', hmsStore.getState(selectAppData('node')));
+    console.log('banana video node', hmsStore.getState(selectAppData('node')));
+    console.log('banana this.node', this.node);
 
     // Joining the room
     this.joinBtn.onclick = async () => {
@@ -214,10 +211,7 @@ class VideoPresentation {
     leaveButton.textContent = 'Leave Room';
 
     // Create leave button element
-    const grayscaleButton = this.pluginButton(
-      this.grayScalePlugin,
-      'Grayscale'
-    );
+    const grayscaleButton = this.pluginButton(this.grayScalePlugin, 'AR Junk');
 
     // Append button to header
     header.appendChild(leaveButton);

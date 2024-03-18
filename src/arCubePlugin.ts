@@ -5,14 +5,15 @@ import {
   HMSVideoPluginType,
   selectAppData
 } from '@100mslive/hms-video-store';
-import ArCube from './arCube';
+import * as THREE from 'three';
 import { hmsStore } from './hms';
 
 class ArCubePlugin implements HMSVideoPlugin {
   input: HTMLCanvasElement | null;
   output: HTMLCanvasElement | null;
-  arCube: ArCube;
+  // arCube: ArCube;
   node: HTMLElement;
+  renderer: THREE.WebGLRenderer;
   //   outputCtx: CanvasRenderingContext2D | null;
 
   constructor() {
@@ -23,6 +24,9 @@ class ArCubePlugin implements HMSVideoPlugin {
   }
 
   blendImages(imageDataBottom: ImageData, imageDataTop: ImageData) {
+    console.log('imageDataBottom', imageDataBottom);
+    console.log('imageDataTop', imageDataTop);
+
     // Ensure the dimensions of both ImageData objects are the same
     if (
       imageDataBottom.width !== imageDataTop.width ||
@@ -79,8 +83,10 @@ class ArCubePlugin implements HMSVideoPlugin {
     const height = input.height;
     output.width = width;
     output.height = height;
-    const threeJsContext = this.arCube.renderer.getContext();
-    threeJsContext?.clear(threeJsContext.COLOR_BUFFER_BIT);
+
+    const threeJsContext = this.renderer.getContext();
+    // threeJsContext?.clear(threeJsContext.COLOR_BUFFER_BIT);
+
     const inputCtx = input.getContext('2d');
     const inputImgData = inputCtx?.getImageData(0, 0, width, height);
 
@@ -138,9 +144,11 @@ class ArCubePlugin implements HMSVideoPlugin {
 
   async init() {
     this.node = hmsStore.getState(selectAppData('node'));
+    this.renderer = hmsStore.getState(selectAppData('renderer'));
+    console.log('this.renderer', this.renderer);
     console.log('plugin node', this.node);
-    this.arCube = new ArCube(this.node);
-    this.arCube.animate();
+    // this.arCube = new ArCube(this.node);
+    // this.arCube.animate();
   } // placeholder, nothing to init
 
   getPluginType() {

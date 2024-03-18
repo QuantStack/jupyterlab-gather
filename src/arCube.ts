@@ -2,6 +2,7 @@
 import * as THREEx from '@ar-js-org/ar.js/three.js/build/ar-threex.js';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { hmsActions } from './hms';
 
 class ArCube {
   /**
@@ -92,7 +93,8 @@ class ArCube {
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
-      canvas: canvas!
+      canvas: canvas!,
+      preserveDrawingBuffer: true
     });
     this.renderer.setClearColor(new THREE.Color('lightgrey'), 0);
     // this.renderer.setSize(640, 480);
@@ -104,6 +106,8 @@ class ArCube {
     this.clock = new THREE.Clock();
     this.deltaTime = 0;
     this.totalTime = 0;
+
+    hmsActions.setAppData('renderer', this.renderer);
 
     ////////////////////////////////////////////////////////////
     // setup arToolkitSource

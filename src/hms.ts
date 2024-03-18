@@ -1,5 +1,10 @@
 import { HMSReactiveStore } from '@100mslive/hms-video-store';
 
-export const hmsManager = new HMSReactiveStore();
-export const hmsStore = hmsManager.getStore();
-export const hmsActions = hmsManager.getActions();
+const hmsManager = new HMSReactiveStore();
+
+hmsManager.triggerOnSubscribe();
+
+const hmsStore = hmsManager.getStore();
+const hmsActions = hmsManager.getActions();
+
+export { hmsActions, hmsStore };
