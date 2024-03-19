@@ -65,8 +65,6 @@ class VideoPresentation {
     grayscaleButton.textContent = `${this.pluginState ? 'Remove' : 'Add'} ${name}`;
     grayscaleButton.onclick = togglePluginState;
 
-    console.log('grayscaleButton', grayscaleButton);
-
     return grayscaleButton;
   }
 
@@ -173,8 +171,23 @@ class VideoPresentation {
     peers.forEach(peer => {
       if (peer.videoTrack) {
         this.peersContainer.append(this.renderPeer(peer));
+        this.peersContainer.append(this.renderPeer(peer));
+        this.peersContainer.append(this.renderPeer(peer));
+        this.peersContainer.append(this.renderPeer(peer));
+        this.peersContainer.append(this.renderPeer(peer));
       }
     });
+
+    // this.testExtraTiles(5, peers);
+  }
+
+  testExtraTiles(numTiles: number, peers: HMSPeer[]) {
+    console.log('peers', peers);
+    // const peers = hmsStore.getState(selectPeers);
+
+    for (let index = 0; index < numTiles; index++) {
+      this.peersContainer.append(this.renderPeer(peers[0]));
+    }
   }
 
   // Showing the required elements on connection/disconnection
@@ -203,73 +216,13 @@ class VideoPresentation {
 
     // Create header element
     const header = document.createElement('header');
-
-    // Create leave button element
-    const leaveButton = document.createElement('button');
-    leaveButton.id = 'leave-btn';
-    leaveButton.classList.add('btn-danger', 'hide');
-    leaveButton.textContent = 'Leave Room';
-
-    // Create leave button element
-    const grayscaleButton = this.pluginButton(this.grayScalePlugin, 'AR Junk');
-
-    // Append button to header
-    header.appendChild(leaveButton);
-    header.appendChild(grayscaleButton);
+    header.textContent = 'PlaceHolder';
 
     // Append header to the body or any other parent element
     container.appendChild(header);
 
-    // Create form element
-    const form = document.createElement('form');
-    form.id = 'join';
-
-    // Create h2 element
-    const heading = document.createElement('h2');
-    heading.textContent = 'Join Room';
-
-    // Create div for input container 1
-    const inputContainer1 = document.createElement('div');
-    inputContainer1.classList.add('input-container');
-
-    // Create input element for name
-    const nameInput = document.createElement('input');
-    nameInput.id = 'name';
-    nameInput.type = 'text';
-    nameInput.name = 'username';
-    nameInput.placeholder = 'Your name';
-
-    // Append name input to input container 1
-    inputContainer1.appendChild(nameInput);
-
-    // Create div for input container 2
-    const inputContainer2 = document.createElement('div');
-    inputContainer2.classList.add('input-container');
-
-    // Create input element for room code
-    const roomCodeInput = document.createElement('input');
-    roomCodeInput.id = 'room-code';
-    roomCodeInput.type = 'text';
-    roomCodeInput.name = 'roomCode';
-    roomCodeInput.placeholder = 'Room code';
-
-    // Append room code input to input container 2
-    inputContainer2.appendChild(roomCodeInput);
-
-    // Create button element
-    const joinButton = document.createElement('button');
-    joinButton.type = 'button';
-    joinButton.id = 'join-btn';
-    joinButton.classList.add('btn-primary');
-    joinButton.textContent = 'Join';
-
-    // Append all elements to the form
-    form.appendChild(heading);
-    form.appendChild(inputContainer1);
-    form.appendChild(inputContainer2);
-    form.appendChild(joinButton);
-
     // Append form to the body or any other parent element
+    const form = this.buildForm();
     container.appendChild(form);
 
     // Create div element for the conference section
@@ -292,28 +245,8 @@ class VideoPresentation {
     // Append the conference section div to the body or any other parent element
     container.appendChild(conferenceDiv);
 
-    // Create div element for the controls section
-    const controlsDiv = document.createElement('div');
-    controlsDiv.id = 'controls';
-    controlsDiv.classList.add('control-bar', 'hide');
-
-    // Create button element for muting audio
-    const muteAudioButton = document.createElement('button');
-    muteAudioButton.id = 'mute-aud';
-    muteAudioButton.classList.add('btn-control');
-    muteAudioButton.textContent = 'Mute';
-
-    // Create button element for muting video
-    const muteVideoButton = document.createElement('button');
-    muteVideoButton.id = 'mute-vid';
-    muteVideoButton.classList.add('btn-control');
-    muteVideoButton.textContent = 'Hide';
-
-    // Append the buttons to the controls section div
-    controlsDiv.appendChild(muteAudioButton);
-    controlsDiv.appendChild(muteVideoButton);
-
     // Append the controls section div to the body or any other parent element
+    const controlsDiv = this.buildControlsBar();
     container.appendChild(controlsDiv);
 
     node.appendChild(container);
@@ -332,6 +265,97 @@ class VideoPresentation {
 
       this.initialize();
     }, 0);
+  }
+
+  buildForm() {
+    // Create form element
+    const form = document.createElement('form');
+    form.id = 'join';
+
+    // Create h2 element
+    const heading = document.createElement('h2');
+    heading.textContent = 'Join Room';
+
+    // Create div for input container 1
+    const inputContainer1 = document.createElement('div');
+    inputContainer1.classList.add('input-container');
+
+    // Create input element for name
+    const nameInput = document.createElement('input');
+    nameInput.id = 'name';
+    nameInput.type = 'text';
+    nameInput.name = 'username';
+    nameInput.placeholder = 'Your name';
+    nameInput.value = 'we';
+
+    // Append name input to input container 1
+    inputContainer1.appendChild(nameInput);
+
+    // Create div for input container 2
+    const inputContainer2 = document.createElement('div');
+    inputContainer2.classList.add('input-container');
+
+    // Create input element for room code
+    const roomCodeInput = document.createElement('input');
+    roomCodeInput.id = 'room-code';
+    roomCodeInput.type = 'text';
+    roomCodeInput.name = 'roomCode';
+    roomCodeInput.placeholder = 'Room code';
+    roomCodeInput.value = 'ibj-yxje-nda';
+
+    // Append room code input to input container 2
+    inputContainer2.appendChild(roomCodeInput);
+
+    // Create button element
+    const joinButton = document.createElement('button');
+    joinButton.type = 'button';
+    joinButton.id = 'join-btn';
+    joinButton.classList.add('btn-primary');
+    joinButton.textContent = 'Join';
+
+    // Append all elements to the form
+    form.appendChild(heading);
+    form.appendChild(inputContainer1);
+    form.appendChild(inputContainer2);
+    form.appendChild(joinButton);
+
+    return form;
+  }
+
+  buildControlsBar() {
+    // Create div element for the controls section
+    const controlsDiv = document.createElement('div');
+    controlsDiv.id = 'controls';
+    controlsDiv.classList.add('control-bar', 'hide');
+
+    // Create button element for muting audio
+    const muteAudioButton = document.createElement('button');
+    muteAudioButton.id = 'mute-aud';
+    muteAudioButton.classList.add('btn-control');
+    muteAudioButton.textContent = 'Mute';
+
+    // Create button element for muting video
+    const muteVideoButton = document.createElement('button');
+    muteVideoButton.id = 'mute-vid';
+    muteVideoButton.classList.add('btn-control');
+    muteVideoButton.textContent = 'Hide';
+
+    // Create leave button element
+    const leaveButton = document.createElement('button');
+    leaveButton.id = 'leave-btn';
+    leaveButton.classList.add('btn-danger', 'hide');
+    leaveButton.textContent = 'Leave Room';
+
+    // Create Ar button element
+    const arButton = this.pluginButton(this.grayScalePlugin, 'AR Junk');
+
+    // Append the buttons to the controls section div
+    controlsDiv.appendChild(muteAudioButton);
+    controlsDiv.appendChild(muteVideoButton);
+    controlsDiv.appendChild(leaveButton);
+    controlsDiv.appendChild(arButton);
+
+    return controlsDiv;
   }
 }
 

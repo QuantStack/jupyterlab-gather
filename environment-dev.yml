@@ -1,0 +1,6 @@
+name: jupyterlab-arpresent
+channels:
+  - conda-forge
+dependencies:
+  - jupyterlab
+  - nodejs

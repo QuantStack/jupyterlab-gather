@@ -56,7 +56,7 @@ input {
   height: 34px;
   padding: 5px;
   background: #37474f;
-  color: inherit;
+  color: #fdfdfd;
   font-family: inherit;
 }
 
@@ -100,11 +100,17 @@ form h2,
 }
 
 #peers-container {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(min-content, 1fr));
-  place-items: center;
-  grid-gap: 10px;
+  /* display: grid; */
+  /* grid-template-columns: repeat(3, minmax(min-content, 1fr)); */
+  /* place-items: start center; */
+  /* grid-gap: 10px; */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   min-height: 500px;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 960px;
 }
 
 .peer-video {
@@ -134,10 +140,13 @@ form h2,
 .peer-name {
   font-size: 14px;
   text-align: center;
+  position: absolute;
 }
 
 .peer-tile {
   padding: 2px;
+  width: 250px;
+  flex: initial;
   position: relative;
 }
 
