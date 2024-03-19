@@ -7691,6 +7691,7 @@ __metadata:
     "@jupyterlab/services": ^7.0.0
     "@jupyterlab/settingregistry": ^4.0.0
     "@jupyterlab/testutils": ^4.0.0
+    "@lumino/signaling": ^2.1.2
     "@lumino/widgets": ^2.3.1
     "@types/jest": ^29.2.0
     "@types/json-schema": ^7.0.11

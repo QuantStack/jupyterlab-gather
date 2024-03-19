@@ -99,7 +99,7 @@ form h2,
   border-bottom: 1px solid #546e7a;
 }
 
-#peers-container {
+.peers-container-main {
   /* display: grid; */
   /* grid-template-columns: repeat(3, minmax(min-content, 1fr)); */
   /* place-items: start center; */

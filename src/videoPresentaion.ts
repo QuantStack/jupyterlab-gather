@@ -7,6 +7,7 @@ import {
   selectIsLocalVideoPluginPresent,
   selectPeers
 } from '@100mslive/hms-video-store';
+import { ISignal, Signal } from '@lumino/signaling';
 import ArCubePlugin from './arCubePlugin';
 import { hmsActions, hmsStore } from './hms';
 
@@ -19,10 +20,13 @@ class VideoPresentation {
     hmsActions.initAppData(this.initAppData);
 
     this.peerCount = 0;
-    this.pluginState = false;
+    this.isPluginLoaded = false;
     this.grayScalePlugin = new ArCubePlugin();
+    this._pluginStateChanged = new Signal<this, void>(this);
 
     this.buildHtml(node);
+
+    this.pluginStateChanged.connect(this.onPluginStateChange.bind(this));
 
     // this.initialize();
   }
@@ -31,6 +35,7 @@ class VideoPresentation {
   form: any;
   joinBtn: any;
   conference: any;
+  arContainer: any;
   peersContainer: any;
   leaveBtn: any;
   grayScaleBtn: any;
@@ -39,7 +44,27 @@ class VideoPresentation {
   controls: any;
   peerCount: number;
   grayScalePlugin: ArCubePlugin;
-  pluginState: boolean;
+  isPluginLoaded: boolean;
+  _pluginStateChanged;
+
+  get pluginStateChanged(): ISignal<this, void> {
+    return this._pluginStateChanged;
+  }
+
+  onPluginStateChange() {
+    console.log('signal junk');
+    if (this.isPluginLoaded) {
+      // show the big img stuff
+      this.arContainer.classList.remove('hide');
+      this.peersContainer.classList.remove('peers-container-main');
+      this.peersContainer.classList.add('peers-container-sidebar');
+    } else {
+      // show the grid shit
+      this.arContainer.classList.add('hide');
+      this.peersContainer.classList.remove('peers-container-sidebar');
+      this.peersContainer.classList.add('peers-container-main');
+    }
+  }
 
   initAppData() {
     const initialAppData = {
@@ -49,23 +74,24 @@ class VideoPresentation {
 
   pluginButton(plugin: any, name: string) {
     const togglePluginState = async () => {
-      if (!this.pluginState) {
+      if (!this.isPluginLoaded) {
         console.log('adding');
         await hmsActions.addPluginToVideoTrack(plugin);
       } else {
         console.log('removing');
         await hmsActions.removePluginFromVideoTrack(plugin);
       }
+      this._pluginStateChanged.emit();
     };
 
     // Create leave button element
-    const grayscaleButton = document.createElement('button');
-    grayscaleButton.id = 'grayscale-btn';
-    grayscaleButton.classList.add('btn-primary', 'hide');
-    grayscaleButton.textContent = `${this.pluginState ? 'Remove' : 'Add'} ${name}`;
-    grayscaleButton.onclick = togglePluginState;
+    const pluginButton = document.createElement('button');
+    pluginButton.id = 'grayscale-btn';
+    pluginButton.classList.add('btn-primary', 'hide');
+    pluginButton.textContent = `${this.isPluginLoaded ? 'Remove' : 'Add'} ${name}`;
+    pluginButton.onclick = togglePluginState;
 
-    return grayscaleButton;
+    return pluginButton;
   }
 
   initialize() {
@@ -171,23 +197,12 @@ class VideoPresentation {
     peers.forEach(peer => {
       if (peer.videoTrack) {
         this.peersContainer.append(this.renderPeer(peer));
-        this.peersContainer.append(this.renderPeer(peer));
-        this.peersContainer.append(this.renderPeer(peer));
-        this.peersContainer.append(this.renderPeer(peer));
-        this.peersContainer.append(this.renderPeer(peer));
+        // this.peersContainer.append(this.renderPeer(peer));
+        // this.peersContainer.append(this.renderPeer(peer));
+        // this.peersContainer.append(this.renderPeer(peer));
+        // this.peersContainer.append(this.renderPeer(peer));
       }
     });
-
-    // this.testExtraTiles(5, peers);
-  }
-
-  testExtraTiles(numTiles: number, peers: HMSPeer[]) {
-    console.log('peers', peers);
-    // const peers = hmsStore.getState(selectPeers);
-
-    for (let index = 0; index < numTiles; index++) {
-      this.peersContainer.append(this.renderPeer(peers[0]));
-    }
   }
 
   // Showing the required elements on connection/disconnection
@@ -198,28 +213,32 @@ class VideoPresentation {
       this.leaveBtn.classList.remove('hide');
       this.grayScaleBtn.classList.remove('hide');
       this.controls.classList.remove('hide');
+      this.peersContainer.classList.remove('hide');
+      this.peersContainer.classList.add('peers-container-main');
     } else {
       this.form.classList.remove('hide');
       this.conference.classList.add('hide');
       this.leaveBtn.classList.add('hide');
       this.grayScaleBtn.classList.add('hide');
       this.controls.classList.add('hide');
+      this.peersContainer.classList.add('hide');
+      this.arContainer.classList.add('hide');
     }
   }
 
   updatePluginState(newState: any, prevState: any) {
-    this.pluginState = newState;
+    this.isPluginLoaded = newState;
   }
 
   buildHtml(node: HTMLElement) {
     const container = document.createElement('div');
 
     // Create header element
-    const header = document.createElement('header');
-    header.textContent = 'PlaceHolder';
+    // const header = document.createElement('header');
+    // header.textContent = 'PlaceHolder';
 
     // Append header to the body or any other parent element
-    container.appendChild(header);
+    // container.appendChild(header);
 
     // Append form to the body or any other parent element
     const form = this.buildForm();
@@ -231,15 +250,20 @@ class VideoPresentation {
     conferenceDiv.classList.add('conference-section', 'hide');
 
     // Create h2 element for the conference section heading
-    const conferenceHeading = document.createElement('h2');
-    conferenceHeading.textContent = 'Conference';
+    // const conferenceHeading = document.createElement('h2');
+    // conferenceHeading.textContent = 'Conference';
+
+    // Create the AR container div
+    const arContainer = document.createElement('div');
+    arContainer.id = 'ar-container';
 
     // Create div element for the peers container
     const peersContainerDiv = document.createElement('div');
     peersContainerDiv.id = 'peers-container';
 
     // Append the conference heading and peers container to the conference section div
-    conferenceDiv.appendChild(conferenceHeading);
+    // conferenceDiv.appendChild(conferenceHeading);
+    conferenceDiv.appendChild(arContainer);
     conferenceDiv.appendChild(peersContainerDiv);
 
     // Append the conference section div to the body or any other parent element
@@ -257,6 +281,7 @@ class VideoPresentation {
       this.joinBtn = document.getElementById('join-btn');
       this.conference = document.getElementById('conference');
       this.peersContainer = document.getElementById('peers-container');
+      this.arContainer = document.getElementById('ar-container');
       this.leaveBtn = document.getElementById('leave-btn');
       this.grayScaleBtn = document.getElementById('grayscale-btn');
       this.muteAudio = document.getElementById('mute-aud');
@@ -301,7 +326,6 @@ class VideoPresentation {
     roomCodeInput.type = 'text';
     roomCodeInput.name = 'roomCode';
     roomCodeInput.placeholder = 'Room code';
-    roomCodeInput.value = 'ibj-yxje-nda';
 
     // Append room code input to input container 2
     inputContainer2.appendChild(roomCodeInput);

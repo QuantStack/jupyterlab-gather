@@ -10,26 +10,20 @@
     <header>
       <img class="logo" src="https://www.100ms.live/assets/logo.svg" />
     </header>
-    <form id="join">
-      <h2>Join Room</h2>
-      <div class="input-container">
-        <input id="name" type="text" name="username" placeholder="Your name" />
-      </div>
-      <div class="input-container">
-        <input
-          id="room-code"
-          type="text"
-          name="roomCode"
-          placeholder="Room code"
-        />
-      </div>
-      <button type="button" class="btn-primary" id="join-btn">Join</button>
-    </form>
 
     <div id="conference" class="conference-section hide">
       <h2>Conference</h2>
 
-      <div id="peers-container"></div>
+      <div id="main-container">
+        <div id="ar-container">
+          <!-- presenter video -->
+          <!-- canvas -->
+        </div>
+        <div id="peers-container-sidebar">
+          <!-- peer video -->
+          <!-- peer name -->
+        </div>
+      </div>
     </div>
 
     <div id="controls" class="control-bar hide">
