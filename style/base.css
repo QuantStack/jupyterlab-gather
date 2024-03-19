@@ -90,6 +90,9 @@ form h2,
   padding: 20px 30px;
   max-width: 960px;
   margin: 0 auto;
+  display: flex;
+  height: 100%;
+  width: 100%;
 }
 
 .conference-section h2 {
@@ -97,6 +100,18 @@ form h2,
   font-size: 32px;
   padding-bottom: 10px;
   border-bottom: 1px solid #546e7a;
+}
+
+.main-container {
+  width: 100%;
+  height: 1500px;
+}
+
+#ar-container {
+  width: 80%;
+  height: 90%;
+  min-height: 500px;
+  position: relative;
 }
 
 .peers-container-main {
@@ -113,6 +128,16 @@ form h2,
   max-width: 960px;
 }
 
+.peers-container-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 80%;
+  width: 20%;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .peer-video {
   height: 250px;
   width: 250px;
@@ -123,12 +148,20 @@ form h2,
   z-index: 0;
 }
 
-.peer-canvas {
-  height: 250px;
-  width: 250px;
-  border-radius: 40%;
+.ar-video {
+  height: 100%;
+  width: 100%;
+  border-radius: 10%;
   object-fit: cover;
-  margin-bottom: 10px;
+  position: absolute;
+  z-index: 0;
+}
+
+.ar-canvas {
+  height: 100%;
+  width: 100%;
+  border-radius: 10%;
+  object-fit: cover;
   position: absolute;
   z-index: 2;
 }
@@ -146,6 +179,7 @@ form h2,
 .peer-tile {
   padding: 2px;
   width: 250px;
+  height: 250px;
   flex: initial;
   position: relative;
 }

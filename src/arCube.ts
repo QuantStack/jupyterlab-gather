@@ -11,9 +11,10 @@ class ArCube {
   constructor(node: HTMLElement) {
     this.node = node;
 
+    console.log('pre');
     this.initialize();
     // this.animate();
-
+    console.log('post');
     window.addEventListener('markerFound', () => {
       console.log('Marker found');
     });
@@ -87,9 +88,10 @@ class ArCube {
     this.camera = new THREE.Camera();
     this.scene.add(this.camera);
 
+    console.log('pre1');
     const canvas = document.getElementById('target');
     // console.log('vid', canvas);
-
+    console.log('canvas', canvas);
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,

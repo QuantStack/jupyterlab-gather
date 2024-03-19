@@ -91,8 +91,6 @@ class ArCubePlugin implements HMSVideoPlugin {
    * @param output {HTMLCanvasElement}
    */
   processVideoFrame(input: HTMLCanvasElement, output: HTMLCanvasElement) {
-    // console.log('input', input);
-    // console.log('output', output);
     if (!input || !output) {
       throw new Error('Plugin invalid input/output');
     }
@@ -173,10 +171,12 @@ class ArCubePlugin implements HMSVideoPlugin {
   async init() {
     this.node = hmsStore.getState(selectAppData('node'));
     // this.renderer = hmsStore.getState(selectAppData('renderer'));
-    // console.log('this.renderer', this.renderer);
+    console.log('this.node', this.node);
     console.log('plugin node', this.node);
     this.arCube = new ArCube(this.node);
+    console.log('here');
     this.arCube.animate();
+    console.log('there');
   } // placeholder, nothing to init
 
   getPluginType() {
