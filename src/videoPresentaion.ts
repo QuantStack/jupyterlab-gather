@@ -425,6 +425,7 @@ class VideoPresentation {
     const videoElement = this.createElementWithClass('video', 'ar-video');
     const peerTileName = this.createElementWithClass('span', 'ar-name');
     const peerCanvas = this.createElementWithClass('canvas', 'ar-canvas');
+    videoElement.classList.add('local.peer-video');
     arPresentationTileDiv.id = 'ar-tile';
     videoElement.id = 'ar-video';
     peerCanvas.id = 'target';

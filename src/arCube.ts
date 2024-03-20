@@ -96,7 +96,7 @@ class ArCube {
       premultipliedAlpha: false
     });
     this.renderer.setClearColor(new THREE.Color('lightgrey'), 0);
-    // this.renderer.setSize(640, 480);
+    this.renderer.setSize(1280, 720);
     // this.renderer.domElement.style.position = 'absolute';
     this.renderer.domElement.style.top = '0px';
     this.renderer.domElement.style.left = '0px';
