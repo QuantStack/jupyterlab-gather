@@ -20,15 +20,11 @@ class ArCubePlugin implements HMSVideoPlugin {
 
   constructor() {
     // this.outputCtx = null;
-    console.log('plugin constructor');
     this.input = null;
     this.output = null;
   }
 
   blendImages(imageDataBottom: ImageData, imageDataTop: ImageData) {
-    console.log('imageDataBottom', imageDataBottom);
-    console.log('imageDataTop', imageDataTop);
-
     // Ensure the dimensions of both ImageData objects are the same
     if (
       imageDataBottom.width !== imageDataTop.width ||
@@ -171,12 +167,8 @@ class ArCubePlugin implements HMSVideoPlugin {
   async init() {
     this.node = hmsStore.getState(selectAppData('node'));
     // this.renderer = hmsStore.getState(selectAppData('renderer'));
-    console.log('this.node', this.node);
-    console.log('plugin node', this.node);
     this.arCube = new ArCube(this.node);
-    console.log('here');
     this.arCube.animate();
-    console.log('there');
   } // placeholder, nothing to init
 
   getPluginType() {

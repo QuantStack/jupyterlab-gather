@@ -5,6 +5,7 @@ import {
   selectIsLocalVideoEnabled,
   selectIsLocalVideoPluginPresent,
   selectLocalPeer,
+  selectLocalPeerID,
   selectPeers
 } from '@100mslive/hms-video-store';
 import { ISignal, Signal } from '@lumino/signaling';
@@ -20,7 +21,7 @@ class VideoPresentation {
 
     this.peerCount = 0;
     this.isPluginLoaded = false;
-    this.grayScalePlugin = new ArCubePlugin();
+    this.arPlugin = new ArCubePlugin();
     this._pluginStateChanged = new Signal<this, void>(this);
 
     this.buildHtml(node);
@@ -37,14 +38,17 @@ class VideoPresentation {
   arContainer: any;
   peersContainer: any;
   leaveBtn: any;
-  grayScaleBtn: any;
+  activateArBtn: any;
   muteAudio: any;
   muteVideo: any;
   controls: any;
   peerCount: number;
-  grayScalePlugin: ArCubePlugin;
+  arPlugin: ArCubePlugin;
   isPluginLoaded: boolean;
   _pluginStateChanged;
+  localId: string;
+  arPresentationTile: any;
+  arPresentationVideo: any;
 
   get pluginStateChanged(): ISignal<this, void> {
     return this._pluginStateChanged;
@@ -58,12 +62,12 @@ class VideoPresentation {
 
   pluginButton(plugin: any, name: string) {
     const togglePluginState = async () => {
-      this._pluginStateChanged.emit();
       if (!this.isPluginLoaded) {
         setTimeout(async () => {
           console.log('wait');
           console.log('adding');
           await hmsActions.addPluginToVideoTrack(plugin);
+          this._pluginStateChanged.emit();
         }, 2000);
       } else {
         console.log('removing');
@@ -73,8 +77,8 @@ class VideoPresentation {
 
     // Create leave button element
     const pluginButton = document.createElement('button');
-    pluginButton.id = 'grayscale-btn';
-    pluginButton.classList.add('btn-primary', 'hide');
+    pluginButton.id = 'activate-ar-btn';
+    pluginButton.classList.add('btn-primary');
     pluginButton.textContent = `${this.isPluginLoaded ? 'Remove' : 'Add'} ${name}`;
     pluginButton.onclick = togglePluginState;
 
@@ -133,7 +137,7 @@ class VideoPresentation {
     // Listen to plugin state
     hmsStore.subscribe(
       this.updatePluginState.bind(this),
-      selectIsLocalVideoPluginPresent(this.grayScalePlugin.getName())
+      selectIsLocalVideoPluginPresent(this.arPlugin.getName())
     );
   }
 
@@ -152,15 +156,16 @@ class VideoPresentation {
 
   // Render a single peer
   renderPeer(peer: HMSPeer, type: string) {
+    console.log('render peer');
     this.peerCount++;
     const peerTileDiv = this.createElementWithClass('div', `${type}-tile`);
     const videoElement = this.createElementWithClass('video', `${type}-video`);
     const peerTileName = this.createElementWithClass('span', `${type}-name`);
-    if (type === 'ar') {
-      const peerCanvas = this.createElementWithClass('canvas', 'peer-canvas');
-      peerCanvas.id = 'target';
-      peerTileDiv.append(peerCanvas);
-    }
+    // if (type === 'ar') {
+    //   const peerCanvas = this.createElementWithClass('canvas', 'peer-canvas');
+    //   peerCanvas.id = 'target';
+    //   peerTileDiv.append(peerCanvas);
+    // }
     videoElement.autoplay = true;
     videoElement.muted = true;
     videoElement.playsinline = true;
@@ -181,7 +186,8 @@ class VideoPresentation {
     const peers = hmsStore.getState(selectPeers);
 
     peers.forEach(peer => {
-      if (peer.videoTrack) {
+      if (peer.videoTrack && peer.id !== this.localId) {
+        console.log('is this happening');
         this.peersContainer.append(this.renderPeer(peer, 'peer'));
         this.peersContainer.append(this.renderPeer(peer, 'peer'));
         this.peersContainer.append(this.renderPeer(peer, 'peer'));
@@ -193,23 +199,29 @@ class VideoPresentation {
 
   // Showing the required elements on connection/disconnection
   onConnection(isConnected: any, prevConnected: any) {
+    console.log('on connection');
     if (isConnected) {
+      this.localId = hmsStore.getState(selectLocalPeerID);
+
+      console.log('this.localId', this.localId);
       this.form.classList.add('hide');
       this.conference.classList.remove('hide');
-      this.leaveBtn.classList.remove('hide');
-      this.grayScaleBtn.classList.remove('hide');
+      // this.leaveBtn.classList.remove('hide');
+      // this.grayScaleBtn.classList.remove('hide');
       this.controls.classList.remove('hide');
       this.peersContainer.classList.remove('hide');
+      // default view
       this.peersContainer.classList.add('peers-container-main');
 
       // TODO: These 2 are just for testing
       // this.peersContainer.classList.add('peers-container-sidebar');
       // this.arContainer.classList.remove('hide');
     } else {
+      // Not connected to room, showing login form
       this.form.classList.remove('hide');
       this.conference.classList.add('hide');
-      this.leaveBtn.classList.add('hide');
-      this.grayScaleBtn.classList.add('hide');
+      // this.leaveBtn.classList.add('hide');
+      // this.grayScaleBtn.classList.add('hide');
       this.controls.classList.add('hide');
       this.peersContainer.classList.add('hide');
       this.arContainer.classList.add('hide');
@@ -218,16 +230,24 @@ class VideoPresentation {
 
   onPluginStateChange() {
     console.log('signal junk');
+    console.log('this.isPluginLoaded', this.isPluginLoaded);
     if (this.isPluginLoaded) {
+      console.log('plugin loaded');
       const localPeer = hmsStore.getState(selectLocalPeer);
       // show the big img stuff
+      console.log('localPeer', localPeer);
       this.arContainer.classList.remove('hide');
       this.peersContainer.classList.remove('peers-container-main');
       this.peersContainer.classList.add('peers-container-sidebar');
-      console.log('localPeer', localPeer);
       if (localPeer?.videoTrack) {
         console.log('WIPPLE');
-        this.arContainer.appendChild(this.renderPeer(localPeer, 'ar'));
+        if (localPeer.videoTrack) {
+          console.log('this.arPresentationVideo', this.arPresentationVideo);
+          hmsActions.attachVideo(
+            localPeer.videoTrack,
+            this.arPresentationVideo
+          );
+        }
       }
     } else {
       // show the grid shit
@@ -269,8 +289,8 @@ class VideoPresentation {
     const arContainer = document.createElement('div');
     arContainer.id = 'ar-container';
 
-    const arCanvas = this.buildArPresentation();
-    arContainer.appendChild(arCanvas);
+    const arPresentationTile = this.buildArPresentation();
+    arContainer.appendChild(arPresentationTile);
 
     // Create div element for the peers container
     const peersContainerDiv = document.createElement('div');
@@ -298,10 +318,13 @@ class VideoPresentation {
       this.peersContainer = document.getElementById('peers-container');
       this.arContainer = document.getElementById('ar-container');
       this.leaveBtn = document.getElementById('leave-btn');
-      this.grayScaleBtn = document.getElementById('grayscale-btn');
+      this.activateArBtn = document.getElementById('activate-ar-btn');
       this.muteAudio = document.getElementById('mute-aud');
       this.muteVideo = document.getElementById('mute-vid');
       this.controls = document.getElementById('controls');
+      this.arPresentationTile = document.getElementById('ar-tile');
+      this.arPresentationVideo = document.getElementById('ar-video');
+      console.log('this.arPresentationVideo', this.arPresentationVideo);
 
       this.initialize();
     }, 0);
@@ -341,7 +364,6 @@ class VideoPresentation {
     roomCodeInput.type = 'text';
     roomCodeInput.name = 'roomCode';
     roomCodeInput.placeholder = 'Room code';
-    roomCodeInput.value = 'ibj-yxje-nda';
 
     // Append room code input to input container 2
     inputContainer2.appendChild(roomCodeInput);
@@ -383,11 +405,11 @@ class VideoPresentation {
     // Create leave button element
     const leaveButton = document.createElement('button');
     leaveButton.id = 'leave-btn';
-    leaveButton.classList.add('btn-danger', 'hide');
+    leaveButton.classList.add('btn-danger');
     leaveButton.textContent = 'Leave Room';
 
     // Create Ar button element
-    const arButton = this.pluginButton(this.grayScalePlugin, 'AR Junk');
+    const arButton = this.pluginButton(this.arPlugin, 'AR Junk');
 
     // Append the buttons to the controls section div
     controlsDiv.appendChild(muteAudioButton);
@@ -399,20 +421,21 @@ class VideoPresentation {
   }
 
   buildArPresentation() {
-    const peerTileDiv = this.createElementWithClass('div', 'ar-tile');
+    const arPresentationTileDiv = this.createElementWithClass('div', 'ar-tile');
     const videoElement = this.createElementWithClass('video', 'ar-video');
     const peerTileName = this.createElementWithClass('span', 'ar-name');
     const peerCanvas = this.createElementWithClass('canvas', 'ar-canvas');
+    arPresentationTileDiv.id = 'ar-tile';
+    videoElement.id = 'ar-video';
     peerCanvas.id = 'target';
-    peerTileDiv.append(peerCanvas);
+    arPresentationTileDiv.append(peerCanvas);
     videoElement.autoplay = true;
     videoElement.muted = true;
     videoElement.playsinline = true;
-    videoElement.id = `peer-video-${this.peerCount}`;
 
-    peerTileDiv.append(videoElement);
-    peerTileDiv.append(peerTileName);
-    return peerTileDiv;
+    arPresentationTileDiv.append(videoElement);
+    arPresentationTileDiv.append(peerTileName);
+    return arPresentationTileDiv;
   }
 }
 
