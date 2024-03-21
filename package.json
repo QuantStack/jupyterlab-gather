@@ -66,6 +66,7 @@
         "@jupyterlab/settingregistry": "^4.0.0",
         "@lumino/signaling": "^2.1.2",
         "@lumino/widgets": "^2.3.1",
+        "react": "^18.2.0",
         "three": "^0.162.0"
     },
     "devDependencies": {
