@@ -3,8 +3,9 @@ import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
 
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { Widget } from '@lumino/widgets';
-import { SidebarWidget } from './Sidebar';
 import ArCube from './arCube';
+import { MainDisplayWidget } from './components/MainArea';
+import { SidebarWidget } from './components/Sidebar';
 import VideoPresentation from './videoPresentaion';
 
 class ArPresentWidget extends Widget {
@@ -26,8 +27,9 @@ export default function activate(
 ) {
   console.log('JupyterLab extension jupyterlab_arpresent is activated!');
 
-  let widget: MainAreaWidget<ArPresentWidget>;
+  let widget: MainAreaWidget<MainDisplayWidget>;
   const sidebarPanel = new SidebarWidget();
+
   sidebarPanel.id = 'test-panel';
   sidebarPanel.title.caption = 'Caption';
 
@@ -38,7 +40,8 @@ export default function activate(
     execute: () => {
       // Regenerate the widget if disposed
       if (!widget || widget.isDisposed) {
-        const content = new ArPresentWidget();
+        // const content = new ArPresentWidget();
+        const content = new MainDisplayWidget();
         widget = new MainAreaWidget({ content });
         widget.id = 'arpresent-jupyterlab';
         widget.title.label = 'AR Presentation';
@@ -57,6 +60,8 @@ export default function activate(
 
       // Activate the widget
       app.shell.activateById(widget.id);
+      widget.title.label = 'React Widget';
+      app.shell.add(widget, 'main');
     }
   });
 
