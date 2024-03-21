@@ -304,6 +304,24 @@ class ArCube {
     // this.setUpVideo();
   }
 
+  resizeCanvasToDisplaySize() {
+    const canvas = this.renderer.domElement;
+    // look up the size the canvas is being displayed
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    // console.log('canvas.width in resize', canvas.width);
+    // console.log('width in resize', width);
+    // adjust displayBuffer size to match
+    if (canvas.width !== width || canvas.height !== height) {
+      // you must pass false here or three.js sadly fights the browser
+      this.renderer.setSize(width, height, false);
+      // this.camera.aspect = width / height;
+      // this.camera.updateProjectionMatrix();
+
+      // update any render target sizes here
+    }
+  }
+
   render() {
     // this.renderer.setRenderTarget(this.renderTarget);
     // this.renderer.render(this.scene, this.camera);
