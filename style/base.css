@@ -110,7 +110,7 @@ form h2,
   border-radius: 40%;
   object-fit: cover;
   margin-bottom: 10px;
-  position: absolute;
+  /* position: absolute; */
   z-index: 0;
 }
 
@@ -144,6 +144,25 @@ form h2,
   object-fit: cover;
   position: absolute;
   z-index: 2;
+}
+
+.presentation-container {
+  display: flex;
+}
+
+.presentation-video {
+  flex: 1 0 auto;
+}
+
+.peers-container-sidebar {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  gap: 10px;
+  height: 80%;
+  width: 15%;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .control-bar {

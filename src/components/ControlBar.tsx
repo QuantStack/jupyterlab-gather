@@ -1,6 +1,7 @@
 import { useAVToggle, useHMSActions } from '@100mslive/react-sdk';
 import React from 'react';
 import PluginButton from './PluginButton';
+import ScreenShareButton from './ScreenShareButton';
 
 function ControlBar() {
   const hmsActions = useHMSActions();
@@ -15,6 +16,8 @@ function ControlBar() {
       <button className="btn-control" onClick={toggleVideo}>
         {isLocalVideoEnabled ? 'Hide' : 'Unhide'}
       </button>
+
+      <ScreenShareButton />
       <PluginButton />
       <button
         id="leave-btn"

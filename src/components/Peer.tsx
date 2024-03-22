@@ -1,7 +1,7 @@
-import { useVideo } from '@100mslive/react-sdk';
+import { HMSPeer, useVideo } from '@100mslive/react-sdk';
 import React from 'react';
 
-function Peer({ peer }: { peer: any }) {
+function Peer({ peer }: { peer: HMSPeer }) {
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
   });

@@ -15,13 +15,9 @@ function PluginButton() {
     selectIsLocalVideoPluginPresent(arPlugin.getName())
   );
   const togglePlugin = async () => {
-    console.log('isPluginLoaded', isPluginLoaded);
     if (!isPluginLoaded) {
+      console.log('adding');
       await hmsActions.addPluginToVideoTrack(arPlugin);
-      //   setTimeout(async () => {
-      //     console.log('wait');
-      //     console.log('adding');
-      //   }, 2000);
     } else {
       console.log('removing');
       await hmsActions.removePluginFromVideoTrack(arPlugin);
