@@ -90,8 +90,8 @@ class ArCubePlugin implements HMSVideoPlugin {
     if (!input || !output) {
       throw new Error('Plugin invalid input/output');
     }
-    console.log('input', input);
-    console.log('output', output);
+    // console.log('input', input);
+    // console.log('output', output);
 
     this.input = input;
     this.output = output;

@@ -15,6 +15,7 @@ function Peer({ peer }: { peer: any }) {
         muted
         playsInline
       />
+      <canvas id="target" className="ar-canvas"></canvas>
       <div className="peer-name">
         {peer.name} {peer.isLocal ? '(You)' : ''}
       </div>

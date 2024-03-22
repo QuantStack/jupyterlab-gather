@@ -47,7 +47,7 @@ input {
 }
 
 input::placeholder {
-  color: #aaa;
+  color: #837c7c;
 }
 
 .input-container {
@@ -110,6 +110,8 @@ form h2,
   border-radius: 40%;
   object-fit: cover;
   margin-bottom: 10px;
+  position: absolute;
+  z-index: 0;
 }
 
 .local.peer-video {
@@ -123,6 +125,25 @@ form h2,
 
 .peer-container {
   padding: 10px;
+}
+
+.ar-video {
+  width: 1280px;
+  height: 720px;
+  border-radius: 10%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  position: absolute;
+  z-index: 0;
+}
+
+.ar-canvas {
+  width: 250px;
+  height: 250px;
+  border-radius: 10%;
+  object-fit: cover;
+  position: absolute;
+  z-index: 2;
 }
 
 .control-bar {

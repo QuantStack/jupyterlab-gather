@@ -87,28 +87,45 @@ class ArCube {
     this.camera = new THREE.Camera();
     this.scene.add(this.camera);
 
-    const canvas = document.getElementById('target');
+    const canvas = document.getElementById('target') as HTMLCanvasElement;
+
+    const offscreen = canvas?.transferControlToOffscreen();
+    if (!canvas?.transferControlToOffscreen) {
+      console.log('no support');
+    }
+
+    const height = canvas.clientHeight;
+    const width = canvas.clientWidth;
+
+    console.log('offscreen', offscreen);
     // console.log('vid', canvas);
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
-      canvas: canvas!,
+      canvas: offscreen,
       preserveDrawingBuffer: true,
       premultipliedAlpha: false
     });
+    console.log('post render');
+
     this.renderer.setClearColor(new THREE.Color('lightgrey'), 0);
-    this.renderer.setSize(1280, 720);
+    this.renderer.setSize(1280, 720, false);
     // this.renderer.domElement.style.position = 'absolute';
-    this.renderer.domElement.style.top = '0px';
-    this.renderer.domElement.style.left = '0px';
+
+    console.log('pre dom');
+    // this.renderer.domElement.style.top = '0px';
+    // this.renderer.domElement.style.left = '0px';
     // this.node.appendChild(this.renderer.domElement);
+    console.log('post dom');
 
     this.renderTarget = new THREE.WebGLRenderTarget(
       canvas?.clientWidth,
       canvas?.clientHeight
     );
 
-    // this.renderer.setRenderTarget(this.renderTarget);
+    this.renderTarget.setSize(1280, 720);
+
+    this.renderer.setRenderTarget(this.renderTarget);
 
     this.clock = new THREE.Clock();
     this.deltaTime = 0;

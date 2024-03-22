@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 function Join() {
   const hmsActions = useHMSActions();
   const [inputValues, setInputValues] = useState({
-    userName: '',
-    roomCode: ''
+    userName: 'we',
+    roomCode: 'ibj-yxje-nda'
   });
 
   const handleInputChange = (e: any) => {
@@ -16,6 +16,7 @@ function Join() {
   };
 
   const handleSubmit = async (e: any) => {
+    console.log('clicking join');
     e.preventDefault();
     const { userName = '', roomCode = '' } = inputValues;
 
@@ -50,6 +51,7 @@ function Join() {
           name="roomCode"
           placeholder="Room code"
           onChange={handleInputChange}
+          value={inputValues.roomCode}
         />
       </div>
       <button className="btn-primary">Join</button>
