@@ -90,12 +90,10 @@ class ArCubePlugin implements HMSVideoPlugin {
     if (!input || !output) {
       throw new Error('Plugin invalid input/output');
     }
-    // console.log('input', input);
-    // console.log('output', output);
 
     this.input = input;
     this.output = output;
-    // let imgData: any;
+
     // we don't want to change the dimensions so set the same width, height
     const width = input.width;
     const height = input.height;
@@ -103,33 +101,30 @@ class ArCubePlugin implements HMSVideoPlugin {
     output.height = height;
 
     const threeJsContext = this.arCube.renderer.getContext();
-    // threeJsContext?.clear(threeJsContext.COLOR_BUFFER_BIT);
 
     const inputCtx = input.getContext('2d');
     const inputImgData = inputCtx?.getImageData(0, 0, width, height);
 
     const pixels = new Uint8Array(width * height * 4);
-    // const pixels2 = new Uint8Array(width * height * 4);
 
-    // console.log('threeJsContext', threeJsContext);
-    // this.arCube.renderer.readRenderTargetPixels(
-    //   this.arCube.renderTarget,
-    //   0,
-    //   0,
-    //   width,
-    //   height,
-    //   pixels
-    // );
-
-    threeJsContext?.readPixels(
+    this.arCube.renderer.readRenderTargetPixels(
+      this.arCube.renderTarget,
       0,
       0,
       width,
       height,
-      threeJsContext.RGBA,
-      threeJsContext.UNSIGNED_BYTE,
       pixels
     );
+
+    // threeJsContext?.readPixels(
+    //   0,
+    //   0,
+    //   width,
+    //   height,
+    //   threeJsContext.RGBA,
+    //   threeJsContext.UNSIGNED_BYTE,
+    //   pixels
+    // );
 
     const threeImageData = new ImageData(
       new Uint8ClampedArray(pixels),
@@ -137,7 +132,6 @@ class ArCubePlugin implements HMSVideoPlugin {
       height
     );
 
-    // console.log('threeImageData', threeImageData);
     const outputCtx = output.getContext('2d');
 
     if (!inputImgData) {
@@ -167,16 +161,10 @@ class ArCubePlugin implements HMSVideoPlugin {
   }
 
   async init() {
-    console.log('inti');
     this.node = hmsStore.getState(selectAppData('node'));
-    console.log('this.node', this.node);
-    // this.renderer = hmsStore.getState(selectAppData('renderer'));
-    console.log('pre');
     this.arCube = new ArCube(this.node);
-    console.log('mid');
     this.arCube.animate();
-    console.log('post');
-  } // placeholder, nothing to init
+  }
 
   getPluginType() {
     return HMSVideoPluginType.TRANSFORM; // because we transform the image

@@ -68,7 +68,6 @@ class ArCube {
   renderTarget: THREE.WebGLRenderTarget;
 
   initialize() {
-    console.log('cube init');
     this.scene = new THREE.Scene();
 
     // promise to track if AR.js has loaded the webcam
@@ -89,7 +88,7 @@ class ArCube {
 
     const canvas = document.getElementById('target') as HTMLCanvasElement;
 
-    const offscreen = canvas?.transferControlToOffscreen();
+    // const offscreen = canvas?.transferControlToOffscreen();
     if (!canvas?.transferControlToOffscreen) {
       console.log('no support');
     }
@@ -97,31 +96,22 @@ class ArCube {
     const height = canvas.clientHeight;
     const width = canvas.clientWidth;
 
-    console.log('offscreen', offscreen);
-    // console.log('vid', canvas);
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
-      canvas: offscreen,
+      canvas: canvas,
       preserveDrawingBuffer: true,
       premultipliedAlpha: false
     });
-    console.log('post render');
 
     this.renderer.setClearColor(new THREE.Color('lightgrey'), 0);
-    this.renderer.setSize(1280, 720, false);
+    // this.renderer.setSize(1280, 720, false);
     // this.renderer.domElement.style.position = 'absolute';
 
-    console.log('pre dom');
     // this.renderer.domElement.style.top = '0px';
     // this.renderer.domElement.style.left = '0px';
-    // this.node.appendChild(this.renderer.domElement);
-    console.log('post dom');
 
-    this.renderTarget = new THREE.WebGLRenderTarget(
-      canvas?.clientWidth,
-      canvas?.clientHeight
-    );
+    this.renderTarget = new THREE.WebGLRenderTarget();
 
     this.renderTarget.setSize(1280, 720);
 
