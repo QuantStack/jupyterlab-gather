@@ -1,7 +1,7 @@
 import { selectIsConnectedToRoom } from '@100mslive/hms-video-store';
 import { ReactWidget } from '@jupyterlab/apputils';
 import React, { useEffect, useState } from 'react';
-import { hmsStore } from '../hms';
+import { hmsActions, hmsStore } from '../hms';
 import { ConferenceComponent } from './Conference';
 import { ControlBarComponent } from './ControlBar';
 import { JoinFormComponent } from './JoinForm';
@@ -14,6 +14,9 @@ const MainAreaComponent = () => {
     const userId = hmsStore.getState(selectIsConnectedToRoom);
     console.log('userId', userId);
     setIsConnected(userId);
+
+    window.addEventListener('beforeunload', () => hmsActions.leave());
+    window.addEventListener('onunload', () => hmsActions.leave());
   }, []);
 
   return (
