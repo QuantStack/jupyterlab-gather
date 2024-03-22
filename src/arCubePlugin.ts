@@ -167,10 +167,15 @@ class ArCubePlugin implements HMSVideoPlugin {
   }
 
   async init() {
+    console.log('inti');
     this.node = hmsStore.getState(selectAppData('node'));
+    console.log('this.node', this.node);
     // this.renderer = hmsStore.getState(selectAppData('renderer'));
+    console.log('pre');
     this.arCube = new ArCube(this.node);
+    console.log('mid');
     this.arCube.animate();
+    console.log('post');
   } // placeholder, nothing to init
 
   getPluginType() {

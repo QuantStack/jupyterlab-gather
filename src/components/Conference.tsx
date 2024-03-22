@@ -1,22 +1,20 @@
-import { ReactWidget } from '@jupyterlab/apputils';
+import { selectPeers, useHMSStore } from '@100mslive/react-sdk';
 import React from 'react';
+import Peer from './Peer';
 
-export const ConferenceComponent = () => {
+function Conference() {
+  const peers = useHMSStore(selectPeers);
+
   return (
-    <div id="conference" className="conference-section">
+    <div className="conference-section">
       <h2>Conference</h2>
-
-      <div id="peers-container"></div>
+      <div className="peers-container">
+        {peers.map(peer => (
+          <Peer key={peer.id} peer={peer} />
+        ))}
+      </div>
     </div>
   );
-};
+}
 
-// export class ConferenceWidget extends ReactWidget {
-//   constructor() {
-//     super();
-//   }
-
-//   render() {
-//     return <ConferenceComponent />;
-//   }
-// }
+export default Conference;

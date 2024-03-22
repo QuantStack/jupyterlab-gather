@@ -1,71 +1,60 @@
+import { useHMSActions } from '@100mslive/react-sdk';
 import React, { useState } from 'react';
-import { hmsActions } from '../hms';
 
-export const JoinFormComponent = () => {
-  const [userName, setUserName] = useState('');
-  const [roomCode, setRoomCode] = useState('');
+function Join() {
+  const hmsActions = useHMSActions();
+  const [inputValues, setInputValues] = useState({
+    userName: '',
+    roomCode: ''
+  });
 
-  const handleNameChange = (e: any) => {
-    setUserName(e.target.value);
+  const handleInputChange = (e: any) => {
+    setInputValues(prevValues => ({
+      ...prevValues,
+      [e.target.name]: e.target.value
+    }));
   };
 
-  const handleRoomCodeChanRoomCode = (e: any) => {
-    setRoomCode(e.target.value);
-  };
-
-  // Joining the room
   const handleSubmit = async (e: any) => {
-    console.log('Clicking join');
     e.preventDefault();
+    const { userName = '', roomCode = '' } = inputValues;
 
     // use room code to fetch auth token
-    const authToken = await hmsActions.getAuthTokenByRoomCode({
-      roomCode
-    });
-    // join room using username and auth token
-    hmsActions.join({
-      userName,
-      authToken
-    });
+    const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode });
+
+    try {
+      await hmsActions.join({ userName, authToken });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
-    <div id="join-form">
+    <form onSubmit={handleSubmit}>
       <h2>Join Room</h2>
-      <form id="join" onSubmit={handleSubmit}>
-        <h2>Join Room</h2>
-        <div className="input-container">
-          <input
-            id="name"
-            type="text"
-            name="username"
-            placeholder="Your name"
-            onChange={handleNameChange}
-          />
-        </div>
-        <div className="input-container">
-          <input
-            id="room-code"
-            type="text"
-            name="roomCode"
-            placeholder="Room code"
-            onChange={handleRoomCodeChanRoomCode}
-          />
-        </div>
-        <button type="submit" className="btn-primary" id="join-btn">
-          Join
-        </button>
-      </form>
-    </div>
+      <div className="input-container">
+        <input
+          required
+          value={inputValues.userName}
+          onChange={handleInputChange}
+          id="userName"
+          type="text"
+          name="userName"
+          placeholder="Your name"
+        />
+      </div>
+      <div className="input-container">
+        <input
+          id="room-code"
+          type="text"
+          name="roomCode"
+          placeholder="Room code"
+          onChange={handleInputChange}
+        />
+      </div>
+      <button className="btn-primary">Join</button>
+    </form>
   );
-};
+}
 
-// export class SidebarWidget extends ReactWidget {
-//   constructor() {
-//     super();
-//   }
-
-//   render() {
-//     return <SidebarComponent />;
-//   }
-// }
+export default Join;

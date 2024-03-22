@@ -2,22 +2,20 @@ import { ILayoutRestorer, JupyterFrontEnd } from '@jupyterlab/application';
 import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
 
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
-import { Widget } from '@lumino/widgets';
 import ArCube from './arCube';
-import { MainDisplayWidget } from './components/MainArea';
-import { SidebarWidget } from './components/Sidebar';
-import VideoPresentation from './videoPresentaion';
+// import { SidebarWidget } from './components/Sidebar';
+import { RootDisplayWidget } from './components/RootDisplay';
 
-class ArPresentWidget extends Widget {
-  constructor() {
-    super();
-    // this.arCube = new ArCube(this.node);
-    this.videoPresentation = new VideoPresentation(this.node);
-  }
+// class ArPresentWidget extends Widget {
+//   constructor() {
+//     super();
+//     // this.arCube = new ArCube(this.node);
+//     this.videoPresentation = new VideoPresentation(this.node);
+//   }
 
-  // arCube: ArCube;
-  videoPresentation: VideoPresentation;
-}
+//   // arCube: ArCube;
+//   videoPresentation: VideoPresentation;
+// }
 
 export default function activate(
   app: JupyterFrontEnd,
@@ -27,11 +25,11 @@ export default function activate(
 ) {
   console.log('JupyterLab extension jupyterlab_arpresent is activated!');
 
-  let widget: MainAreaWidget<MainDisplayWidget>;
-  const sidebarPanel = new SidebarWidget();
+  let widget: MainAreaWidget<RootDisplayWidget>;
+  // const sidebarPanel = new SidebarWidget();
 
-  sidebarPanel.id = 'test-panel';
-  sidebarPanel.title.caption = 'Caption';
+  // sidebarPanel.id = 'test-panel';
+  // sidebarPanel.title.caption = 'Caption';
 
   // Add an application command
   const arPresentCommand: string = 'arpresent:open';
@@ -41,7 +39,8 @@ export default function activate(
       // Regenerate the widget if disposed
       if (!widget || widget.isDisposed) {
         // const content = new ArPresentWidget();
-        const content = new MainDisplayWidget();
+
+        const content = new RootDisplayWidget();
         widget = new MainAreaWidget({ content });
         widget.id = 'arpresent-jupyterlab';
         widget.title.label = 'AR Presentation';
@@ -79,7 +78,7 @@ export default function activate(
   palette.addItem({ command: arPresentCommand, category: 'Tutorial' });
   palette.addItem({ command: arStartCommand, category: 'Tutorial' });
 
-  app.shell.add(sidebarPanel, 'left', { rank: 2000 });
+  // app.shell.add(sidebarPanel, 'left', { rank: 2000 });
   // Track and restore the widget state
   // const tracker = new WidgetTracker<MainAreaWidget<ArPresent>>({
   //   namespace: 'arpresent'

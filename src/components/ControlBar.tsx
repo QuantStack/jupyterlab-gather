@@ -1,24 +1,30 @@
+import { useAVToggle, useHMSActions } from '@100mslive/react-sdk';
 import React from 'react';
+import PluginButton from './PluginButton';
 
-export const ControlBarComponent = () => {
+function ControlBar() {
+  const hmsActions = useHMSActions();
+  const { isLocalAudioEnabled, isLocalVideoEnabled, toggleAudio, toggleVideo } =
+    useAVToggle();
+
   return (
-    <div id="controls" className="control-bar">
-      <button id="mute-aud" className="btn-control">
-        <span className="material-symbols-outlined">mic</span>
+    <div className="control-bar">
+      <button className="btn-control" onClick={toggleAudio}>
+        {isLocalAudioEnabled ? 'Mute' : 'Unmute'}
       </button>
-      <button id="mute-vid" className="btn-control">
-        <span className="material-symbols-outlined">videocam</span>
+      <button className="btn-control" onClick={toggleVideo}>
+        {isLocalVideoEnabled ? 'Hide' : 'Unhide'}
+      </button>
+      <PluginButton />
+      <button
+        id="leave-btn"
+        className="btn-danger"
+        onClick={() => hmsActions.leave()}
+      >
+        Leave Room
       </button>
     </div>
   );
-};
+}
 
-// export class ControlBarWidget extends ReactWidget {
-//   constructor() {
-//     super();
-//   }
-
-//   render() {
-//     return <ControlBarComponent />;
-//   }
-// }
+export default ControlBar;

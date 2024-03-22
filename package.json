@@ -57,7 +57,7 @@
         "watch:labextension": "jupyter labextension watch ."
     },
     "dependencies": {
-        "@100mslive/hms-video-store": "^0.12.1",
+        "@100mslive/react-sdk": "^0.10.3",
         "@ar-js-org/ar.js": "^3.4.5",
         "@jupyterlab/application": "^4.1.4",
         "@jupyterlab/apputils": "^4.2.4",
@@ -66,7 +66,9 @@
         "@jupyterlab/settingregistry": "^4.0.0",
         "@lumino/signaling": "^2.1.2",
         "@lumino/widgets": "^2.3.1",
+        "@types/react-dom": "^18.2.22",
         "react": "^18.2.0",
+        "react-dom": "^18.2.0",
         "three": "^0.162.0"
     },
     "devDependencies": {

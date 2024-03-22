@@ -68,6 +68,7 @@ class ArCube {
   renderTarget: THREE.WebGLRenderTarget;
 
   initialize() {
+    console.log('cube init');
     this.scene = new THREE.Scene();
 
     // promise to track if AR.js has loaded the webcam
