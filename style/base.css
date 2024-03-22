@@ -115,18 +115,18 @@ form h2,
 }
 
 .peers-container-main {
-  display: flex;
+  /* display: flex; */
   flex-wrap: wrap;
   gap: 10px;
   min-height: 500px;
   justify-content: space-around;
   align-items: center;
   max-width: 960px;
-  margin: auto;
+  /* margin: auto; */
 }
 
 .peers-container-sidebar {
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   gap: 10px;
   height: 80%;
@@ -150,7 +150,7 @@ form h2,
   height: 720px;
   border-radius: 10%;
   object-fit: cover;
-  position: absolute;
+  /* position: absolute; */
   z-index: 0;
 }
 

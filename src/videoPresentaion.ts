@@ -158,6 +158,7 @@ class VideoPresentation {
   renderPeer(peer: HMSPeer, type: string) {
     console.log('render peer');
     this.peerCount++;
+    type = 'ar';
     const peerTileDiv = this.createElementWithClass('div', `${type}-tile`);
     const videoElement = this.createElementWithClass('video', `${type}-video`);
     const peerTileName = this.createElementWithClass('span', `${type}-name`);
@@ -189,10 +190,10 @@ class VideoPresentation {
       if (peer.videoTrack && peer.id !== this.localId) {
         console.log('is this happening');
         this.peersContainer.append(this.renderPeer(peer, 'peer'));
-        this.peersContainer.append(this.renderPeer(peer, 'peer'));
-        this.peersContainer.append(this.renderPeer(peer, 'peer'));
-        this.peersContainer.append(this.renderPeer(peer, 'peer'));
-        this.peersContainer.append(this.renderPeer(peer, 'peer'));
+        // this.peersContainer.append(this.renderPeer(peer, 'peer'));
+        // this.peersContainer.append(this.renderPeer(peer, 'peer'));
+        // this.peersContainer.append(this.renderPeer(peer, 'peer'));
+        // this.peersContainer.append(this.renderPeer(peer, 'peer'));
       }
     });
   }
