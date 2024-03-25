@@ -1,7 +1,7 @@
 import {
   selectPeerScreenSharing,
   selectPeers,
-  selectScreenVideoTrackByID,
+  selectScreenShareByPeerID,
   useHMSStore,
   useVideo
 } from '@100mslive/react-sdk';
@@ -11,8 +11,9 @@ import Peer from './Peer';
 function ScreenShare() {
   const peers = useHMSStore(selectPeers);
   const screenPresenter = useHMSStore(selectPeerScreenSharing);
+
   const screenShareVideoTrack = useHMSStore(
-    selectScreenVideoTrackByID(screenPresenter?.id)
+    selectScreenShareByPeerID(screenPresenter?.id)
   );
 
   const { videoRef } = useVideo({
@@ -20,20 +21,23 @@ function ScreenShare() {
   });
 
   useEffect(() => {
-    console.log('screen share');
-  }, []);
+    console.log('screenShareVideoTrack?.id', screenShareVideoTrack);
+    console.log('screenPresenter', screenPresenter);
+  }, [screenShareVideoTrack]);
 
   return (
     <div className="conference-section">
       <div className="presentation-container">
         {/* Presentation video */}
-        <video
-          ref={videoRef}
-          className="presentation-video"
-          autoPlay
-          muted
-          playsInline
-        />
+        <div className="presentation-video-container">
+          <video
+            ref={videoRef}
+            className="presentation-video"
+            autoPlay
+            muted
+            playsInline
+          />
+        </div>
         <div className="peers-container-sidebar">
           {peers.map(peer => (
             <Peer key={peer.id} peer={peer} />

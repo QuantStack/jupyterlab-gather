@@ -105,8 +105,8 @@ form h2,
 }
 
 .peer-video {
-  height: 250px;
-  width: 250px;
+  max-height: 250px;
+  max-width: 250px;
   border-radius: 40%;
   object-fit: cover;
   margin-bottom: 10px;
@@ -150,17 +150,23 @@ form h2,
   display: flex;
 }
 
+.presentation-video-container {
+  flex: 0 0 80%;
+}
+
 .presentation-video {
-  flex: 1 0 auto;
+  width: 100%;
+  border-radius: 10%;
+  object-fit: cover;
 }
 
 .peers-container-sidebar {
   display: flex;
-  flex: 0 1 auto;
+  flex: 1;
   flex-direction: column;
   gap: 10px;
   height: 80%;
-  width: 15%;
+  /* width: 15%; */
   justify-content: space-around;
   align-items: center;
 }
