@@ -12,6 +12,7 @@ function RootDisplay({ node }: IRootDisplayProps) {
   useEffect(() => {
     const initialAppData = {
       node: node,
+      canLoadModel: true,
       modelUrl:
         'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf'
     };

@@ -61,7 +61,7 @@ class ArCube {
   readonly edgeGeometry: THREE.CylinderGeometry;
   readonly edgeCenters: THREE.Vector3[];
   readonly edgeRotations: THREE.Vector3[];
-  readonly okToLoadModel: boolean;
+  okToLoadModel: boolean;
   readonly animationRequestId: number | undefined;
   readonly now: number;
   readonly then: number;
@@ -73,13 +73,8 @@ class ArCube {
   modelUrl: string;
 
   initialize() {
+    this.okToLoadModel = true;
     this.scene = new THREE.Scene();
-
-    console.log('first');
-    // const selector = selectAppData('modelUrl');
-    console.log('mid');
-    // hmsStore.subscribe(this.loadModel, selector);
-    console.log('sec');
 
     // promise to track if AR.js has loaded the webcam
     this.webcam_loaded = new Promise(resolve => {
@@ -290,11 +285,8 @@ class ArCube {
       this.gltfLoader = new GLTFLoader();
     }
 
-    console.log('bet');
-
     this.loadModel();
 
-    console.log('post bet');
     const pointLight = new THREE.PointLight(0xffffff, 1, 50);
     pointLight.position.set(0.5, 3, 2);
     this.scene.add(pointLight);
@@ -312,33 +304,39 @@ class ArCube {
     }
 
     // load model
+    if (this.okToLoadModel) {
+      this.okToLoadModel = false;
+      hmsActions.setAppData('canLoadModel', false);
 
-    this.gltfLoader.load(
-      this.modelUrl,
-      gltf => {
-        const scale = 1.0;
-        this.gltfModel = gltf.scene;
-        this.gltfModel.scale.set(scale, scale, scale);
-        this.gltfModel.position.fromArray([0, -1, 0]);
+      this.gltfLoader.load(
+        this.modelUrl,
+        gltf => {
+          const scale = 1.0;
+          this.gltfModel = gltf.scene;
+          this.gltfModel.scale.set(scale, scale, scale);
+          this.gltfModel.position.fromArray([0, -1, 0]);
 
-        this.animations = gltf.animations;
-        this.mixer = new THREE.AnimationMixer(this.gltfModel);
+          this.animations = gltf.animations;
+          this.mixer = new THREE.AnimationMixer(this.gltfModel);
 
-        if (this.animations) {
-          this.animations.forEach(clip => {
-            this.mixer.clipAction(clip).play();
-          });
+          if (this.animations) {
+            this.animations.forEach(clip => {
+              this.mixer.clipAction(clip).play();
+            });
+          }
+
+          this.sceneGroup.add(this.gltfModel);
+          this.okToLoadModel = true;
+          hmsActions.setAppData('canLoadModel', true);
+        },
+        () => {
+          console.log('model loading');
+        },
+        error => {
+          console.log('Error loading model', error);
         }
-
-        this.sceneGroup.add(this.gltfModel);
-      },
-      () => {
-        console.log('model loading');
-      },
-      error => {
-        console.log('Error loading model', error);
-      }
-    );
+      );
+    }
   }
 
   removeFromScene(object3d: THREE.Object3D) {

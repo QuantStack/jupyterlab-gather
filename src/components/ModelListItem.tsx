@@ -1,26 +1,22 @@
-import { selectAppData } from '@100mslive/react-sdk';
 import { Button } from '@jupyterlab/ui-components';
 import React from 'react';
-import ArCube from '../arCube';
-import { hmsActions, hmsStore } from '../hms';
 
 interface IModelListItem {
   name: string;
   url: string;
+  isDisabled: boolean;
+  handleClick: (url: string) => void;
 }
 
-function ModelListItem({ name, url }: IModelListItem) {
-  const handleClick = () => {
-    const cube: ArCube = hmsStore.getState(selectAppData('arCube'));
-    hmsActions.setAppData('modelUrl', url);
-    cube.loadModel();
-
-    console.log('cube', cube);
-  };
-
+function ModelListItem({ name, url, isDisabled, handleClick }: IModelListItem) {
   return (
-    <Button minimal className="model-list-item" onClick={handleClick}>
-      {name}
+    <Button
+      minimal
+      className="model-list-item"
+      disabled={isDisabled}
+      onClick={() => handleClick(url)}
+    >
+      {isDisabled ? 'Working...' : `${name}`}
     </Button>
   );
 }
