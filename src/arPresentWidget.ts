@@ -62,6 +62,7 @@ export default function activate(
       app.shell.activateById(widget.id);
       widget.title.label = 'React Widget';
       app.shell.add(widget, 'main');
+      app.shell.add(sidebarPanel, 'left', { rank: 2000 });
     }
   });
 
@@ -79,7 +80,6 @@ export default function activate(
   palette.addItem({ command: arPresentCommand, category: 'Tutorial' });
   palette.addItem({ command: arStartCommand, category: 'Tutorial' });
 
-  app.shell.add(sidebarPanel, 'left', { rank: 2000 });
   // Track and restore the widget state
   // const tracker = new WidgetTracker<MainAreaWidget<ArPresent>>({
   //   namespace: 'arpresent'
