@@ -29,7 +29,10 @@ function ScreenShare() {
     <div className="conference-section">
       <div className="presentation-container">
         {/* Presentation video */}
-        <div className="presentation-video-container">
+        <div
+          id="screen-share-container"
+          className="presentation-video-container"
+        >
           <video
             ref={videoRef}
             className="presentation-video"

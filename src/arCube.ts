@@ -1,9 +1,12 @@
+import {
+  selectIsSomeoneScreenSharing,
+  useHMSStore
+} from '@100mslive/react-sdk';
 //@ts-expect-error AR.js doesn't have type definitions
 import * as THREEx from '@ar-js-org/ar.js/three.js/build/ar-threex.js';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { hmsActions } from './hms';
-
 class ArCube {
   /**
    * Construct a new arpresent widget.
@@ -86,36 +89,42 @@ class ArCube {
     this.camera = new THREE.Camera();
     this.scene.add(this.camera);
 
-    const canvas = document.getElementById('target') as HTMLCanvasElement;
+    // const canvas = document.getElementById('target') as HTMLCanvasElement;
 
     // const offscreen = canvas?.transferControlToOffscreen();
-    if (!canvas?.transferControlToOffscreen) {
-      console.log('no support');
-    }
-
-    const height = canvas.clientHeight;
-    const width = canvas.clientWidth;
+    // if (!canvas?.transferControlToOffscreen) {
+    //   console.log('no support');
+    // }
 
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
-      canvas: canvas,
+      // canvas: canvas,
       preserveDrawingBuffer: true,
       premultipliedAlpha: false
     });
 
     this.renderer.setClearColor(new THREE.Color('lightgrey'), 0);
+
+    //Not render target things
+    const isScreenShareOn = useHMSStore(selectIsSomeoneScreenSharing);
+
+    if (isScreenShareOn) {
+      console.log('iffing');
+      const container = document.getElementById('screen-share-container');
+      container?.appendChild(this.renderer.domElement);
+    } else {
+      // Renderer target things
+      this.renderTarget = new THREE.WebGLRenderTarget();
+      this.renderTarget.setSize(1280, 720);
+      this.renderer.setRenderTarget(this.renderTarget);
+    }
+
     // this.renderer.setSize(1280, 720, false);
     // this.renderer.domElement.style.position = 'absolute';
 
     // this.renderer.domElement.style.top = '0px';
     // this.renderer.domElement.style.left = '0px';
-
-    this.renderTarget = new THREE.WebGLRenderTarget();
-
-    this.renderTarget.setSize(1280, 720);
-
-    this.renderer.setRenderTarget(this.renderTarget);
 
     this.clock = new THREE.Clock();
     this.deltaTime = 0;

@@ -14,6 +14,7 @@ function PluginButton() {
   const isPluginLoaded = useHMSStore(
     selectIsLocalVideoPluginPresent(arPlugin.getName())
   );
+
   const togglePlugin = async () => {
     if (!isPluginLoaded) {
       console.log('adding');
