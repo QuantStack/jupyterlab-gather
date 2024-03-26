@@ -7,7 +7,7 @@ import {
 } from '@100mslive/hms-video-store';
 import * as THREE from 'three';
 import ArCube from './arCube';
-import { hmsStore } from './hms';
+import { hmsActions, hmsStore } from './hms';
 
 class ArCubePlugin implements HMSVideoPlugin {
   input: HTMLCanvasElement | null;
@@ -163,6 +163,8 @@ class ArCubePlugin implements HMSVideoPlugin {
   async init() {
     this.node = hmsStore.getState(selectAppData('node'));
     this.arCube = new ArCube(this.node);
+    hmsActions.setAppData('arCube', this.arCube);
+
     this.arCube.animate();
   }
 

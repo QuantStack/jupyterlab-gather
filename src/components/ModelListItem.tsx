@@ -1,6 +1,8 @@
+import { selectAppData } from '@100mslive/react-sdk';
 import { Button } from '@jupyterlab/ui-components';
 import React from 'react';
-import { hmsActions } from '../hms';
+import ArCube from '../arCube';
+import { hmsActions, hmsStore } from '../hms';
 
 interface IModelListItem {
   name: string;
@@ -9,7 +11,11 @@ interface IModelListItem {
 
 function ModelListItem({ name, url }: IModelListItem) {
   const handleClick = () => {
+    const cube: ArCube = hmsStore.getState(selectAppData('arCube'));
     hmsActions.setAppData('modelUrl', url);
+    cube.loadModel();
+
+    console.log('cube', cube);
   };
 
   return (

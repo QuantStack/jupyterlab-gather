@@ -13,15 +13,16 @@ class ArCube {
    */
   constructor(node: HTMLElement) {
     this.node = node;
+    this.modelUrl = hmsStore.getState(selectAppData('modelUrl'));
 
     this.initialize();
     // this.animate();
     window.addEventListener('markerFound', () => {
-      console.log('Marker found');
+      // console.log('Marker found');
     });
 
     window.addEventListener('markerLost', () => {
-      console.log('Marker lost');
+      // console.log('Marker lost');
     });
   }
 
@@ -73,6 +74,12 @@ class ArCube {
 
   initialize() {
     this.scene = new THREE.Scene();
+
+    console.log('first');
+    // const selector = selectAppData('modelUrl');
+    console.log('mid');
+    // hmsStore.subscribe(this.loadModel, selector);
+    console.log('sec');
 
     // promise to track if AR.js has loaded the webcam
     this.webcam_loaded = new Promise(resolve => {
@@ -283,13 +290,28 @@ class ArCube {
       this.gltfLoader = new GLTFLoader();
     }
 
+    console.log('bet');
+
+    this.loadModel();
+
+    console.log('post bet');
+    const pointLight = new THREE.PointLight(0xffffff, 1, 50);
+    pointLight.position.set(0.5, 3, 2);
+    this.scene.add(pointLight);
+
+    // this.setUpVideo();
+  }
+
+  loadModel() {
+    this.modelUrl = hmsStore.getState(selectAppData('modelUrl'));
+
+    console.log('load model', this.modelUrl);
     // remove old model first
-    // if (this.gltfModel) {
-    //   this.removeFromScene(this.gltfModel);
-    // }
+    if (this.gltfModel) {
+      this.removeFromScene(this.gltfModel);
+    }
 
     // load model
-    this.modelUrl = hmsStore.getState(selectAppData('modelUrl'));
 
     this.gltfLoader.load(
       this.modelUrl,
@@ -317,12 +339,10 @@ class ArCube {
         console.log('Error loading model', error);
       }
     );
+  }
 
-    const pointLight = new THREE.PointLight(0xffffff, 1, 50);
-    pointLight.position.set(0.5, 3, 2);
-    this.scene.add(pointLight);
-
-    // this.setUpVideo();
+  removeFromScene(object3d: THREE.Object3D) {
+    this.sceneGroup.remove(object3d);
   }
 
   resizeCanvasToDisplaySize() {
@@ -374,7 +394,7 @@ class ArCube {
     for (let i = 0; i < 6; i++) {
       if (this.markerRootArray[i].visible) {
         this.markerGroupArray[i].add(this.sceneGroup);
-        console.log('visible: ' + this.patternArray[i]);
+        // console.log('visible: ' + this.patternArray[i]);
         break;
       }
     }
