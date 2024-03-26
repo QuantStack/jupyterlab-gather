@@ -11,7 +11,9 @@ interface IRootDisplayProps {
 function RootDisplay({ node }: IRootDisplayProps) {
   useEffect(() => {
     const initialAppData = {
-      node: node
+      node: node,
+      modelUrl:
+        'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf'
     };
 
     hmsActions.initAppData(initialAppData);

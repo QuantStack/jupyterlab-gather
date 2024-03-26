@@ -207,3 +207,10 @@ form h2,
 .separator {
   font-size: 12px;
 }
+
+.sidebar-list {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 10px;
+}

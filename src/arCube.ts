@@ -1,12 +1,12 @@
 import {
-  selectIsSomeoneScreenSharing,
-  useHMSStore
+  selectAppData,
+  selectIsSomeoneScreenSharing
 } from '@100mslive/react-sdk';
 //@ts-expect-error AR.js doesn't have type definitions
 import * as THREEx from '@ar-js-org/ar.js/three.js/build/ar-threex.js';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { hmsActions } from './hms';
+import { hmsActions, hmsStore } from './hms';
 class ArCube {
   /**
    * Construct a new arpresent widget.
@@ -69,6 +69,7 @@ class ArCube {
   //   readonly webcamFromArjs: HTMLElement | null;
   readonly node: HTMLElement;
   renderTarget: THREE.WebGLRenderTarget;
+  modelUrl: string;
 
   initialize() {
     this.scene = new THREE.Scene();
@@ -107,7 +108,7 @@ class ArCube {
     this.renderer.setClearColor(new THREE.Color('lightgrey'), 0);
 
     //Not render target things
-    const isScreenShareOn = useHMSStore(selectIsSomeoneScreenSharing);
+    const isScreenShareOn = hmsStore.getState(selectIsSomeoneScreenSharing); //useHMSStore(selectIsSomeoneScreenSharing);
 
     if (isScreenShareOn) {
       console.log('iffing');
@@ -115,6 +116,7 @@ class ArCube {
       container?.appendChild(this.renderer.domElement);
     } else {
       // Renderer target things
+      console.log('elsing');
       this.renderTarget = new THREE.WebGLRenderTarget();
       this.renderTarget.setSize(1280, 720);
       this.renderer.setRenderTarget(this.renderTarget);
@@ -287,8 +289,10 @@ class ArCube {
     // }
 
     // load model
+    this.modelUrl = hmsStore.getState(selectAppData('modelUrl'));
+
     this.gltfLoader.load(
-      'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf',
+      this.modelUrl,
       gltf => {
         const scale = 1.0;
         this.gltfModel = gltf.scene;

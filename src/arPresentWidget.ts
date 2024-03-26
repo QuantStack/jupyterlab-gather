@@ -5,6 +5,7 @@ import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import ArCube from './arCube';
 // import { SidebarWidget } from './components/Sidebar';
 import { RootDisplayWidget } from './components/RootDisplay';
+import { SidebarWidget } from './widgets/Sidebar';
 
 // class ArPresentWidget extends Widget {
 //   constructor() {
@@ -26,10 +27,10 @@ export default function activate(
   console.log('JupyterLab extension jupyterlab_arpresent is activated!');
 
   let widget: MainAreaWidget<RootDisplayWidget>;
-  // const sidebarPanel = new SidebarWidget();
 
-  // sidebarPanel.id = 'test-panel';
-  // sidebarPanel.title.caption = 'Caption';
+  const sidebarPanel = new SidebarWidget();
+  sidebarPanel.id = 'test-panel';
+  sidebarPanel.title.caption = 'Caption';
 
   // Add an application command
   const arPresentCommand: string = 'arpresent:open';
@@ -78,7 +79,7 @@ export default function activate(
   palette.addItem({ command: arPresentCommand, category: 'Tutorial' });
   palette.addItem({ command: arStartCommand, category: 'Tutorial' });
 
-  // app.shell.add(sidebarPanel, 'left', { rank: 2000 });
+  app.shell.add(sidebarPanel, 'left', { rank: 2000 });
   // Track and restore the widget state
   // const tracker = new WidgetTracker<MainAreaWidget<ArPresent>>({
   //   namespace: 'arpresent'
