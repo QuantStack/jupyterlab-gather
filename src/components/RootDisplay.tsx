@@ -16,7 +16,9 @@ function RootDisplay({ node }: IRootDisplayProps) {
       node: node,
       canLoadModel: true,
       modelUrl:
-        'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf'
+        'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf',
+      isPresenting: false,
+      presenterId: ''
     };
 
     hmsActions.initAppData(initialAppData);

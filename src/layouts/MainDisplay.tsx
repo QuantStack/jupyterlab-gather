@@ -1,4 +1,5 @@
 import {
+  selectAppData,
   selectIsConnectedToRoom,
   useHMSActions,
   useHMSStore
@@ -7,12 +8,13 @@ import React, { useEffect } from 'react';
 
 import ControlBar from '../components/ControlBar';
 import JoinForm from '../components/JoinForm';
+import GridView from './GridView';
 import PresenterView from './PresenterView';
 
 export const MainDisplay = () => {
   const isConnected = useHMSStore(selectIsConnectedToRoom);
   const hmsActions = useHMSActions();
-  const presenter = true;
+  const isPresenting = useHMSStore(selectAppData('isPresenting'));
 
   useEffect(() => {
     window.onunload = () => {
@@ -22,11 +24,12 @@ export const MainDisplay = () => {
     };
   }, [hmsActions, isConnected]);
 
-  const ViewComponent = PresenterView; //GridView;
-  // if presenter
-  // viewcomponet = prenseter view
-  //else
-  // view component = grid view
+  let ViewComponent;
+  if (isPresenting) {
+    ViewComponent = PresenterView;
+  } else {
+    ViewComponent = GridView;
+  }
 
   return (
     <div className="App">
