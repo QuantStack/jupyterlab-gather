@@ -124,3 +124,5 @@ dmypy.json
 # Yarn cache
 .yarn/
 development.env
+
+.vscode

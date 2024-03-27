@@ -1,20 +1,19 @@
 import { HMSPeer, useVideo } from '@100mslive/react-sdk';
 import React from 'react';
 
-function Peer({ peer }: { peer: HMSPeer }) {
+interface IPeer {
+  peer: HMSPeer;
+  className: string;
+}
+
+function Peer({ peer, className }: IPeer) {
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
   });
 
   return (
     <div className="peer-tile">
-      <video
-        ref={videoRef}
-        className={`peer-video ${peer.isLocal ? 'local' : ''}`}
-        autoPlay
-        muted
-        playsInline
-      />
+      <video ref={videoRef} className={className} autoPlay muted playsInline />
       <div className="peer-name">
         {peer.name} {peer.isLocal ? '(You)' : ''}
       </div>

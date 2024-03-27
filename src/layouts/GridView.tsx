@@ -14,20 +14,24 @@ function GridView() {
       <div className="main-grid-view">
         {peers.map(peer => (
           <>
-            <Peer key={peer.id} peer={peer} />
-            <Peer key={peer.id} peer={peer} />
-            <Peer key={peer.id} peer={peer} />
-            <Peer key={peer.id} peer={peer} />
-            <Peer key={peer.id} peer={peer} />
-            <Peer key={peer.id} peer={peer} />
-            <Peer key={peer.id} peer={peer} />
-            <Peer key={peer.id} peer={peer} />
-            <Peer key={peer.id} peer={peer} />
-            <Peer key={peer.id} peer={peer} />
-            <Peer key={peer.id} peer={peer} />
-            <Peer key={peer.id} peer={peer} />
-            <Peer key={peer.id} peer={peer} />
-            <Peer key={peer.id} peer={peer} />
+            <Peer
+              key={peer.id}
+              peer={peer}
+              className={`peer-video ${peer.isLocal ? 'local' : ''}`}
+            />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
           </>
         ))}
       </div>

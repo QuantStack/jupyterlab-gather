@@ -1,12 +1,30 @@
-import React from 'react';
+import {
+  selectLocalPeer,
+  selectPeers,
+  useHMSStore
+} from '@100mslive/react-sdk';
+import React, { useEffect } from 'react';
+import Peer from '../components/Peer';
+import PeerSidePane from './PeerSidePane';
 
 const PresenterView = () => {
+  const localPeer = useHMSStore(selectLocalPeer);
+  const peers = useHMSStore(selectPeers);
+
+  // if (!localPeer) {
+  //   return;
+  // }
+
+  useEffect(() => {
+    console.log('localPeer', localPeer);
+  }, []);
+
   return (
     <div className="presenter-container-main">
       <div className="presenter-container">
-        <div className="presenter-video"></div>
+        <Peer peer={localPeer!} className="presenter-video" />
       </div>
-      <div className="peer-side-pane"></div>
+      <PeerSidePane peers={peers} />
     </div>
   );
 };

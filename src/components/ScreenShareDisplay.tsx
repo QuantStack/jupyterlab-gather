@@ -43,7 +43,7 @@ function ScreenShare() {
         </div>
         <div className="peers-container-sidebar">
           {peers.map(peer => (
-            <Peer key={peer.id} peer={peer} />
+            <Peer key={peer.id} peer={peer} className="peer-video" />
           ))}
         </div>
       </div>

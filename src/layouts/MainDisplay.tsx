@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 
 import ControlBar from '../components/ControlBar';
 import JoinForm from '../components/JoinForm';
-import GridView from './GridView';
+import PresenterView from './PresenterView';
 
 export const MainDisplay = () => {
   const isConnected = useHMSStore(selectIsConnectedToRoom);
@@ -22,7 +22,7 @@ export const MainDisplay = () => {
     };
   }, [hmsActions, isConnected]);
 
-  const ViewComponent = GridView;
+  const ViewComponent = PresenterView; //GridView;
   // if presenter
   // viewcomponet = prenseter view
   //else

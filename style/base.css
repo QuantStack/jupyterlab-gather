@@ -248,3 +248,29 @@ form h2,
   align-items: start;
   gap: 10px;
 }
+
+.presenter-container-main {
+  display: flex;
+  padding: 4rem;
+  gap: 6rem;
+  background-origin: padding-box;
+}
+
+.presenter-container {
+  flex: 1 1 0;
+}
+
+.presenter-video {
+  width: 100%;
+  height: 100%;
+  border-radius: 10%;
+}
+
+.peer-sidepane-list {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 0;
+}
+
+.peer-sidepane-video {
+}
