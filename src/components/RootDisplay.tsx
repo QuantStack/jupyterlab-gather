@@ -2,7 +2,7 @@ import { HMSRoomProvider } from '@100mslive/react-sdk';
 import { ReactWidget } from '@jupyterlab/ui-components';
 import React, { useEffect } from 'react';
 import { hmsActions } from '../hms';
-import MainDisplay from './MainDisplay';
+import MainDisplay from '../layouts/MainDisplay';
 
 interface IRootDisplayProps {
   node: HTMLElement;

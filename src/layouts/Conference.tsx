@@ -4,8 +4,8 @@ import {
   useHMSStore
 } from '@100mslive/react-sdk';
 import React from 'react';
-import Peer from './Peer';
-import ScreenShare from './ScreenShareDisplay';
+import Peer from '../components/Peer';
+import ScreenShare from '../components/ScreenShareDisplay';
 
 function Conference() {
   const peers = useHMSStore(selectPeers);
