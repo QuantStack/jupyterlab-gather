@@ -7,7 +7,7 @@ function Peer({ peer }: { peer: HMSPeer }) {
   });
 
   return (
-    <div className="peer-container">
+    <div className="peer-tile">
       <video
         ref={videoRef}
         className={`peer-video ${peer.isLocal ? 'local' : ''}`}
@@ -15,7 +15,6 @@ function Peer({ peer }: { peer: HMSPeer }) {
         muted
         playsInline
       />
-      <canvas id="target" className="ar-canvas"></canvas>
       <div className="peer-name">
         {peer.name} {peer.isLocal ? '(You)' : ''}
       </div>

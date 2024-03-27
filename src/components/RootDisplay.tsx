@@ -1,14 +1,16 @@
 import { HMSRoomProvider } from '@100mslive/react-sdk';
 import { ReactWidget } from '@jupyterlab/ui-components';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { hmsActions } from '../hms';
-import MainDisplay from '../layouts/MainDisplay';
+import { MainDisplay } from '../layouts/MainDisplay';
 
 interface IRootDisplayProps {
   node: HTMLElement;
 }
 
 function RootDisplay({ node }: IRootDisplayProps) {
+  const childRef = useRef(null);
+
   useEffect(() => {
     const initialAppData = {
       node: node,
@@ -20,8 +22,18 @@ function RootDisplay({ node }: IRootDisplayProps) {
     hmsActions.initAppData(initialAppData);
   }, [hmsActions]);
 
+  // TODO: There's probably a better way to do this
+  // add overflow: auto to parent container
+  useEffect(() => {
+    if (childRef.current) {
+      const parent = (childRef.current as HTMLElement).parentElement;
+      parent?.classList.add('overflow');
+      console.log('parent', parent);
+    }
+  }, [childRef]);
+
   return (
-    <div className="Root">
+    <div ref={childRef} className="Root">
       <HMSRoomProvider>
         <MainDisplay />
       </HMSRoomProvider>

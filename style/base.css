@@ -84,13 +84,42 @@ form h2,
   cursor: pointer;
 }
 
+/* TODO: don't need this */
 .conference-section {
   padding: 20px 30px;
   max-width: 960px;
   margin: 0 auto;
 }
 
-.conference-section h2 {
+.main-grid-container {
+  width: auto;
+  padding: 2rem 6rem;
+}
+
+.main-grid-view {
+  display: flex;
+  flex: 1 1 0;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  margin: auto 1rem;
+  flex-wrap: wrap;
+  gap: 3rem;
+  /* place content: center */
+}
+
+.overflow {
+  overflow: auto;
+}
+
+/* .conference-section h2 {
+  text-align: center;
+  font-size: 32px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #546e7a;
+} */
+
+.main-grid-container h2 {
   text-align: center;
   font-size: 32px;
   padding-bottom: 10px;
@@ -104,12 +133,16 @@ form h2,
   grid-gap: 10px;
 }
 
+.peer-tile {
+  /* position: relative; */
+}
+
 .peer-video {
-  max-height: 250px;
-  max-width: 250px;
-  border-radius: 40%;
+  height: 250px;
+  width: 250px;
+  border-radius: 30%;
   object-fit: cover;
-  margin-bottom: 10px;
+  /* padding-bottom: 10px; */
   /* position: absolute; */
   z-index: 0;
 }
@@ -121,6 +154,7 @@ form h2,
 .peer-name {
   font-size: 14px;
   text-align: center;
+  /* position: absolute; */
 }
 
 .peer-container {
@@ -173,7 +207,7 @@ form h2,
 
 .control-bar {
   display: flex;
-  position: fixed;
+  position: sticky;
   bottom: 0;
   width: 100%;
   padding: 15px;

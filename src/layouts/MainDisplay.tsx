@@ -7,11 +7,12 @@ import React, { useEffect } from 'react';
 
 import ControlBar from '../components/ControlBar';
 import JoinForm from '../components/JoinForm';
-import Conference from './Conference';
+import GridView from './GridView';
 
-export default function MainDisplay() {
+export const MainDisplay = () => {
   const isConnected = useHMSStore(selectIsConnectedToRoom);
   const hmsActions = useHMSActions();
+  const presenter = true;
 
   useEffect(() => {
     window.onunload = () => {
@@ -21,11 +22,17 @@ export default function MainDisplay() {
     };
   }, [hmsActions, isConnected]);
 
+  const ViewComponent = GridView;
+  // if presenter
+  // viewcomponet = prenseter view
+  //else
+  // view component = grid view
+
   return (
     <div className="App">
       {isConnected ? (
         <>
-          <Conference />
+          <ViewComponent />
           <ControlBar />
         </>
       ) : (
@@ -33,4 +40,4 @@ export default function MainDisplay() {
       )}
     </div>
   );
-}
+};
