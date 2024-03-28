@@ -1,12 +1,13 @@
 import { selectAppData } from '@100mslive/react-sdk';
 import { ReactWidget } from '@jupyterlab/apputils';
+import { SidePanel } from '@jupyterlab/ui-components';
+import { Panel, Widget } from '@lumino/widgets';
 import React, { useEffect, useState } from 'react';
 import ArCube from '../arCube';
 import ModelListItem from '../components/ModelListItem';
 import { hmsActions, hmsStore } from '../hms';
-import { SidePanel } from '@jupyterlab/ui-components';
-import { Panel, Widget } from '@lumino/widgets';
 import { arIcon } from '../icons';
+import { IArPresent } from '../tokens';
 
 const modelList = [
   {
@@ -65,7 +66,7 @@ const SidebarComponent = () => {
   );
 };
 
-export class SidebarWidget extends SidePanel {
+export class SidebarWidget extends SidePanel implements IArPresent {
   constructor() {
     super({ content: new Panel() });
     this.addClass('sidebar-widget');
@@ -77,5 +78,10 @@ export class SidebarWidget extends SidePanel {
     this.header.addWidget(new Widget({ node: headerNode }));
 
     this.content.addWidget(ReactWidget.create(<SidebarComponent />));
+  }
+
+  foo(): string {
+    console.log('test');
+    return 'test';
   }
 }

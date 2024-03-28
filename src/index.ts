@@ -9,6 +9,11 @@ import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { LogoIcon } from './components/Icons';
 import { RootDisplayWidget } from './components/RootDisplay';
 import { SidebarWidget } from './widgets/Sidebar';
+import { IArPresent } from './tokens';
+
+/**
+ * Activate the arpresent widget extension.
+ */
 
 /**
  * Initialization data for the jupyterlab_arpresent extension.
@@ -86,7 +91,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
     //     name: () => 'arpresent'
     //   });
     // }
-  }
+  },
+  provides: IArPresent
 };
 
 export default plugin;
