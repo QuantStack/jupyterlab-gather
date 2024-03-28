@@ -1,5 +1,6 @@
 import { HMSPeer, useVideo } from '@100mslive/react-sdk';
 import React from 'react';
+import { Icons } from './Icons';
 
 interface IPeer {
   peer: HMSPeer;
@@ -13,8 +14,19 @@ function Peer({ peer, className }: IPeer) {
   });
 
   return (
-    <div className="peer-tile">
-      <video ref={videoRef} className={className} autoPlay muted playsInline />
+    <div className={'peer-tile'}>
+      {peer.isHandRaised ? (
+        <Icons.raisedHand className="peer-hand-raised-icon" />
+      ) : (
+        ''
+      )}
+      <video
+        ref={videoRef}
+        className={`${className} ${peer.isHandRaised ? 'peer-hand-raised' : ''}`}
+        autoPlay
+        muted
+        playsInline
+      />
       <div className="peer-name">
         {peer.name} {peer.isLocal ? '(You)' : ''}
       </div>

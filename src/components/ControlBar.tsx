@@ -1,6 +1,7 @@
 import { useAVToggle, useHMSActions } from '@100mslive/react-sdk';
 import React from 'react';
 import PluginButton from './PluginButton';
+import RaiseHand from './RaiseHand';
 
 function ControlBar() {
   const hmsActions = useHMSActions();
@@ -18,6 +19,7 @@ function ControlBar() {
 
       {/* <ScreenShareButton /> */}
       <PluginButton />
+      <RaiseHand />
       <button
         id="leave-btn"
         className="btn-danger"

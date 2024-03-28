@@ -60,7 +60,7 @@ export default function activate(
 
       // Activate the widget
       app.shell.activateById(widget.id);
-      widget.title.label = 'React Widget';
+      widget.title.label = 'AR Presentation';
       app.shell.add(widget, 'main');
       app.shell.add(sidebarPanel, 'left', { rank: 2000 });
     }

@@ -134,7 +134,16 @@ form h2,
 }
 
 .peer-tile {
-  /* position: relative; */
+  position: relative;
+}
+
+.peer-hand-raised-icon {
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  fill: #f37726;
 }
 
 .peer-video {
@@ -154,7 +163,8 @@ form h2,
 .peer-name {
   font-size: 14px;
   text-align: center;
-  /* position: absolute; */
+  /* position: fixed; */
+  /* bottom: 0; */
 }
 
 .peer-container {
@@ -230,7 +240,7 @@ form h2,
   text-align: center;
   background-color: #607d8b;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  color: white;
+  color: whitesmoke;
   cursor: pointer;
 }
 
@@ -273,4 +283,35 @@ form h2,
 }
 
 .peer-sidepane-video {
+}
+
+.peer-hand-raised {
+  outline: thick solid #f37726;
+}
+
+.icon {
+  /* width: 2em; */
+  /* height: 2em; */
+  scale: 0.8;
+  fill: whitesmoke;
+  /* vertical-align: -0.125em; */
+}
+
+@keyframes breathe {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+}
+
+.icon-breathe {
+  animation: breathe 3s infinite alternate; /* Adjust the duration and other animation properties as needed */
 }
