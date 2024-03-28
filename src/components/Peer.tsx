@@ -7,6 +7,7 @@ interface IPeer {
 }
 
 function Peer({ peer, className }: IPeer) {
+  // TODO: Use peer id instead of Peer
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
   });
