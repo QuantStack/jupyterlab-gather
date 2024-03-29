@@ -1,7 +1,6 @@
-import { HMSRoomProvider } from '@100mslive/react-sdk';
 import { ReactWidget } from '@jupyterlab/ui-components';
 import React, { useEffect, useRef } from 'react';
-import { hmsActions } from '../hms';
+import { TypedHMSRoomProvider, hmsActions } from '../hms';
 import { MainDisplay } from '../layouts/MainDisplay';
 
 interface IRootDisplayProps {
@@ -11,6 +10,7 @@ interface IRootDisplayProps {
 function RootDisplay({ node }: IRootDisplayProps) {
   const childRef = useRef(null);
 
+  // TODO: Replace this with session store?
   useEffect(() => {
     const initialAppData = {
       node: node,
@@ -30,15 +30,14 @@ function RootDisplay({ node }: IRootDisplayProps) {
     if (childRef.current) {
       const parent = (childRef.current as HTMLElement).parentElement;
       parent?.classList.add('overflow');
-      console.log('parent', parent);
     }
   }, [childRef]);
 
   return (
     <div ref={childRef} className="Root">
-      <HMSRoomProvider>
+      <TypedHMSRoomProvider>
         <MainDisplay />
-      </HMSRoomProvider>
+      </TypedHMSRoomProvider>
     </div>
   );
 }

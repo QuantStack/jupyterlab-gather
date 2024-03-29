@@ -1,5 +1,9 @@
-import { selectPeers, useHMSStore } from '@100mslive/react-sdk';
-import React from 'react';
+import {
+  selectPeers,
+  selectSessionStore,
+  useHMSStore
+} from '@100mslive/react-sdk';
+import React, { useEffect } from 'react';
 import Peer from '../components/Peer';
 
 function GridView() {
@@ -7,6 +11,15 @@ function GridView() {
   // const isScreenShareOn = useHMSStore(selectIsSomeoneScreenSharing);
 
   // const limitMaxTiles = 20;
+
+  const isPresenting = useHMSStore(selectSessionStore('isPresenting'));
+  const presenterId = useHMSStore(selectSessionStore('presenterId'));
+
+  useEffect(() => {
+    console.log('isPresenting once', isPresenting);
+    console.log('presenterId twos', presenterId);
+    console.log('peers', peers);
+  }, []);
 
   return (
     <div className="main-grid-container">
@@ -19,18 +32,6 @@ function GridView() {
               peer={peer}
               className={`peer-video ${peer.isLocal ? 'local' : ''}`}
             />
-            <Peer key={peer.id} peer={peer} className="peer-video" />
-            <Peer key={peer.id} peer={peer} className="peer-video" />
-            <Peer key={peer.id} peer={peer} className="peer-video" />
-            <Peer key={peer.id} peer={peer} className="peer-video" />
-            <Peer key={peer.id} peer={peer} className="peer-video" />
-            <Peer key={peer.id} peer={peer} className="peer-video" />
-            <Peer key={peer.id} peer={peer} className="peer-video" />
-            <Peer key={peer.id} peer={peer} className="peer-video" />
-            <Peer key={peer.id} peer={peer} className="peer-video" />
-            <Peer key={peer.id} peer={peer} className="peer-video" />
-            <Peer key={peer.id} peer={peer} className="peer-video" />
-            <Peer key={peer.id} peer={peer} className="peer-video" />
             <Peer key={peer.id} peer={peer} className="peer-video" />
           </>
         ))}

@@ -12,10 +12,6 @@ const PeerSidePane = ({ peers }: IPeerSidePane) => {
       {peers.map(peer => (
         <>
           <Peer key={peer.id} peer={peer} className="peer-video" />
-          <Peer key={peer.id} peer={peer} className="peer-video" />
-          <Peer key={peer.id} peer={peer} className="peer-video" />
-          <Peer key={peer.id} peer={peer} className="peer-video" />
-          <Peer key={peer.id} peer={peer} className="peer-video" />
         </>
       ))}
     </div>

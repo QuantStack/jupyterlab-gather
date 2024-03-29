@@ -23,14 +23,14 @@ function PluginButton() {
     // don't load plugin locally if someone else is presenting
     if (!isPluginLoaded && !isPresenting) {
       console.log('adding');
-      hmsActions.setAppData('isPresenting', true);
-      hmsActions.setAppData('presenterId', localPeerId);
+      hmsActions.sessionStore.set('isPresenting', true);
+      hmsActions.sessionStore.set('presenterId', localPeerId);
 
       await hmsActions.addPluginToVideoTrack(arPlugin);
     } else {
       console.log('removing');
-      hmsActions.setAppData('isPresenting', false);
-      hmsActions.setAppData('presenterId', '');
+      hmsActions.sessionStore.set('isPresenting', false);
+      hmsActions.sessionStore.set('presenterId', '');
 
       await hmsActions.removePluginFromVideoTrack(arPlugin);
     }
