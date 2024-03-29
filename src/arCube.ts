@@ -86,8 +86,12 @@ class ArCube {
       this.resolve();
     });
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+    const pointLight = new THREE.PointLight(0xffffff, 1, 50);
+
+    pointLight.position.set(0.5, 2, 4);
     this.scene.add(ambientLight);
+    this.scene.add(pointLight);
 
     this.camera = new THREE.Camera();
     this.scene.add(this.camera);
@@ -286,10 +290,6 @@ class ArCube {
     }
 
     this.loadModel();
-
-    const pointLight = new THREE.PointLight(0xffffff, 1, 50);
-    pointLight.position.set(0.5, 3, 2);
-    this.scene.add(pointLight);
 
     // this.setUpVideo();
   }

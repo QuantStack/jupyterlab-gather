@@ -1,4 +1,5 @@
 import {
+  selectLocalPeerID,
   selectPeers,
   selectSessionStore,
   useHMSStore
@@ -8,6 +9,7 @@ import Peer from '../components/Peer';
 import PeerSidePane from './PeerSidePane';
 
 const PresenterView = () => {
+  const localPeerId = useHMSStore(selectLocalPeerID);
   const peers = useHMSStore(selectPeers);
   const presenter = useHMSStore(selectSessionStore('presenterId'));
 
@@ -20,7 +22,7 @@ const PresenterView = () => {
           <div>Waiting...</div>
         )}
       </div>
-      <PeerSidePane peers={peers} />
+      <PeerSidePane peers={peers.filter(peer => peer.id !== localPeerId)} />
     </div>
   );
 };
