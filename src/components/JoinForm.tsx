@@ -30,8 +30,7 @@ const Join = () => {
         settings: {
           isAudioMuted: true,
           isVideoMuted: false
-        },
-        rememberDeviceSelection: true
+        }
       });
     } catch (e) {
       console.error(e);
