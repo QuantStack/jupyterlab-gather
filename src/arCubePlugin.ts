@@ -135,7 +135,7 @@ class ArCubePlugin implements HMSVideoPlugin {
     const outputCtx = output.getContext('2d');
 
     if (!inputImgData) {
-      console.log('fucked');
+      console.log('no image input data');
     }
     const flippedImage = this.flipImageDataVertically(threeImageData);
     const blendedData = this.blendImages(inputImgData!, flippedImage);

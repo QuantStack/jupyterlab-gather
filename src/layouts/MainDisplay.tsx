@@ -17,13 +17,6 @@ export const MainDisplay = () => {
   const isPresenting = useHMSStore(selectSessionStore('isPresenting'));
   const presenterId = useHMSStore(selectSessionStore('presenterId'));
 
-  let words;
-
-  useEffect(() => {
-    console.log('isPresenting should change', isPresenting);
-    console.log('presenterId one', presenterId);
-  }, [isPresenting, presenterId]);
-
   useEffect(() => {
     if (isConnected) {
       hmsActions.sessionStore.observe('isPresenting');
@@ -39,21 +32,13 @@ export const MainDisplay = () => {
     };
   }, [hmsActions, isConnected]);
 
-  useEffect(() => {
-    console.log('isPresenting once', isPresenting);
-    console.log('presenterId twos', presenterId);
-  }, []);
-
   let ViewComponent;
   if (isPresenting) {
     ViewComponent = PresenterView;
-    words = 'present';
   } else {
     ViewComponent = GridView;
-    words = 'grid';
   }
 
-  console.log('isPresenting raw', words);
   return (
     <div className="App">
       {isConnected ? (

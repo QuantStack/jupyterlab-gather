@@ -65,7 +65,6 @@ export class SidebarWidget extends ReactWidget {
   constructor() {
     super();
     this.addClass('sidebar-widget');
-    console.log('I dunno');
   }
 
   render() {

@@ -5,7 +5,7 @@ import {
 } from '@100mslive/react-sdk';
 import React from 'react';
 
-function Header() {
+const Header = () => {
   const isConnected = useHMSStore(selectIsConnectedToRoom);
   const hmsActions = useHMSActions();
 
@@ -27,6 +27,6 @@ function Header() {
       )}
     </header>
   );
-}
+};
 
 export default Header;

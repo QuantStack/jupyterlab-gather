@@ -13,10 +13,6 @@ const Peer = ({ peer, className }: IPeer) => {
     trackId: peer.videoTrack
   });
 
-  useEffect(() => {
-    console.log('peer');
-  }, []);
-
   return (
     <div className={'peer-tile'}>
       {peer.isHandRaised ? (

@@ -6,20 +6,11 @@ import {
 import React, { useEffect } from 'react';
 import Peer from '../components/Peer';
 
-function GridView() {
+const GridView = () => {
   const peers = useHMSStore(selectPeers);
   // const isScreenShareOn = useHMSStore(selectIsSomeoneScreenSharing);
 
   // const limitMaxTiles = 20;
-
-  const isPresenting = useHMSStore(selectSessionStore('isPresenting'));
-  const presenterId = useHMSStore(selectSessionStore('presenterId'));
-
-  useEffect(() => {
-    console.log('isPresenting grid', isPresenting);
-    console.log('presenterId grid', presenterId);
-    console.log('peers', peers);
-  }, []);
 
   return (
     <div className="main-grid-container">
@@ -38,6 +29,6 @@ function GridView() {
       </div>
     </div>
   );
-}
+};
 
 export default GridView;

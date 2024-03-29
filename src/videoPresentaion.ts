@@ -64,7 +64,6 @@ class VideoPresentation {
     const togglePluginState = async () => {
       if (!this.isPluginLoaded) {
         setTimeout(async () => {
-          console.log('wait');
           console.log('adding');
           await hmsActions.addPluginToVideoTrack(plugin);
           this._pluginStateChanged.emit();

@@ -3,7 +3,7 @@ import React from 'react';
 import PluginButton from './PluginButton';
 import RaiseHand from './RaiseHand';
 
-function ControlBar() {
+const ControlBar = () => {
   const hmsActions = useHMSActions();
   const { isLocalAudioEnabled, isLocalVideoEnabled, toggleAudio, toggleVideo } =
     useAVToggle();
@@ -29,6 +29,6 @@ function ControlBar() {
       </button>
     </div>
   );
-}
+};
 
 export default ControlBar;

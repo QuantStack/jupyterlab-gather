@@ -1,7 +1,7 @@
 import { useHMSActions } from '@100mslive/react-sdk';
 import React, { useState } from 'react';
 
-function Join() {
+const Join = () => {
   const hmsActions = useHMSActions();
   const [inputValues, setInputValues] = useState({
     userName: 'we',
@@ -65,6 +65,6 @@ function Join() {
       <button className="btn-primary">Join</button>
     </form>
   );
-}
+};
 
 export default Join;

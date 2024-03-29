@@ -8,7 +8,12 @@ interface IModelListItem {
   handleClick: (url: string) => void;
 }
 
-function ModelListItem({ name, url, isDisabled, handleClick }: IModelListItem) {
+const ModelListItem = ({
+  name,
+  url,
+  isDisabled,
+  handleClick
+}: IModelListItem) => {
   return (
     <Button
       minimal
@@ -19,6 +24,6 @@ function ModelListItem({ name, url, isDisabled, handleClick }: IModelListItem) {
       {isDisabled ? 'Working...' : `${name}`}
     </Button>
   );
-}
+};
 
 export default ModelListItem;

@@ -8,9 +8,9 @@ import {
 import React from 'react';
 import ArCubePlugin from '../arCubePlugin';
 
-function PluginButton() {
+const PluginButton = () => {
   const hmsActions = useHMSActions();
-  const localPeerId = useHMSStore(selectLocalPeer);
+  const localPeer = useHMSStore(selectLocalPeer);
   const isPresenting = useHMSStore(selectAppData('isPresenting'));
 
   const arPlugin = new ArCubePlugin();
@@ -24,7 +24,7 @@ function PluginButton() {
     if (!isPluginLoaded && !isPresenting) {
       console.log('adding');
       hmsActions.sessionStore.set('isPresenting', true);
-      hmsActions.sessionStore.set('presenterId', localPeerId);
+      hmsActions.sessionStore.set('presenterId', localPeer);
 
       await hmsActions.addPluginToVideoTrack(arPlugin);
     } else {
@@ -41,6 +41,6 @@ function PluginButton() {
       {isPluginLoaded ? 'Stop AR' : 'Start AR'}
     </button>
   );
-}
+};
 
 export default PluginButton;

@@ -7,7 +7,7 @@ interface IRootDisplayProps {
   node: HTMLElement;
 }
 
-function RootDisplay({ node }: IRootDisplayProps) {
+const RootDisplay = ({ node }: IRootDisplayProps) => {
   const childRef = useRef(null);
 
   // TODO: Replace this with session store?
@@ -40,7 +40,7 @@ function RootDisplay({ node }: IRootDisplayProps) {
       </TypedHMSRoomProvider>
     </div>
   );
-}
+};
 
 export class RootDisplayWidget extends ReactWidget {
   constructor() {

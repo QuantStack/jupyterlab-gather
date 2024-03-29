@@ -5,7 +5,7 @@ import {
 } from '@100mslive/react-sdk';
 import React from 'react';
 
-function ScreenShareButton() {
+const ScreenShareButton = () => {
   const hmsActions = useHMSActions();
   const isScreenShared = useHMSStore(selectIsLocalScreenShared);
 
@@ -30,6 +30,6 @@ function ScreenShareButton() {
       {isScreenShared ? 'Stop Sharing' : 'Share Screen'}
     </button>
   );
-}
+};
 
 export default ScreenShareButton;

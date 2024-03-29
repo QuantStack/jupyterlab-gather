@@ -8,7 +8,7 @@ import {
 import React, { useEffect } from 'react';
 import Peer from './Peer';
 
-function ScreenShare() {
+const ScreenShare = () => {
   const peers = useHMSStore(selectPeers);
   const screenPresenter = useHMSStore(selectPeerScreenSharing);
 
@@ -49,6 +49,6 @@ function ScreenShare() {
       </div>
     </div>
   );
-}
+};
 
 export default ScreenShare;
