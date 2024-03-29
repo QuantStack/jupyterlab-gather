@@ -17,6 +17,8 @@ export const MainDisplay = () => {
   const isPresenting = useHMSStore(selectSessionStore('isPresenting'));
   const presenterId = useHMSStore(selectSessionStore('presenterId'));
 
+  let words;
+
   useEffect(() => {
     console.log('isPresenting should change', isPresenting);
     console.log('presenterId one', presenterId);
@@ -30,6 +32,8 @@ export const MainDisplay = () => {
 
     window.onunload = () => {
       if (isConnected) {
+        hmsActions.sessionStore.set('isPresenting');
+        hmsActions.sessionStore.set('presenterId');
         hmsActions.leave();
       }
     };
@@ -43,10 +47,13 @@ export const MainDisplay = () => {
   let ViewComponent;
   if (isPresenting) {
     ViewComponent = PresenterView;
+    words = 'present';
   } else {
     ViewComponent = GridView;
+    words = 'grid';
   }
 
+  console.log('isPresenting raw', words);
   return (
     <div className="App">
       {isConnected ? (

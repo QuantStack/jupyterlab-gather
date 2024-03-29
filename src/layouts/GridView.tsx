@@ -16,8 +16,8 @@ function GridView() {
   const presenterId = useHMSStore(selectSessionStore('presenterId'));
 
   useEffect(() => {
-    console.log('isPresenting once', isPresenting);
-    console.log('presenterId twos', presenterId);
+    console.log('isPresenting grid', isPresenting);
+    console.log('presenterId grid', presenterId);
     console.log('peers', peers);
   }, []);
 

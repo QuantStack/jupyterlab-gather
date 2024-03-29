@@ -15,12 +15,24 @@ const PresenterView = () => {
   // const presenter = useHMSStore(selectAppData('presenterId'));
   const presenter = useHMSStore(selectSessionStore('presenterId'));
 
+  console.log('looks at this happen wee');
+  console.log('peers1', peers);
+  console.log('presenter', presenter);
+
+  useEffect(() => {
+    console.log('presenter view');
+    console.log('peers2', peers);
+    hmsActions.sessionStore.observe('presenterId');
+  }, []);
+
   useEffect(() => {
     console.log('presenter view look at this plx');
-    hmsActions.sessionStore.observe('presenterId');
+    console.log('peers3', peers);
+    // hmsActions.sessionStore.observe('presenterId');
   }, [hmsActions]);
 
   useEffect(() => {
+    console.log('peers4', peers);
     console.log('presenter in view', presenter);
   }, [presenter]);
 

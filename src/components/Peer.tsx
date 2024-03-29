@@ -1,5 +1,5 @@
 import { HMSPeer, useVideo } from '@100mslive/react-sdk';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Icons } from './Icons';
 
 interface IPeer {
@@ -7,11 +7,15 @@ interface IPeer {
   className: string;
 }
 
-function Peer({ peer, className }: IPeer) {
+const Peer = ({ peer, className }: IPeer) => {
   // TODO: Use peer id instead of Peer
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
   });
+
+  useEffect(() => {
+    console.log('peer');
+  }, []);
 
   return (
     <div className={'peer-tile'}>
@@ -32,6 +36,6 @@ function Peer({ peer, className }: IPeer) {
       </div>
     </div>
   );
-}
+};
 
 export default Peer;
