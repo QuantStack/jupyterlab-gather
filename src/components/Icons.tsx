@@ -1,4 +1,6 @@
+import { LabIcon } from '@jupyterlab/ui-components';
 import React from 'react';
+import duckLogo from '../../icons/duckduck.svg';
 
 interface IIcons {
   className?: string;
@@ -15,3 +17,8 @@ export const Icons = {
     </svg>
   )
 };
+
+export const LogoIcon = new LabIcon({
+  name: 'arpresent:icon_logo',
+  svgstr: duckLogo
+});

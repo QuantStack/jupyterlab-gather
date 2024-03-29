@@ -109,7 +109,7 @@ form h2,
 }
 
 .overflow {
-  overflow: auto;
+  overflow-y: auto;
 }
 
 /* .conference-section h2 {
@@ -149,7 +149,7 @@ form h2,
 .peer-video {
   height: 250px;
   width: 250px;
-  border-radius: 30%;
+  border-radius: 8px;
   object-fit: cover;
   /* padding-bottom: 10px; */
   /* position: absolute; */
@@ -174,7 +174,7 @@ form h2,
 .ar-video {
   width: 1280px;
   height: 720px;
-  border-radius: 10%;
+  border-radius: 8px;
   object-fit: cover;
   margin-bottom: 10px;
   position: absolute;
@@ -184,7 +184,7 @@ form h2,
 .ar-canvas {
   width: 250px;
   height: 250px;
-  border-radius: 10%;
+  border-radius: 8px;
   object-fit: cover;
   position: absolute;
   z-index: 2;
@@ -273,7 +273,7 @@ form h2,
 .presenter-video {
   width: 100%;
   height: 100%;
-  border-radius: 10%;
+  border-radius: 8px;
 }
 
 .peer-sidepane-list {
@@ -299,7 +299,7 @@ form h2,
 
 @keyframes breathe {
   0% {
-    transform: scale(0.8);
+    transform: scale(0.7);
     opacity: 0.8;
   }
   50% {
@@ -307,11 +307,12 @@ form h2,
     opacity: 1;
   }
   100% {
-    transform: scale(0.8);
+    transform: scale(0.7);
     opacity: 0.8;
   }
 }
 
 .icon-breathe {
-  animation: breathe 3s infinite alternate; /* Adjust the duration and other animation properties as needed */
+  animation: breathe 3s infinite alternate;
+  fill: #f37726;
 }

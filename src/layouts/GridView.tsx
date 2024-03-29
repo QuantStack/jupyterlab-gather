@@ -23,7 +23,6 @@ const GridView = () => {
               peer={peer}
               className={`peer-video ${peer.isLocal ? 'local' : ''}`}
             />
-            <Peer key={peer.id} peer={peer} className="peer-video" />
           </>
         ))}
       </div>

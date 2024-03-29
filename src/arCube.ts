@@ -226,7 +226,7 @@ class ArCube {
       new THREE.Mesh(
         new THREE.BoxGeometry(2, 2, 2),
         new THREE.MeshBasicMaterial({
-          color: '#1a1b26',
+          color: '#2EEEFF',
           side: THREE.BackSide
         })
       )
