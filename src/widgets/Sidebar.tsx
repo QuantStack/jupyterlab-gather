@@ -6,6 +6,7 @@ import ModelListItem from '../components/ModelListItem';
 import { hmsActions, hmsStore } from '../hms';
 import { SidePanel } from '@jupyterlab/ui-components';
 import { Panel, Widget } from '@lumino/widgets';
+import { arIcon } from '../icons';
 
 const modelList = [
   {
@@ -68,6 +69,8 @@ export class SidebarWidget extends SidePanel {
   constructor() {
     super({ content: new Panel() });
     this.addClass('sidebar-widget');
+    this.title.icon = arIcon;
+    this.title.caption = 'Aurgmented reality';
 
     const headerNode = document.createElement('h2');
     headerNode.textContent = 'augmented reality';
