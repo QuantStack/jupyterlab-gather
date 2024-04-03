@@ -50,6 +50,10 @@ input::placeholder {
   color: #837c7c;
 }
 
+.join-form-input {
+  margin-bottom: 20px;
+}
+
 .input-container {
   margin-bottom: 20px;
   display: flex;
