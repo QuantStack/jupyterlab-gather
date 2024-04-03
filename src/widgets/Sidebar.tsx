@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import ArCube from '../arCube';
 import ModelListItem from '../components/ModelListItem';
 import { hmsActions, hmsStore } from '../hms';
+import { SidePanel } from '@jupyterlab/ui-components';
+import { Panel, Widget } from '@lumino/widgets';
 
 const modelList = [
   {
@@ -43,8 +45,9 @@ const SidebarComponent = () => {
 
   return (
     <div>
-      <h2>This is a side panel</h2>
-      <span>split</span>
+      <div className="sidebar-description">
+        Select a model from the list below
+      </div>
       <div className="sidebar-list">
         {modelList.map(model => {
           return (
@@ -61,13 +64,15 @@ const SidebarComponent = () => {
   );
 };
 
-export class SidebarWidget extends ReactWidget {
+export class SidebarWidget extends SidePanel {
   constructor() {
-    super();
+    super({ content: new Panel() });
     this.addClass('sidebar-widget');
-  }
 
-  render() {
-    return <SidebarComponent />;
+    const headerNode = document.createElement('h2');
+    headerNode.textContent = 'augmented reality';
+    this.header.addWidget(new Widget({ node: headerNode }));
+
+    this.content.addWidget(ReactWidget.create(<SidebarComponent />));
   }
 }

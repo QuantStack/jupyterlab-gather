@@ -31,8 +31,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     let widget: MainAreaWidget<RootDisplayWidget>;
 
     const sidebarPanel = new SidebarWidget();
-    sidebarPanel.id = 'test-panel';
-    sidebarPanel.title.caption = 'Caption';
+    sidebarPanel.id = 'AR-sidepanel';
 
     // Add an application command
     const arPresentCommand: string = 'arpresent:open';
