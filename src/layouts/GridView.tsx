@@ -12,13 +12,11 @@ const GridView = () => {
     <div className="main-grid-container">
       <div className="main-grid-view">
         {peers.map(peer => (
-          <>
-            <Peer
-              key={peer.id}
-              peer={peer}
-              className={`peer-video ${peer.isLocal ? 'local' : ''}`}
-            />
-          </>
+          <Peer
+            key={peer.id}
+            peer={peer}
+            className={`peer-video ${peer.isLocal ? 'local' : ''}`}
+          />
         ))}
       </div>
     </div>
