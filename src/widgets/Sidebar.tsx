@@ -7,7 +7,7 @@ import ArCube from '../arCube';
 import ModelListItem from '../components/ModelListItem';
 import { hmsActions, hmsStore } from '../hms';
 import { arIcon } from '../icons';
-import { IArPresent } from '../tokens';
+import { IArPresentInterface } from '../tokens';
 
 const modelList = [
   {
@@ -32,6 +32,10 @@ const SidebarComponent = () => {
   const updateModelLoadingState = () => {
     const canLoadModel = hmsStore.getState(selectAppData('canLoadModel'));
     setIsDisabled(canLoadModel);
+  };
+
+  const testButton = () => {
+    console.log('first');
   };
 
   const handleClick = (url: string) => {
@@ -66,7 +70,7 @@ const SidebarComponent = () => {
   );
 };
 
-export class SidebarWidget extends SidePanel implements IArPresent {
+export class SidebarWidget extends SidePanel implements IArPresentInterface {
   constructor() {
     super({ content: new Panel() });
     this.addClass('sidebar-widget');
@@ -80,8 +84,10 @@ export class SidebarWidget extends SidePanel implements IArPresent {
     this.content.addWidget(ReactWidget.create(<SidebarComponent />));
   }
 
-  foo(): string {
-    console.log('test');
-    return 'test';
+  foo(modelUrl: string): string {
+    console.log('modelUrl', modelUrl);
+    modelList.push({ name: modelUrl, url: modelUrl });
+
+    return modelUrl;
   }
 }
