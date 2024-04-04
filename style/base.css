@@ -50,6 +50,10 @@ input::placeholder {
   color: #837c7c;
 }
 
+.join-form-input {
+  margin-bottom: 20px;
+}
+
 .input-container {
   margin-bottom: 20px;
   display: flex;
@@ -252,11 +256,26 @@ form h2,
   font-size: 12px;
 }
 
-.sidebar-list {
+.sidebar-widget .sidebar-description {
+  width: 100%;
+  border-bottom: var(--jp-border-width) solid var(--jp-border-color2);
+  padding: 1em;
+}
+
+.sidebar-widget .sidebar-list {
   display: flex;
   flex-direction: column;
   align-items: start;
   gap: 10px;
+}
+
+.sidebar-widget .sidebar-list .model-list-item {
+  width: 100%;
+  justify-content: left;
+}
+
+.sidebar-widget .sidebar-list .model-list-item:disabled{
+  color: var(--jp-ui-font-color3);
 }
 
 .presenter-container-main {

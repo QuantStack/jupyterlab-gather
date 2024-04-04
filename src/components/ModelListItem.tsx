@@ -21,7 +21,7 @@ const ModelListItem = ({
       disabled={isDisabled}
       onClick={() => handleClick(url)}
     >
-      {isDisabled ? 'Working...' : `${name}`}
+      {isDisabled ? 'Working...' : name}
     </Button>
   );
 };

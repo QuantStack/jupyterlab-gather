@@ -40,7 +40,8 @@ const Join = () => {
   return (
     <form onSubmit={handleSubmit}>
       <h2>Join Room</h2>
-      <div className="input-container">
+      <div className="join-form-input">
+        <label htmlFor="userName">Username</label>
         <input
           required
           value={inputValues.userName}
@@ -51,7 +52,8 @@ const Join = () => {
           placeholder="Your name"
         />
       </div>
-      <div className="input-container">
+      <div className="join-form-input">
+        <label htmlFor="room-code">Room ID</label>
         <input
           id="room-code"
           type="text"
