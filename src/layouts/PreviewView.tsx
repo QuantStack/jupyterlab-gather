@@ -24,10 +24,14 @@ const PreviewView = () => {
   return (
     <div className="preview-container-main">
       <div className="preview-container">
-        <div>Get Started</div>
+        <h2>Get Started</h2>
         <div>Setup audio and video</div>
-        <div>{localPeer ? <Video trackId={localPeer.videoTrack} /> : null}</div>
-        <button onClick={join}>Join</button>
+        {localPeer ? <Video trackId={localPeer.videoTrack} /> : null}
+        <div className="preview-control-bar">
+          <button className="btn-primary" onClick={join}>
+            Join
+          </button>
+        </div>
       </div>
     </div>
   );
