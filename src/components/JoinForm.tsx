@@ -1,10 +1,10 @@
 import { useHMSActions } from '@100mslive/react-sdk';
 import React, { useState } from 'react';
 
-const Join = () => {
+const JoinForm = () => {
   const hmsActions = useHMSActions();
   const [inputValues, setInputValues] = useState({
-    userName: 'we',
+    userName: 'Host',
     roomCode: 'ibj-yxje-nda'
   });
 
@@ -24,7 +24,7 @@ const Join = () => {
     const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode });
 
     try {
-      await hmsActions.join({
+      await hmsActions.preview({
         userName,
         authToken,
         settings: {
@@ -68,4 +68,4 @@ const Join = () => {
   );
 };
 
-export default Join;
+export default JoinForm;
