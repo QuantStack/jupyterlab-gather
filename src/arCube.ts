@@ -9,6 +9,8 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { hmsActions, hmsStore } from './hms';
 import { IModelRegistryData } from './registry';
 class ArCube {
+  sceneGroup2: THREE.Group<THREE.Object3DEventMap>;
+  gltfModel2: THREE.Group<THREE.Object3DEventMap>;
   /**
    * Construct a new arpresent widget.
    */
@@ -246,16 +248,16 @@ class ArCube {
     const hiroGroup = new THREE.Group();
     this.markerGroupArray.push(hiroGroup);
 
-    const mesh = new THREE.Mesh(
-      new THREE.BoxGeometry(1.25, 1.25, 1.25),
-      new THREE.MeshBasicMaterial({
-        color: 0xff8800,
-        transparent: true,
-        opacity: 0.5
-      })
-    );
-    mesh.position.y = 1.25 / 2;
-    hiroRoot.add(mesh);
+    // const mesh = new THREE.Mesh(
+    //   new THREE.BoxGeometry(1.25, 1.25, 1.25),
+    //   new THREE.MeshBasicMaterial({
+    //     color: 0xff8800,
+    //     transparent: true,
+    //     opacity: 0.5
+    //   })
+    // );
+    // mesh.position.y = 1.25 / 2;
+    // hiroRoot.add(mesh);
 
     hiroRoot.add(hiroGroup);
 
@@ -264,6 +266,7 @@ class ArCube {
     ////////////////////////////////////////////////////////////
 
     this.sceneGroup = new THREE.Group();
+    this.sceneGroup2 = new THREE.Group();
     // a 1x1x1 cube model with scale factor 1.25 fills up the physical cube
     this.sceneGroup.scale.set(1.75 / 2, 1.75 / 2, 1.75 / 2);
 
@@ -332,6 +335,7 @@ class ArCube {
     }
 
     this.loadModel();
+    this.loadModel2();
 
     // this.setUpVideo();
   }
@@ -391,6 +395,47 @@ class ArCube {
     console.log('model loaded parse');
   };
 
+  loadModel2() {
+    console.log('load model2');
+    // remove old model first
+    // if (this.gltfModel) {
+    //   this.removeFromScene(this.gltfModel);
+    // }
+
+    // load model
+    this.okToLoadModel = false;
+    hmsActions.setAppData('canLoadModel', false);
+
+    this.gltfLoader.load(
+      'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf',
+      gltf => {
+        const scale = 1.0;
+        this.gltfModel2 = gltf.scene;
+        this.gltfModel2.scale.set(scale, scale, scale);
+        this.gltfModel2.position.fromArray([0, -1, 0]);
+
+        // this.animations = gltf.animations;
+        // this.mixer = new THREE.AnimationMixer(this.gltfModel);
+
+        // if (this.animations) {
+        //   this.animations.forEach(clip => {
+        //     this.mixer.clipAction(clip).play();
+        //   });
+        // }
+
+        this.sceneGroup2.add(this.gltfModel2);
+        this.okToLoadModel = true;
+        hmsActions.setAppData('canLoadModel', true);
+      },
+      () => {
+        console.log('model loading');
+      },
+      error => {
+        console.log('Error loading model', error);
+      }
+    );
+  }
+
   removeFromScene(object3d: THREE.Object3D) {
     this.sceneGroup.remove(object3d);
   }
@@ -449,7 +494,7 @@ class ArCube {
       }
 
       if (this.markerRootArray[6].visible) {
-        // this.markerGroupArray[6].add(this.sceneGroup);
+        this.markerGroupArray[6].add(this.sceneGroup2);
         console.log('hiro visible');
       }
     }
