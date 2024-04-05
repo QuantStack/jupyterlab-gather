@@ -209,6 +209,11 @@ class ArCube {
         }
       );
 
+      console.log(
+        'url',
+        `${THREEx.ArToolkitContext.baseURL}examples/marker-training/examples/pattern-files/pattern-${this.patternArray[i]}.patt'`
+      );
+
       const markerGroup = new THREE.Group();
       this.markerGroupArray.push(markerGroup);
       markerGroup.position.y = -1.25 / 2;
@@ -216,6 +221,36 @@ class ArCube {
 
       markerRoot.add(markerGroup);
     }
+
+    const hiroRoot = new THREE.Group();
+    this.markerRootArray.push(hiroRoot);
+    this.scene.add(hiroRoot);
+
+    const hiroControls = new THREEx.ArMarkerControls(
+      this.arToolkitContext,
+      hiroRoot,
+      {
+        type: 'pattern',
+        patternUrl:
+          'https://ar-js-org.github.io/AR.js/three.js/examples/marker-training/examples/pattern-files/pattern-hiro.patt'
+      }
+    );
+
+    const hiroGroup = new THREE.Group();
+    this.markerGroupArray.push(hiroGroup);
+
+    const mesh = new THREE.Mesh(
+      new THREE.BoxGeometry(1.25, 1.25, 1.25),
+      new THREE.MeshBasicMaterial({
+        color: 0xff8800,
+        transparent: true,
+        opacity: 0.5
+      })
+    );
+    mesh.position.y = 1.25 / 2;
+    hiroRoot.add(mesh);
+
+    hiroRoot.add(hiroGroup);
 
     ////////////////////////////////////////////////////////////
     // setup scene
@@ -394,6 +429,11 @@ class ArCube {
         this.markerGroupArray[i].add(this.sceneGroup);
         // console.log('visible: ' + this.patternArray[i]);
         break;
+      }
+
+      if (this.markerRootArray[6].visible) {
+        // this.markerGroupArray[6].add(this.sceneGroup);
+        console.log('hiro visible');
       }
     }
   }
