@@ -1,5 +1,6 @@
 import {
   selectIsConnectedToRoom,
+  selectIsInPreview,
   selectSessionStore,
   useHMSActions,
   useHMSStore
@@ -14,6 +15,8 @@ import PreviewView from './PreviewView';
 
 export const MainDisplay = () => {
   const isConnected = useHMSStore(selectIsConnectedToRoom);
+  const isInPreview = useHMSStore(selectIsInPreview);
+
   const hmsActions = useHMSActions();
   const isPresenting = useHMSStore(selectSessionStore('isPresenting'));
 
@@ -53,6 +56,8 @@ export const MainDisplay = () => {
           <ViewComponent />
           <ControlBar />
         </>
+      ) : isInPreview ? (
+        <PreviewView />
       ) : (
         <>
           <JoinForm />
