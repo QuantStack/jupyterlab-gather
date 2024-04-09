@@ -96,6 +96,11 @@ class ArCube {
     this.camera = new THREE.Camera();
     this.scene.add(this.camera);
 
+    // Camera lights
+    const camLight = new THREE.DirectionalLight(0xffffff, 1);
+    camLight.position.set(-1, 2, 4);
+    this.camera.add(camLight);
+
     // const canvas = document.getElementById('target') as HTMLCanvasElement;
 
     // const offscreen = canvas?.transferControlToOffscreen();

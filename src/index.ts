@@ -11,6 +11,7 @@ import { RootDisplayWidget } from './components/RootDisplay';
 import { IArPresentInterface, IArPresentToken } from './tokens';
 import { SidebarWidget } from './widgets/Sidebar';
 
+export { IArPresentInterface, IArPresentToken } from './tokens';
 /**
  * Activate the arpresent widget extension.
  */
@@ -18,7 +19,7 @@ import { SidebarWidget } from './widgets/Sidebar';
 /**
  * Initialization data for the jupyterlab_arpresent extension.
  */
-const plugin: JupyterFrontEndPlugin<void> = {
+const plugin: JupyterFrontEndPlugin<IArPresentInterface> = {
   id: 'jupyterlab_arpresent',
   description: 'Video presentation over WebRTC with AR capabilities.',
   autoStart: true,
@@ -31,7 +32,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     launcher: ILauncher | null,
     settingRegistry: ISettingRegistry | null,
     restorer: ILayoutRestorer | null
-  ) => {
+  ): IArPresentInterface => {
     console.log('JupyterLab extension jupyterlab_arpresent is activated!');
 
     let widget: MainAreaWidget<RootDisplayWidget>;
@@ -92,6 +93,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
     //     name: () => 'arpresent'
     //   });
     // }
+
+    return sidebarPanel;
   }
 };
 
@@ -107,16 +110,13 @@ const duckPlugin: JupyterFrontEndPlugin<void> = {
   ) => {
     console.log('JupyterLab extension The Duck is activated!');
 
-    const sidebarPanel = new SidebarWidget();
-    sidebarPanel.id = 'Duck-sidepanel';
-
     const duckPluginCommand: string = 'duckPlugin:open';
     app.commands.addCommand(duckPluginCommand, {
       label: 'The Duck',
       execute: () => {
-        const woop = sidebarPanel.foo('this is a test');
-
-        console.log('woop', woop);
+        arPresent.foo(
+          'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
+        );
       }
     });
 
@@ -125,22 +125,3 @@ const duckPlugin: JupyterFrontEndPlugin<void> = {
 };
 
 export default [plugin, duckPlugin];
-
-// export const trackerPlugin: JupyterFrontEndPlugin<IJupyterCadTracker> = {
-//   id: 'jupytercad:core:tracker',
-//   autoStart: true,
-//   requires: [ITranslator],
-//   optional: [IMainMenu],
-//   provides: IJupyterCadDocTracker,
-//   activate: (
-//     app: JupyterFrontEnd,
-//     translator: ITranslator,
-//     mainMenu?: IMainMenu
-//   ): IJupyterCadTracker => {
-//     const tracker = new WidgetTracker<JupyterCadWidget>({
-//       namespace: NAME_SPACE
-//     });
-//     console.log('jupytercad:core:tracker is activated!');
-//     return tracker;
-//   }
-// };
