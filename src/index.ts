@@ -8,36 +8,49 @@ import { ILauncher } from '@jupyterlab/launcher';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { LogoIcon } from './components/Icons';
 import { RootDisplayWidget } from './components/RootDisplay';
-import { IArPresentInterface, IArPresentToken } from './tokens';
+import {
+  IArPresentRegistryToken,
+  IModelRegistry,
+  ModelManager
+} from './registry';
 import { SidebarWidget } from './widgets/Sidebar';
-
-export { IArPresentInterface, IArPresentToken } from './tokens';
-/**
- * Activate the arpresent widget extension.
- */
 
 /**
  * Initialization data for the jupyterlab_arpresent extension.
  */
-const plugin: JupyterFrontEndPlugin<IArPresentInterface> = {
+const plugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyterlab_arpresent',
   description: 'Video presentation over WebRTC with AR capabilities.',
   autoStart: true,
-  provides: IArPresentToken,
-  requires: [ICommandPalette, ILauncher],
+  requires: [ICommandPalette, ILauncher, IArPresentRegistryToken],
   optional: [ILayoutRestorer, ISettingRegistry],
   activate: (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
     launcher: ILauncher | null,
+    registry: IModelRegistry,
     settingRegistry: ISettingRegistry | null,
     restorer: ILayoutRestorer | null
-  ): IArPresentInterface => {
+  ) => {
     console.log('JupyterLab extension jupyterlab_arpresent is activated!');
+
+    // Register default models
+    registry.registerModel({
+      name: 'Duck',
+      url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf'
+    });
+
+    registry.registerModel({
+      name: 'Brain Stem',
+      url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf'
+    });
 
     let widget: MainAreaWidget<RootDisplayWidget>;
 
-    const sidebarPanel = new SidebarWidget();
+    const sidebarPanel = new SidebarWidget(
+      registry.modelRegistry,
+      registry.modelRegistryChanged
+    );
     sidebarPanel.id = 'AR-sidepanel';
 
     // Add an application command
@@ -48,8 +61,6 @@ const plugin: JupyterFrontEndPlugin<IArPresentInterface> = {
       execute: () => {
         // Regenerate the widget if disposed
         if (!widget || widget.isDisposed) {
-          // const content = new ArPresentWidget();
-
           const content = new RootDisplayWidget();
           widget = new MainAreaWidget({ content });
           widget.id = 'arpresent-jupyterlab';
@@ -83,6 +94,7 @@ const plugin: JupyterFrontEndPlugin<IArPresentInterface> = {
         rank: 2
       });
     }
+
     // Track and restore the widget state
     // const tracker = new WidgetTracker<MainAreaWidget<ArPresent>>({
     //   namespace: 'arpresent'
@@ -93,8 +105,19 @@ const plugin: JupyterFrontEndPlugin<IArPresentInterface> = {
     //     name: () => 'arpresent'
     //   });
     // }
+  }
+};
 
-    return sidebarPanel;
+const modelRegistryPlugin: JupyterFrontEndPlugin<IModelRegistry> = {
+  id: 'jupyterlab_arpresent:registry',
+  description: 'Registry of available models to display in ar present',
+  autoStart: true,
+  requires: [],
+  provides: IArPresentRegistryToken,
+  activate: () => {
+    const modelRegistryManager = new ModelManager();
+
+    return modelRegistryManager;
   }
 };
 
@@ -102,11 +125,11 @@ const duckPlugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyterlab_duck',
   description: 'a duck.',
   autoStart: true,
-  requires: [ICommandPalette, IArPresentToken],
+  requires: [ICommandPalette, IArPresentRegistryToken],
   activate: (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
-    arPresent: IArPresentInterface
+    registry: IModelRegistry
   ) => {
     console.log('JupyterLab extension The Duck is activated!');
 
@@ -114,9 +137,11 @@ const duckPlugin: JupyterFrontEndPlugin<void> = {
     app.commands.addCommand(duckPluginCommand, {
       label: 'The Duck',
       execute: () => {
-        arPresent.foo(
-          'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
-        );
+        console.log('executing the duck');
+        registry.registerModel({
+          name: 'Suzanne',
+          url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
+        });
       }
     });
 
@@ -124,4 +149,4 @@ const duckPlugin: JupyterFrontEndPlugin<void> = {
   }
 };
 
-export default [plugin, duckPlugin];
+export default [plugin, modelRegistryPlugin, duckPlugin];

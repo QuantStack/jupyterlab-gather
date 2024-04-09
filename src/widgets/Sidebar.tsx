@@ -1,36 +1,21 @@
 import { selectAppData } from '@100mslive/react-sdk';
 import { ReactWidget } from '@jupyterlab/apputils';
 import { SidePanel, UseSignal } from '@jupyterlab/ui-components';
-import { Signal } from '@lumino/signaling';
+import { ISignal } from '@lumino/signaling';
 import { Panel, Widget } from '@lumino/widgets';
 import React, { useEffect, useState } from 'react';
 import ArCube from '../arCube';
 import ModelListItem from '../components/ModelListItem';
 import { hmsActions, hmsStore } from '../hms';
 import { arIcon } from '../icons';
-import { IArPresentInterface } from '../tokens';
+import { IModelRegistry, IModelRegistryData } from '../registry';
 
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/IridescenceAbalone/glTF/IridescenceAbalone.gltf
-interface IModelInfo {
-  name: string;
-  url: string;
-}
 
 interface IModelInfoList {
-  modelList: IModelInfo[];
+  modelList: IModelRegistryData[];
 }
-
-const modelListOg = [
-  {
-    name: 'duck',
-    url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf'
-  },
-  {
-    name: 'brain stem',
-    url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf'
-  }
-];
 
 const SidebarComponent = ({ modelList }: IModelInfoList) => {
   const [isDisabled, setIsDisabled] = useState(false);
@@ -79,11 +64,18 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
   );
 };
 
-export class SidebarWidget extends SidePanel implements IArPresentInterface {
-  _signal = new Signal<this, string>(this);
+export class SidebarWidget extends SidePanel {
+  private _signal: ISignal<IModelRegistry, void>;
+  private _modelRegistry: IModelRegistryData[];
 
-  constructor() {
+  constructor(
+    modelRegistry: IModelRegistryData[],
+    modelRegistryChanged: ISignal<IModelRegistry, void>
+  ) {
     super({ content: new Panel() });
+    this._modelRegistry = modelRegistry;
+    this._signal = modelRegistryChanged;
+
     this.addClass('sidebar-widget');
     this.title.icon = arIcon;
     this.title.caption = 'Augmented reality';
@@ -94,19 +86,9 @@ export class SidebarWidget extends SidePanel implements IArPresentInterface {
 
     const widget = ReactWidget.create(
       <UseSignal signal={this._signal}>
-        {() => <SidebarComponent modelList={modelListOg} />}
+        {() => <SidebarComponent modelList={this._modelRegistry} />}
       </UseSignal>
     );
     this.content.addWidget(widget);
-  }
-
-  foo(modelUrl: string): string {
-    console.log('modelUrl', modelUrl);
-    modelListOg.push({ name: 'test model', url: modelUrl });
-    console.log('modelList', modelListOg);
-
-    this._signal.emit(modelUrl);
-
-    return modelUrl;
   }
 }
