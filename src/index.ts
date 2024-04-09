@@ -37,12 +37,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
     // Register default models
     registry.registerModel({
       name: 'Duck',
-      url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf'
+      url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf',
+      type: 'url'
     });
 
     registry.registerModel({
       name: 'Brain Stem',
-      url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf'
+      url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf',
+      type: 'url'
     });
 
     let widget: MainAreaWidget<RootDisplayWidget>;
@@ -140,7 +142,8 @@ const duckPlugin: JupyterFrontEndPlugin<void> = {
         console.log('executing the duck');
         registry.registerModel({
           name: 'Suzanne',
-          url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
+          url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf',
+          type: 'url'
         });
       }
     });

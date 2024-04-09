@@ -15,8 +15,13 @@ const RootDisplay = ({ node }: IRootDisplayProps) => {
     const initialAppData = {
       node: node,
       canLoadModel: true,
-      modelUrl:
-        'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf',
+      // modelUrl:
+      //   'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf',
+      model: {
+        name: 'Duck',
+        url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf',
+        type: 'url'
+      },
       isPresenting: false,
       presenterId: ''
     };
@@ -35,9 +40,7 @@ const RootDisplay = ({ node }: IRootDisplayProps) => {
 
   return (
     <div ref={childRef} className="Root">
-      <TypedHMSRoomProvider>
-        <MainDisplay />
-      </TypedHMSRoomProvider>
+      <MainDisplay />
     </div>
   );
 };
@@ -48,6 +51,10 @@ export class RootDisplayWidget extends ReactWidget {
   }
 
   render() {
-    return <RootDisplay node={this.node} />;
+    return (
+      <TypedHMSRoomProvider>
+        <RootDisplay node={this.node} />
+      </TypedHMSRoomProvider>
+    );
   }
 }

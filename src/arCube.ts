@@ -5,15 +5,16 @@ import {
 //@ts-expect-error AR.js doesn't have type definitions
 import * as THREEx from '@ar-js-org/ar.js/three.js/build/ar-threex.js';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { hmsActions, hmsStore } from './hms';
+import { IModelRegistryData } from './registry';
 class ArCube {
   /**
    * Construct a new arpresent widget.
    */
   constructor(node: HTMLElement) {
     this.node = node;
-    this.modelUrl = hmsStore.getState(selectAppData('modelUrl'));
+    this.model = hmsStore.getState(selectAppData('modelUrl'));
 
     this.initialize();
     // this.animate();
@@ -70,7 +71,7 @@ class ArCube {
   //   readonly webcamFromArjs: HTMLElement | null;
   readonly node: HTMLElement;
   renderTarget: THREE.WebGLRenderTarget;
-  modelUrl: string;
+  model: IModelRegistryData;
 
   initialize() {
     this.okToLoadModel = true;
@@ -300,49 +301,56 @@ class ArCube {
   }
 
   loadModel() {
-    this.modelUrl = hmsStore.getState(selectAppData('modelUrl'));
+    this.model = hmsStore.getState(selectAppData('model'));
 
-    console.log('load model', this.modelUrl);
+    console.log('load model', this.model);
     // remove old model first
     if (this.gltfModel) {
       this.removeFromScene(this.gltfModel);
     }
+
+    // const data = JSON.stringify(threeCube);
 
     // load model
     if (this.okToLoadModel) {
       this.okToLoadModel = false;
       hmsActions.setAppData('canLoadModel', false);
 
-      this.gltfLoader.load(
-        this.modelUrl,
-        gltf => {
-          const scale = 1.0;
-          this.gltfModel = gltf.scene;
-          this.gltfModel.scale.set(scale, scale, scale);
-          this.gltfModel.position.fromArray([0, -1, 0]);
-
-          this.animations = gltf.animations;
-          this.mixer = new THREE.AnimationMixer(this.gltfModel);
-
-          if (this.animations) {
-            this.animations.forEach(clip => {
-              this.mixer.clipAction(clip).play();
-            });
+      if (this.model.type === 'url') {
+        this.gltfLoader.load(
+          this.model.url,
+          this.onSuccessfulLoad,
+          () => {
+            console.log('model loading');
+          },
+          error => {
+            console.log('Error loading model', error);
           }
-
-          this.sceneGroup.add(this.gltfModel);
-          this.okToLoadModel = true;
-          hmsActions.setAppData('canLoadModel', true);
-        },
-        () => {
-          console.log('model loading');
-        },
-        error => {
-          console.log('Error loading model', error);
-        }
-      );
+        );
+      }
     }
   }
+
+  onSuccessfulLoad = (gltf: GLTF) => {
+    const scale = 1.0;
+    this.gltfModel = gltf.scene;
+    this.gltfModel.scale.set(scale, scale, scale);
+    this.gltfModel.position.fromArray([0, -1, 0]);
+
+    this.animations = gltf.animations;
+    this.mixer = new THREE.AnimationMixer(this.gltfModel);
+
+    if (this.animations) {
+      this.animations.forEach(clip => {
+        this.mixer.clipAction(clip).play();
+      });
+    }
+
+    this.sceneGroup.add(this.gltfModel);
+    this.okToLoadModel = true;
+    hmsActions.setAppData('canLoadModel', true);
+    console.log('model loaded parse');
+  };
 
   removeFromScene(object3d: THREE.Object3D) {
     this.sceneGroup.remove(object3d);

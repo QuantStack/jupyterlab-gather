@@ -11,9 +11,12 @@ export interface IModelRegistry {
   registerModel(data: IModelRegistryData): void;
 }
 
+export type IModelRegistryDataType = 'url' | 'gltf';
+
 export interface IModelRegistryData {
   name: string;
   url: string;
+  type: IModelRegistryDataType;
 }
 
 export class ModelManager implements IModelRegistry {

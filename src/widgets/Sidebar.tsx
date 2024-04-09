@@ -32,8 +32,8 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
     setIsDisabled(canLoadModel);
   };
 
-  const handleClick = (url: string) => {
-    hmsActions.setAppData('modelUrl', url);
+  const handleClick = (model: IModelRegistryData) => {
+    hmsActions.setAppData('model', model);
 
     if (!arCube) {
       setArCube(hmsStore.getState(selectAppData('arCube')));
@@ -52,8 +52,7 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
         {modelList.map(model => {
           return (
             <ModelListItem
-              name={model.name}
-              url={model.url}
+              model={model}
               isDisabled={!isDisabled}
               handleClick={handleClick}
             />

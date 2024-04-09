@@ -1,5 +1,6 @@
 import { HMSLogLevel, HMSReactiveStore } from '@100mslive/hms-video-store';
 import { HMSPeer, HMSRoomProvider } from '@100mslive/react-sdk';
+import { IModelRegistryData } from './registry';
 
 const hmsManager = new HMSReactiveStore();
 
@@ -8,7 +9,8 @@ interface ISessionStore {
   isPresenting: boolean;
   node: HTMLElement;
   canLoadModel: boolean;
-  modelUrl: string;
+  // modelUrl: string;
+  model: IModelRegistryData;
 }
 
 const TypedHMSRoomProvider = HMSRoomProvider<{

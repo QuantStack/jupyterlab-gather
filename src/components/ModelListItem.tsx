@@ -1,27 +1,22 @@
 import { Button } from '@jupyterlab/ui-components';
 import React from 'react';
+import { IModelRegistryData } from '../registry';
 
 interface IModelListItem {
-  name: string;
-  url: string;
+  model: IModelRegistryData;
   isDisabled: boolean;
-  handleClick: (url: string) => void;
+  handleClick: (model: IModelRegistryData) => void;
 }
 
-const ModelListItem = ({
-  name,
-  url,
-  isDisabled,
-  handleClick
-}: IModelListItem) => {
+const ModelListItem = ({ model, isDisabled, handleClick }: IModelListItem) => {
   return (
     <Button
       minimal
       className="model-list-item"
       disabled={isDisabled}
-      onClick={() => handleClick(url)}
+      onClick={() => handleClick(model)}
     >
-      {isDisabled ? 'Working...' : name}
+      {isDisabled ? 'Working...' : model.name}
     </Button>
   );
 };
