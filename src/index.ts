@@ -38,14 +38,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
     // Register default models
     registry.registerModel({
       name: 'Duck',
-      url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf',
-      type: 'url'
+      url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf'
     });
 
     registry.registerModel({
       name: 'Brain Stem',
-      url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf',
-      type: 'url'
+      url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf'
     });
 
     let widget: MainAreaWidget<RootDisplayWidget>;
@@ -141,12 +139,12 @@ const duckPlugin: JupyterFrontEndPlugin<void> = {
       label: 'The Duck',
       execute: () => {
         console.log('executing the duck');
-        const data = JSON.stringify(threeCube);
-
+        // const data = JSON.stringify(threeCube);
+        // const data = JSON.parse(threeCube);
+        const data = threeCube;
         registry.registerModel({
           name: 'Three Cube',
-          url: data,
-          type: 'gltf'
+          gltf: data
         });
       }
     });

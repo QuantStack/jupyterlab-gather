@@ -19,8 +19,7 @@ const RootDisplay = ({ node }: IRootDisplayProps) => {
       //   'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf',
       model: {
         name: 'Duck',
-        url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf',
-        type: 'url'
+        url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf'
       },
       isPresenting: false,
       presenterId: ''

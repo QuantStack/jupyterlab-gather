@@ -13,11 +13,29 @@ export interface IModelRegistry {
 
 export type IModelRegistryDataType = 'url' | 'gltf';
 
-export type IModelRegistryData = {
+// export type IModelRegistryData = {
+//   name: string;
+//   url: any;
+//   type: IModelRegistryDataType;
+// };
+
+export type IModelRegistryData = IModelRegistryDataUrl | IModelRegistryDataGltf;
+
+export interface IModelRegistryDataUrl {
   name: string;
   url: string;
-  type: IModelRegistryDataType;
-};
+}
+
+export interface IModelRegistryDataGltf {
+  name: string;
+  gltf: any;
+}
+
+export function isIModelRegistryDataUrl(
+  model: any
+): model is IModelRegistryDataUrl {
+  return model && typeof model.object === 'string';
+}
 
 export class ModelManager implements IModelRegistry {
   modelRegistry: IModelRegistryData[] = [];
@@ -25,7 +43,6 @@ export class ModelManager implements IModelRegistry {
 
   registerModel(data: IModelRegistryData): void {
     this.modelRegistry.push(data);
-    console.log('in register model', this.modelRegistry);
     this.modelRegistryChanged.emit();
   }
 }

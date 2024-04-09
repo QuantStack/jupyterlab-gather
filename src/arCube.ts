@@ -309,14 +309,12 @@ class ArCube {
       this.removeFromScene(this.gltfModel);
     }
 
-    // const data = JSON.stringify(threeCube);
-
     // load model
     if (this.okToLoadModel) {
       this.okToLoadModel = false;
       hmsActions.setAppData('canLoadModel', false);
 
-      if (this.model.type === 'url') {
+      if ('url' in this.model) {
         this.gltfLoader.load(
           this.model.url,
           this.onSuccessfulLoad,
@@ -327,15 +325,11 @@ class ArCube {
             console.log('Error loading model url', error);
           }
         );
-      } else if (this.model.type === 'gltf') {
-        this.gltfLoader.parse(
-          this.model.url,
-          '',
-          this.onSuccessfulLoad,
-          error => {
-            console.log('Error loading model gltf', error);
-          }
-        );
+      } else if ('gltf' in this.model) {
+        const data = JSON.stringify(this.model.gltf);
+        this.gltfLoader.parse(data, '', this.onSuccessfulLoad, error => {
+          console.log('Error loading model gltf', error);
+        });
       }
     }
   }
