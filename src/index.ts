@@ -8,6 +8,7 @@ import { ILauncher } from '@jupyterlab/launcher';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { LogoIcon } from './components/Icons';
 import { RootDisplayWidget } from './components/RootDisplay';
+import { threeCube } from './model-examples/models';
 import {
   IArPresentRegistryToken,
   IModelRegistry,
@@ -140,10 +141,12 @@ const duckPlugin: JupyterFrontEndPlugin<void> = {
       label: 'The Duck',
       execute: () => {
         console.log('executing the duck');
+        const data = JSON.stringify(threeCube);
+
         registry.registerModel({
-          name: 'Suzanne',
-          url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf',
-          type: 'url'
+          name: 'Three Cube',
+          url: data,
+          type: 'gltf'
         });
       }
     });

@@ -324,7 +324,16 @@ class ArCube {
             console.log('model loading');
           },
           error => {
-            console.log('Error loading model', error);
+            console.log('Error loading model url', error);
+          }
+        );
+      } else if (this.model.type === 'gltf') {
+        this.gltfLoader.parse(
+          this.model.url,
+          '',
+          this.onSuccessfulLoad,
+          error => {
+            console.log('Error loading model gltf', error);
           }
         );
       }

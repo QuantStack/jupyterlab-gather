@@ -13,11 +13,11 @@ export interface IModelRegistry {
 
 export type IModelRegistryDataType = 'url' | 'gltf';
 
-export interface IModelRegistryData {
+export type IModelRegistryData = {
   name: string;
   url: string;
   type: IModelRegistryDataType;
-}
+};
 
 export class ModelManager implements IModelRegistry {
   modelRegistry: IModelRegistryData[] = [];
