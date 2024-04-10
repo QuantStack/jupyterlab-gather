@@ -36,6 +36,8 @@ class ArCube {
   arToolkitContext: any;
   markerRootArray: THREE.Group[];
   markerGroupArray: THREE.Group[];
+  hiroRootArray: THREE.Group[];
+  hiroGroupArray: THREE.Group[];
   patternArray: string[];
   patternArraySecondModel: string[];
   sceneGroup: THREE.Group;
@@ -90,6 +92,8 @@ class ArCube {
   }
 
   setupThreeStuff() {
+    console.log('setting up threee stuff');
+
     this.okToLoadModel = true;
     this.scene = new THREE.Scene();
 
@@ -160,6 +164,8 @@ class ArCube {
   }
 
   setupSource() {
+    console.log('setting up source');
+
     this.arToolkitSource = new THREEx.ArToolkitSource({
       sourceType: 'webcam'
     });
@@ -168,6 +174,8 @@ class ArCube {
   }
 
   setupContext() {
+    console.log('setting up context');
+
     // create atToolkitContext
     this.arToolkitContext = new THREEx.ArToolkitContext({
       cameraParametersUrl:
@@ -182,10 +190,15 @@ class ArCube {
       );
     });
   }
+
   setupMarkerRoots() {
+    console.log('setting up marker roots');
+
     this.markerRootArray = [];
     this.markerGroupArray = [];
 
+    this.hiroRootArray = [];
+    this.hiroGroupArray = [];
     this.patternArray = [
       'letterA',
       'letterB',
@@ -240,7 +253,7 @@ class ArCube {
 
     for (let i = 0; i < 6; i++) {
       const hiroRoot = new THREE.Group();
-      this.markerRootArray.push(hiroRoot);
+      this.hiroRootArray.push(hiroRoot);
       this.scene.add(hiroRoot);
       const hiroControls = new THREEx.ArMarkerControls(
         this.arToolkitContext,
@@ -255,7 +268,7 @@ class ArCube {
       );
 
       const hiroGroup = new THREE.Group();
-      this.markerGroupArray.push(hiroGroup);
+      this.hiroGroupArray.push(hiroGroup);
       hiroGroup.position.y = -1.25 / 2;
       hiroGroup.rotation.setFromVector3(rotationArray[i]);
 
@@ -264,6 +277,7 @@ class ArCube {
   }
 
   setupScene() {
+    console.log('setting up scene');
     this.sceneGroup = new THREE.Group();
     this.sceneGroup2 = new THREE.Group();
     // a 1x1x1 cube model with scale factor 1.25 fills up the physical cube
@@ -341,6 +355,7 @@ class ArCube {
 
     pointLight.position.set(0.5, 2, 4);
     this.scene.add(pointLight);
+    console.log('fin');
 
     // this.setUpVideo();
   }
@@ -414,9 +429,13 @@ class ArCube {
     this.gltfLoader.load(
       'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf',
       gltf => {
+        console.log('test');
         const scale = 1.0;
+        console.log('test');
         this.gltfModel2 = gltf.scene;
+        console.log('test');
         this.gltfModel2.scale.set(scale, scale, scale);
+        console.log('test');
         this.gltfModel2.position.fromArray([0, -1, 0]);
 
         // this.animations = gltf.animations;
@@ -427,8 +446,11 @@ class ArCube {
         //     this.mixer.clipAction(clip).play();
         //   });
         // }
+        console.log('test');
 
+        console.log('test');
         this.sceneGroup2.add(this.gltfModel2);
+        console.log('test');
         this.okToLoadModel = true;
         // hmsActions.setAppData('canLoadModel', true);
       },
@@ -504,11 +526,11 @@ class ArCube {
       }
     }
 
-    for (let i = 6; i < 12; i++) {
-      if (this.markerRootArray[i].visible) {
+    for (let i = 0; i < 6; i++) {
+      if (this.hiroRootArray[i].visible) {
         console.log('second', i);
         //TODO want to iterate through new scene group list
-        this.markerGroupArray[i].add(this.sceneGroup2);
+        this.hiroGroupArray[i].add(this.sceneGroup2);
         // console.log('visible: ' + this.patternArraySecondModel[i - 6]);
         break;
       }
