@@ -15,12 +15,16 @@ const PresenterView = () => {
     <div className="presenter-container-main">
       <div className="presenter-container">
         {presenter ? (
-          <Peer peer={presenter} className="presenter-video" />
+          <>
+            <Peer peer={presenter} className="presenter-video" />
+            <PeerSidePane
+              peers={peers.filter(peer => peer.id !== presenter.id)}
+            />
+          </>
         ) : (
           <div>Waiting...</div>
         )}
       </div>
-      <PeerSidePane peers={peers.filter(peer => peer.id !== presenter.id)} />
     </div>
   );
 };

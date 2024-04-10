@@ -1,9 +1,15 @@
 import { selectAppData } from '@100mslive/react-sdk';
 import { ReactWidget } from '@jupyterlab/apputils';
+<<<<<<< HEAD
 import { SidePanel, UseSignal } from '@jupyterlab/ui-components';
 import { ISignal } from '@lumino/signaling';
 import { Panel, Widget } from '@lumino/widgets';
 import React, { useEffect, useState } from 'react';
+=======
+import { Button, SidePanel } from '@jupyterlab/ui-components';
+import { Panel, Widget } from '@lumino/widgets';
+import React, { useEffect, useRef, useState } from 'react';
+>>>>>>> 4d033de (Two cube working)
 import ArCube from '../arCube';
 import ModelListItem from '../components/ModelListItem';
 import { hmsActions, hmsStore } from '../hms';
@@ -20,6 +26,7 @@ interface IModelInfoList {
 const SidebarComponent = ({ modelList }: IModelInfoList) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
+  const childRef = useRef(null);
 
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData('arCube')));
@@ -28,6 +35,15 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
     console.log('botty');
     hmsStore.subscribe(updateModelLoadingState, selectAppData('canLoadModel'));
   }, []);
+
+  // TODO: There's probably a better way to do this
+  // add height: 100% to parent container
+  useEffect(() => {
+    if (childRef.current) {
+      const parent = (childRef.current as HTMLElement).parentElement;
+      parent?.classList.add('sidebar-parent');
+    }
+  }, [childRef]);
 
   const updateModelLoadingState = () => {
     const canLoadModel = hmsStore.getState(selectAppData('canLoadModel'));
@@ -46,7 +62,7 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
   };
 
   return (
-    <div>
+    <div className="sidebar-container">
       <div className="sidebar-description">
         Select a model from the list below
       </div>
@@ -60,6 +76,10 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
             />
           );
         })}
+      </div>
+      <div className="sidebar-buttons">
+        <Button>Set as first model</Button>
+        <Button>Set as second model</Button>
       </div>
     </div>
   );

@@ -37,7 +37,9 @@ class ArCube {
   markerRootArray: THREE.Group[];
   markerGroupArray: THREE.Group[];
   patternArray: string[];
+  patternArraySecondModel: string[];
   sceneGroup: THREE.Group;
+  sceneGroupArray: THREE.Group[];
   edgeGroup: THREE.Group;
   gltfLoader: GLTFLoader;
   gltfModel: THREE.Group;
@@ -76,6 +78,18 @@ class ArCube {
   model: IModelRegistryData;
 
   initialize() {
+    this.setupThreeStuff();
+
+    this.setupSource();
+
+    this.setupContext();
+
+    this.setupMarkerRoots();
+
+    this.setupScene();
+  }
+
+  setupThreeStuff() {
     this.okToLoadModel = true;
     this.scene = new THREE.Scene();
 
@@ -90,11 +104,7 @@ class ArCube {
     });
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-    const pointLight = new THREE.PointLight(0xffffff, 1, 50);
-
-    pointLight.position.set(0.5, 2, 4);
     this.scene.add(ambientLight);
-    this.scene.add(pointLight);
 
     this.camera = new THREE.Camera();
     this.scene.add(this.camera);
@@ -147,21 +157,17 @@ class ArCube {
     this.totalTime = 0;
 
     hmsActions.setAppData('renderer', this.renderer);
+  }
 
-    ////////////////////////////////////////////////////////////
-    // setup arToolkitSource
-    ////////////////////////////////////////////////////////////
-
+  setupSource() {
     this.arToolkitSource = new THREEx.ArToolkitSource({
       sourceType: 'webcam'
     });
 
     this.arToolkitSource.init();
+  }
 
-    ////////////////////////////////////////////////////////////
-    // setup arToolkitContext
-    ////////////////////////////////////////////////////////////
-
+  setupContext() {
     // create atToolkitContext
     this.arToolkitContext = new THREEx.ArToolkitContext({
       cameraParametersUrl:
@@ -175,11 +181,8 @@ class ArCube {
         this.arToolkitContext.getProjectionMatrix()
       );
     });
-
-    ////////////////////////////////////////////////////////////
-    // setup markerRoots
-    ////////////////////////////////////////////////////////////
-
+  }
+  setupMarkerRoots() {
     this.markerRootArray = [];
     this.markerGroupArray = [];
 
@@ -190,6 +193,15 @@ class ArCube {
       'letterD',
       'letterF',
       'kanji'
+    ];
+
+    this.patternArraySecondModel = [
+      'letterJ',
+      'letterK',
+      'letterL',
+      'letterM',
+      'letterN',
+      'letterP'
     ];
 
     const rotationArray = [
@@ -218,11 +230,6 @@ class ArCube {
         }
       );
 
-      console.log(
-        'url',
-        `${THREEx.ArToolkitContext.baseURL}examples/marker-training/examples/pattern-files/pattern-${this.patternArray[i]}.patt'`
-      );
-
       const markerGroup = new THREE.Group();
       this.markerGroupArray.push(markerGroup);
       markerGroup.position.y = -1.25 / 2;
@@ -231,44 +238,37 @@ class ArCube {
       markerRoot.add(markerGroup);
     }
 
-    const hiroRoot = new THREE.Group();
-    this.markerRootArray.push(hiroRoot);
-    this.scene.add(hiroRoot);
+    for (let i = 0; i < 6; i++) {
+      const hiroRoot = new THREE.Group();
+      this.markerRootArray.push(hiroRoot);
+      this.scene.add(hiroRoot);
+      const hiroControls = new THREEx.ArMarkerControls(
+        this.arToolkitContext,
+        hiroRoot,
+        {
+          type: 'pattern',
+          patternUrl:
+            'https://raw.githubusercontent.com/gjmooney/jupyterlab-arpresent/main/pattern-files/pattern-' +
+            this.patternArraySecondModel[i] +
+            '.patt'
+        }
+      );
 
-    const hiroControls = new THREEx.ArMarkerControls(
-      this.arToolkitContext,
-      hiroRoot,
-      {
-        type: 'pattern',
-        patternUrl:
-          'https://ar-js-org.github.io/AR.js/three.js/examples/marker-training/examples/pattern-files/pattern-hiro.patt'
-      }
-    );
+      const hiroGroup = new THREE.Group();
+      this.markerGroupArray.push(hiroGroup);
+      hiroGroup.position.y = -1.25 / 2;
+      hiroGroup.rotation.setFromVector3(rotationArray[i]);
 
-    const hiroGroup = new THREE.Group();
-    this.markerGroupArray.push(hiroGroup);
+      hiroRoot.add(hiroGroup);
+    }
+  }
 
-    // const mesh = new THREE.Mesh(
-    //   new THREE.BoxGeometry(1.25, 1.25, 1.25),
-    //   new THREE.MeshBasicMaterial({
-    //     color: 0xff8800,
-    //     transparent: true,
-    //     opacity: 0.5
-    //   })
-    // );
-    // mesh.position.y = 1.25 / 2;
-    // hiroRoot.add(mesh);
-
-    hiroRoot.add(hiroGroup);
-
-    ////////////////////////////////////////////////////////////
-    // setup scene
-    ////////////////////////////////////////////////////////////
-
+  setupScene() {
     this.sceneGroup = new THREE.Group();
     this.sceneGroup2 = new THREE.Group();
     // a 1x1x1 cube model with scale factor 1.25 fills up the physical cube
     this.sceneGroup.scale.set(1.75 / 2, 1.75 / 2, 1.75 / 2);
+    this.sceneGroup2.scale.set(1.75 / 2, 1.75 / 2, 1.75 / 2);
 
     // reversed cube
     this.sceneGroup.add(
@@ -337,6 +337,11 @@ class ArCube {
     this.loadModel();
     this.loadModel2();
 
+    const pointLight = new THREE.PointLight(0xffffff, 1, 50);
+
+    pointLight.position.set(0.5, 2, 4);
+    this.scene.add(pointLight);
+
     // this.setUpVideo();
   }
 
@@ -389,6 +394,19 @@ class ArCube {
       });
     }
 
+          this.sceneGroup.add(this.gltfModel);
+          this.okToLoadModel = true;
+          hmsActions.setAppData('canLoadModel', true);
+        },
+        () => {
+          console.log('model loading 1');
+        },
+        error => {
+          console.log('Error loading model', error);
+        }
+      );
+    }
+  }
     this.sceneGroup.add(this.gltfModel);
     this.okToLoadModel = true;
     hmsActions.setAppData('canLoadModel', true);
@@ -404,7 +422,7 @@ class ArCube {
 
     // load model
     this.okToLoadModel = false;
-    hmsActions.setAppData('canLoadModel', false);
+    // hmsActions.setAppData('canLoadModel', false);
 
     this.gltfLoader.load(
       'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf',
@@ -425,10 +443,10 @@ class ArCube {
 
         this.sceneGroup2.add(this.gltfModel2);
         this.okToLoadModel = true;
-        hmsActions.setAppData('canLoadModel', true);
+        // hmsActions.setAppData('canLoadModel', true);
       },
       () => {
-        console.log('model loading');
+        console.log('model loading 2');
       },
       error => {
         console.log('Error loading model', error);
@@ -486,16 +504,26 @@ class ArCube {
     if (this.arToolkitSource.ready !== false) {
       this.arToolkitContext.update(this.arToolkitSource.domElement);
     }
+
+    // console.log('root array', this.markerRootArray);
+
     for (let i = 0; i < 6; i++) {
       if (this.markerRootArray[i].visible) {
+        console.log('first', i);
+        //TODO want to iterate through new scene group list
         this.markerGroupArray[i].add(this.sceneGroup);
         // console.log('visible: ' + this.patternArray[i]);
         break;
       }
+    }
 
-      if (this.markerRootArray[6].visible) {
-        this.markerGroupArray[6].add(this.sceneGroup2);
-        console.log('hiro visible');
+    for (let i = 6; i < 12; i++) {
+      if (this.markerRootArray[i].visible) {
+        console.log('second', i);
+        //TODO want to iterate through new scene group list
+        this.markerGroupArray[i].add(this.sceneGroup2);
+        // console.log('visible: ' + this.patternArraySecondModel[i - 6]);
+        break;
       }
     }
   }
