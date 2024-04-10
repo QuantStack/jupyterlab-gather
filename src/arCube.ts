@@ -394,19 +394,6 @@ class ArCube {
       });
     }
 
-          this.sceneGroup.add(this.gltfModel);
-          this.okToLoadModel = true;
-          hmsActions.setAppData('canLoadModel', true);
-        },
-        () => {
-          console.log('model loading 1');
-        },
-        error => {
-          console.log('Error loading model', error);
-        }
-      );
-    }
-  }
     this.sceneGroup.add(this.gltfModel);
     this.okToLoadModel = true;
     hmsActions.setAppData('canLoadModel', true);

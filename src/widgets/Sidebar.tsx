@@ -1,15 +1,9 @@
 import { selectAppData } from '@100mslive/react-sdk';
 import { ReactWidget } from '@jupyterlab/apputils';
-<<<<<<< HEAD
-import { SidePanel, UseSignal } from '@jupyterlab/ui-components';
+import { Button, SidePanel, UseSignal } from '@jupyterlab/ui-components';
 import { ISignal } from '@lumino/signaling';
 import { Panel, Widget } from '@lumino/widgets';
-import React, { useEffect, useState } from 'react';
-=======
-import { Button, SidePanel } from '@jupyterlab/ui-components';
-import { Panel, Widget } from '@lumino/widgets';
 import React, { useEffect, useRef, useState } from 'react';
->>>>>>> 4d033de (Two cube working)
 import ArCube from '../arCube';
 import ModelListItem from '../components/ModelListItem';
 import { hmsActions, hmsStore } from '../hms';
