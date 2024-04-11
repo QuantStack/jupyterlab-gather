@@ -20,6 +20,7 @@ interface IModelInfoList {
 const SidebarComponent = ({ modelList }: IModelInfoList) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
+  const [selected, setSelected] = useState<IModelRegistryData>();
   const childRef = useRef(null);
 
   useEffect(() => {
@@ -44,14 +45,16 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
     setIsDisabled(canLoadModel);
   };
 
-  const handleClick = (model: IModelRegistryData) => {
-    hmsActions.setAppData('model', model);
+  const handleModelNameClick = (model: IModelRegistryData) => {
+    setSelected(model);
+  };
 
+  const handleModelSelectClick = (modelNumber: number) => {
     if (!arCube) {
       setArCube(hmsStore.getState(selectAppData('arCube')));
     }
 
-    arCube?.loadModel();
+    arCube?.loadModel(modelNumber);
     console.log('cube', arCube);
   };
 
@@ -66,14 +69,18 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
             <ModelListItem
               model={model}
               isDisabled={!isDisabled}
-              handleClick={handleClick}
+              handleClick={handleModelNameClick}
             />
           );
         })}
       </div>
       <div className="sidebar-buttons">
-        <Button>Set as first model</Button>
-        <Button>Set as second model</Button>
+        <Button onClick={() => handleModelSelectClick(0)}>
+          Set as first model
+        </Button>
+        <Button onClick={() => handleModelSelectClick(1)}>
+          Set as second model
+        </Button>
       </div>
     </div>
   );

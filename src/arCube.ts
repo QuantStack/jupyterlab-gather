@@ -78,8 +78,11 @@ class ArCube {
   readonly node: HTMLElement;
   renderTarget: THREE.WebGLRenderTarget;
   model: IModelRegistryData;
+  sceneGroups: THREE.Group[];
 
   initialize() {
+    this.sceneGroups = [];
+
     this.setupThreeStuff();
 
     this.setupSource();
@@ -88,7 +91,8 @@ class ArCube {
 
     this.setupMarkerRoots();
 
-    this.setupScene();
+    this.setupScene(0);
+    this.setupScene(1);
   }
 
   setupThreeStuff() {
@@ -199,6 +203,7 @@ class ArCube {
 
     this.hiroRootArray = [];
     this.hiroGroupArray = [];
+
     this.patternArray = [
       'letterA',
       'letterB',
@@ -276,16 +281,15 @@ class ArCube {
     }
   }
 
-  setupScene() {
+  setupScene(sceneNumber: number) {
     console.log('setting up scene');
-    this.sceneGroup = new THREE.Group();
-    this.sceneGroup2 = new THREE.Group();
+    const sceneGroup = new THREE.Group();
     // a 1x1x1 cube model with scale factor 1.25 fills up the physical cube
-    this.sceneGroup.scale.set(1.75 / 2, 1.75 / 2, 1.75 / 2);
-    this.sceneGroup2.scale.set(1.75 / 2, 1.75 / 2, 1.75 / 2);
+    sceneGroup.scale.set(1.75 / 2, 1.75 / 2, 1.75 / 2);
 
     // reversed cube
-    this.sceneGroup.add(
+    //TODO: Can probably just have one cube and add it to scenes as needed
+    sceneGroup.add(
       new THREE.Mesh(
         new THREE.BoxGeometry(2, 2, 2),
         new THREE.MeshBasicMaterial({
@@ -296,7 +300,7 @@ class ArCube {
     );
 
     // cube edges
-    this.edgeGroup = new THREE.Group();
+    const edgeGroup = new THREE.Group();
     const edgeGeometry = new THREE.CylinderGeometry(0.03, 0.03, 2, 32);
 
     const edgeCenters = [
@@ -339,45 +343,45 @@ class ArCube {
       edge.position.copy(edgeCenters[i]);
       edge.rotation.setFromVector3(edgeRotations[i]);
 
-      this.edgeGroup.add(edge);
+      edgeGroup.add(edge);
     }
 
-    this.sceneGroup.add(this.edgeGroup);
+    sceneGroup.add(edgeGroup);
+    this.sceneGroups.push(sceneGroup);
 
+    this.loadModel(sceneNumber);
+    console.log('fin');
+  }
+
+  loadModel(sceneNumber: number) {
+    console.log('loading model');
     if (!this.gltfLoader) {
       this.gltfLoader = new GLTFLoader();
     }
 
-    this.loadModel();
-    this.loadModel2();
+    const modelRegistry = hmsStore.getState(selectAppData('modelRegistry'));
+    console.log('modelRegistry', modelRegistry);
 
-    const pointLight = new THREE.PointLight(0xffffff, 1, 50);
+    const model = modelRegistry[sceneNumber];
+    console.log('load model', model);
 
-    pointLight.position.set(0.5, 2, 4);
-    this.scene.add(pointLight);
-    console.log('fin');
-
-    // this.setUpVideo();
-  }
-
-  loadModel() {
-    this.model = hmsStore.getState(selectAppData('model'));
-
-    console.log('load model', this.model);
     // remove old model first
     if (this.gltfModel) {
       this.removeFromScene(this.gltfModel);
     }
 
     // load model
-    if (this.okToLoadModel) {
+    // eslint-disable-next-line no-constant-condition
+    if (true) {
       this.okToLoadModel = false;
       hmsActions.setAppData('canLoadModel', false);
 
-      if ('url' in this.model) {
+      if ('url' in model) {
         this.gltfLoader.load(
-          this.model.url,
-          this.onSuccessfulLoad,
+          model.url,
+          gltf => {
+            this.onSuccessfulLoad(gltf, sceneNumber);
+          },
           () => {
             console.log('model loading');
           },
@@ -385,23 +389,31 @@ class ArCube {
             console.log('Error loading model url', error);
           }
         );
-      } else if ('gltf' in this.model) {
-        const data = JSON.stringify(this.model.gltf);
-        this.gltfLoader.parse(data, '', this.onSuccessfulLoad, error => {
-          console.log('Error loading model gltf', error);
-        });
+      } else if ('gltf' in model) {
+        const data = JSON.stringify(model.gltf);
+        this.gltfLoader.parse(
+          data,
+          '',
+          gltf => {
+            this.onSuccessfulLoad(gltf, sceneNumber);
+          },
+          error => {
+            console.log('Error loading model gltf', error);
+          }
+        );
       }
     }
   }
 
-  onSuccessfulLoad = (gltf: GLTF) => {
+  onSuccessfulLoad = (gltf: GLTF, sceneNumber: number) => {
+    console.log('on successful load');
     const scale = 1.0;
-    this.gltfModel = gltf.scene;
-    this.gltfModel.scale.set(scale, scale, scale);
-    this.gltfModel.position.fromArray([0, -1, 0]);
+    const gltfModel = gltf.scene;
+    gltfModel.scale.set(scale, scale, scale);
+    gltfModel.position.fromArray([0, -1, 0]);
 
     this.animations = gltf.animations;
-    this.mixer = new THREE.AnimationMixer(this.gltfModel);
+    this.mixer = new THREE.AnimationMixer(gltfModel);
 
     if (this.animations) {
       this.animations.forEach(clip => {
@@ -409,59 +421,11 @@ class ArCube {
       });
     }
 
-    this.sceneGroup.add(this.gltfModel);
+    this.sceneGroups[sceneNumber].add(gltfModel);
     this.okToLoadModel = true;
     hmsActions.setAppData('canLoadModel', true);
     console.log('model loaded parse');
   };
-
-  loadModel2() {
-    console.log('load model2');
-    // remove old model first
-    // if (this.gltfModel) {
-    //   this.removeFromScene(this.gltfModel);
-    // }
-
-    // load model
-    this.okToLoadModel = false;
-    // hmsActions.setAppData('canLoadModel', false);
-
-    this.gltfLoader.load(
-      'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf',
-      gltf => {
-        console.log('test');
-        const scale = 1.0;
-        console.log('test');
-        this.gltfModel2 = gltf.scene;
-        console.log('test');
-        this.gltfModel2.scale.set(scale, scale, scale);
-        console.log('test');
-        this.gltfModel2.position.fromArray([0, -1, 0]);
-
-        // this.animations = gltf.animations;
-        // this.mixer = new THREE.AnimationMixer(this.gltfModel);
-
-        // if (this.animations) {
-        //   this.animations.forEach(clip => {
-        //     this.mixer.clipAction(clip).play();
-        //   });
-        // }
-        console.log('test');
-
-        console.log('test');
-        this.sceneGroup2.add(this.gltfModel2);
-        console.log('test');
-        this.okToLoadModel = true;
-        // hmsActions.setAppData('canLoadModel', true);
-      },
-      () => {
-        console.log('model loading 2');
-      },
-      error => {
-        console.log('Error loading model', error);
-      }
-    );
-  }
 
   removeFromScene(object3d: THREE.Object3D) {
     this.sceneGroup.remove(object3d);
@@ -520,7 +484,7 @@ class ArCube {
       if (this.markerRootArray[i].visible) {
         console.log('first', i);
         //TODO want to iterate through new scene group list
-        this.markerGroupArray[i].add(this.sceneGroup);
+        this.markerGroupArray[i].add(this.sceneGroups[0]);
         // console.log('visible: ' + this.patternArray[i]);
         break;
       }
@@ -530,7 +494,7 @@ class ArCube {
       if (this.hiroRootArray[i].visible) {
         console.log('second', i);
         //TODO want to iterate through new scene group list
-        this.hiroGroupArray[i].add(this.sceneGroup2);
+        this.hiroGroupArray[i].add(this.sceneGroups[1]);
         // console.log('visible: ' + this.patternArraySecondModel[i - 6]);
         break;
       }
