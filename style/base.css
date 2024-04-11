@@ -275,6 +275,7 @@ form h2,
 .sidebar-widget .sidebar-list .model-list-item {
   width: 100%;
   justify-content: left;
+  text-transform: capitalize;
 }
 
 .sidebar-widget .sidebar-list .model-list-item:disabled {

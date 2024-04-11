@@ -37,12 +37,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     // Register default models
     registry.registerModel({
-      name: 'Duck',
+      name: 'duck',
       url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf'
     });
 
     registry.registerModel({
-      name: 'Brain Stem',
+      name: 'brain stem',
       url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf'
     });
 
