@@ -92,7 +92,7 @@ class ArCube {
     this.setupMarkerRoots();
 
     this.setupScene(0);
-    this.setupScene(1);
+    // this.setupScene(1);
   }
 
   setupThreeStuff() {
@@ -362,13 +362,13 @@ class ArCube {
     const modelRegistry = hmsStore.getState(selectAppData('modelRegistry'));
     console.log('modelRegistry', modelRegistry);
 
-    const model = modelRegistry[sceneNumber];
+    const model = this.findModelByName('duck');
     console.log('load model', model);
 
     // remove old model first
-    if (this.gltfModel) {
-      this.removeFromScene(this.gltfModel);
-    }
+    // if (this.gltfModel) {
+    //   this.removeFromScene(sceneNumber, this.gltfModel);
+    // }
 
     // load model
     // eslint-disable-next-line no-constant-condition
@@ -405,6 +405,14 @@ class ArCube {
     }
   }
 
+  findModelByName(name: string) {
+    const modelRegistry = hmsStore.getState(selectAppData('modelRegistry'));
+
+    return modelRegistry.find(
+      (model: IModelRegistryData) => model.name === name
+    );
+  }
+
   onSuccessfulLoad = (gltf: GLTF, sceneNumber: number) => {
     console.log('on successful load');
     const scale = 1.0;
@@ -427,8 +435,8 @@ class ArCube {
     console.log('model loaded parse');
   };
 
-  removeFromScene(object3d: THREE.Object3D) {
-    this.sceneGroup.remove(object3d);
+  removeFromScene(sceneNumber: number, object3d: THREE.Object3D) {
+    this.sceneGroups[sceneNumber].remove(object3d);
   }
 
   resizeCanvasToDisplaySize() {

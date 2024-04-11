@@ -50,12 +50,14 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
   };
 
   const handleModelSelectClick = (modelNumber: number) => {
-    if (!arCube) {
-      setArCube(hmsStore.getState(selectAppData('arCube')));
-    }
+    // if (!arCube) {
+    //   setArCube(hmsStore.getState(selectAppData('arCube')));
+    // }
 
-    arCube?.loadModel(modelNumber);
-    console.log('cube', arCube);
+    // arCube?.loadModel(modelNumber);
+    // console.log('cube', arCube);
+
+    console.log('modelList', modelList);
   };
 
   return (
