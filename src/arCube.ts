@@ -180,6 +180,7 @@ class ArCube {
 
     this.markerRootArray = [];
     this.markerGroupArray = [];
+
     this.patternArray = [
       'letterA',
       'letterB',

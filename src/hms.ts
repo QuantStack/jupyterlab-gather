@@ -9,8 +9,7 @@ interface ISessionStore {
   isPresenting: boolean;
   node: HTMLElement;
   canLoadModel: boolean;
-  // modelUrl: string;
-  model: IModelRegistryData;
+  modelRegistry: IModelRegistryData[];
 }
 
 const TypedHMSRoomProvider = HMSRoomProvider<{

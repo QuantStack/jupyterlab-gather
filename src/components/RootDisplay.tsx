@@ -2,12 +2,14 @@ import { ReactWidget } from '@jupyterlab/ui-components';
 import React, { useEffect, useRef } from 'react';
 import { TypedHMSRoomProvider, hmsActions } from '../hms';
 import { MainDisplay } from '../layouts/MainDisplay';
+import { IModelRegistryData } from '../registry';
 
 interface IRootDisplayProps {
   node: HTMLElement;
+  modelList: IModelRegistryData[];
 }
 
-const RootDisplay = ({ node }: IRootDisplayProps) => {
+const RootDisplay = ({ node, modelList }: IRootDisplayProps) => {
   const childRef = useRef(null);
 
   // TODO: Replace this with session store?
@@ -15,12 +17,7 @@ const RootDisplay = ({ node }: IRootDisplayProps) => {
     const initialAppData = {
       node: node,
       canLoadModel: true,
-      // modelUrl:
-      //   'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf',
-      model: {
-        name: 'Duck',
-        url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf'
-      },
+      modelRegistry: [...modelList],
       isPresenting: false,
       presenterId: ''
     };
@@ -45,14 +42,17 @@ const RootDisplay = ({ node }: IRootDisplayProps) => {
 };
 
 export class RootDisplayWidget extends ReactWidget {
-  constructor() {
+  _modelList: IModelRegistryData[];
+
+  constructor(modelList: IModelRegistryData[]) {
     super();
+    this._modelList = modelList;
   }
 
   render() {
     return (
       <TypedHMSRoomProvider>
-        <RootDisplay node={this.node} />
+        <RootDisplay node={this.node} modelList={this._modelList} />
       </TypedHMSRoomProvider>
     );
   }

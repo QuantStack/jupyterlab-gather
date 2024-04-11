@@ -11,16 +11,6 @@ export interface IModelRegistry {
   registerModel(data: IModelRegistryData): void;
 }
 
-export type IModelRegistryDataType = 'url' | 'gltf';
-
-// export type IModelRegistryData = {
-//   name: string;
-//   url: any;
-//   type: IModelRegistryDataType;
-// };
-
-export type IModelRegistryData = IModelRegistryDataUrl | IModelRegistryDataGltf;
-
 export interface IModelRegistryDataUrl {
   name: string;
   url: string;
@@ -31,11 +21,7 @@ export interface IModelRegistryDataGltf {
   gltf: any;
 }
 
-export function isIModelRegistryDataUrl(
-  model: any
-): model is IModelRegistryDataUrl {
-  return model && typeof model.object === 'string';
-}
+export type IModelRegistryData = IModelRegistryDataUrl | IModelRegistryDataGltf;
 
 export class ModelManager implements IModelRegistry {
   modelRegistry: IModelRegistryData[] = [];

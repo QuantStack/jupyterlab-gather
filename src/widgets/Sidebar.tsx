@@ -24,6 +24,8 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData('arCube')));
 
+    hmsActions.setAppData('modelRegistry', [...modelList]);
+    console.log('botty');
     hmsStore.subscribe(updateModelLoadingState, selectAppData('canLoadModel'));
   }, []);
 
