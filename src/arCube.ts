@@ -8,6 +8,9 @@ import * as THREE from 'three';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { hmsActions, hmsStore } from './hms';
 import { IModelRegistryData } from './registry';
+const FIRST_SCENE = 0;
+const SECOND_SCENE = 1;
+
 class ArCube {
   sceneGroup2: THREE.Group<THREE.Object3DEventMap>;
   gltfModel2: THREE.Group<THREE.Object3DEventMap>;
@@ -76,6 +79,7 @@ class ArCube {
   renderTarget: THREE.WebGLRenderTarget;
   // model: IModelRegistryData;
   sceneGroups: THREE.Group[];
+  isSecondScene: boolean;
 
   initialize() {
     this.sceneGroups = [];
@@ -88,8 +92,8 @@ class ArCube {
 
     this.setupMarkerRoots();
 
-    this.setupScene(0);
-    this.setupScene(1);
+    this.setupScene(FIRST_SCENE);
+    // this.setupScene(1);
   }
 
   setupThreeStuff() {
@@ -220,7 +224,7 @@ class ArCube {
     ];
 
     const rotationArray = [
-      new THREE.Vector3(-Math.PI / 2, 0, 0),
+      new THREE.Vector3(-Math.PI / 2, 0),
       new THREE.Vector3(0, -Math.PI / 2, Math.PI / 2),
       new THREE.Vector3(Math.PI / 2, 0, Math.PI),
       new THREE.Vector3(-Math.PI / 2, Math.PI / 2, 0),
@@ -283,6 +287,7 @@ class ArCube {
     const sceneGroup = new THREE.Group();
     // a 1x1x1 cube model with scale factor 1.25 fills up the physical cube
     sceneGroup.scale.set(1.75 / 2, 1.75 / 2, 1.75 / 2);
+    sceneGroup.name = `scene${sceneNumber}`;
 
     // reversed cube
     //TODO: Can probably just have one cube and add it to scenes as needed
@@ -356,12 +361,7 @@ class ArCube {
       this.gltfLoader = new GLTFLoader();
     }
 
-    const modelRegistry = hmsStore.getState(selectAppData('modelRegistry'));
-    console.log('modelRegistry load model', modelRegistry);
-
-    console.log('modelName', modelName);
     const model = this.findModelByName(modelName ? modelName : 'duck');
-    console.log('load model', model);
 
     // remove old model first
     // if (this.gltfModel) {
@@ -421,7 +421,6 @@ class ArCube {
     }
 
     this.sceneGroups[sceneNumber].add(gltfModel);
-    console.log('this.sceneGroups[sceneNumber]', this.sceneGroups[sceneNumber]);
     this.okToLoadModel = true;
     hmsActions.setAppData('canLoadModel', true);
     console.log('model loaded parse');
@@ -448,6 +447,19 @@ class ArCube {
 
   removeFromScene(sceneNumber: number, object3d: THREE.Object3D) {
     this.sceneGroups[sceneNumber].remove(object3d);
+  }
+
+  enableSecondScene() {
+    console.log('enaling');
+    this.isSecondScene = true;
+    this.setupScene(SECOND_SCENE);
+  }
+
+  disableSecondScene() {
+    console.log('disabling');
+    this.isSecondScene = false;
+    //TODO this won't work with more than two scenes but it's fine for now
+    this.sceneGroups.pop();
   }
 
   resizeCanvasToDisplaySize() {
@@ -501,7 +513,6 @@ class ArCube {
 
     for (let i = 0; i < 6; i++) {
       if (this.markerRootArray[i].visible) {
-        console.log('first', i);
         //TODO want to iterate through new scene group list
         this.markerGroupArray[i].add(this.sceneGroups[0]);
         // console.log('visible: ' + this.patternArray[i]);
@@ -509,13 +520,14 @@ class ArCube {
       }
     }
 
-    for (let i = 0; i < 6; i++) {
-      if (this.hiroRootArray[i].visible) {
-        console.log('second', i);
-        //TODO want to iterate through new scene group list
-        this.hiroGroupArray[i].add(this.sceneGroups[1]);
-        // console.log('visible: ' + this.patternArraySecondModel[i - 6]);
-        break;
+    if (this.isSecondScene) {
+      for (let i = 0; i < 6; i++) {
+        if (this.hiroRootArray[i].visible) {
+          //TODO want to iterate through new scene group list
+          this.hiroGroupArray[i].add(this.sceneGroups[1]);
+          // console.log('visible: ' + this.patternArraySecondModel[i - 6]);
+          break;
+        }
       }
     }
   }

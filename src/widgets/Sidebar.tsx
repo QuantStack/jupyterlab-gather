@@ -19,6 +19,7 @@ interface IModelInfoList {
 
 const SidebarComponent = ({ modelList }: IModelInfoList) => {
   const [isDisabled, setIsDisabled] = useState(false);
+  const [isSecondScene, setIsSecondScene] = useState(false);
   const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
   const [selected, setSelected] = useState<IModelRegistryData>();
 
@@ -27,11 +28,15 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
 
     hmsActions.setAppData('modelRegistry', [...modelList]);
     hmsStore.subscribe(updateModelLoadingState, selectAppData('canLoadModel'));
+    hmsStore.subscribe(updateArCube, selectAppData('arCube'));
   }, []);
+
+  const updateArCube = () => {
+    setArCube(hmsStore.getState(selectAppData('arCube')));
+  };
 
   const updateModelLoadingState = () => {
     const canLoadModel = hmsStore.getState(selectAppData('canLoadModel'));
-    console.log('isDisabled', isDisabled);
     setIsDisabled(canLoadModel);
   };
 
@@ -52,6 +57,14 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
     arCube?.changeModelInScene(sceneNumber, selected.name);
 
     console.log('modelList', modelList);
+  };
+
+  const handleLoadSecondScene = () => {
+    if (isSecondScene) {
+      arCube?.disableSecondScene();
+    } else {
+      arCube?.enableSecondScene();
+    }
   };
 
   //TODO Add bg color to selected item
@@ -82,7 +95,9 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
           Set as second model
         </Button>
       </div>
-      <Button style={{ padding: '0.5rem' }}>Load second model</Button>
+      <Button style={{ padding: '0.5rem' }} onClick={handleLoadSecondScene}>
+        Load second model
+      </Button>
     </div>
   );
 };
