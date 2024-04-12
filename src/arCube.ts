@@ -15,9 +15,6 @@ class ArCube {
    * Construct a new arpresent widget.
    */
   constructor(node: HTMLElement) {
-    this.node = node;
-    this.model = hmsStore.getState(selectAppData('modelUrl'));
-
     this.initialize();
     // this.animate();
     window.addEventListener('markerFound', () => {
@@ -40,11 +37,11 @@ class ArCube {
   hiroGroupArray: THREE.Group[];
   patternArray: string[];
   patternArraySecondModel: string[];
-  sceneGroup: THREE.Group;
-  sceneGroupArray: THREE.Group[];
-  edgeGroup: THREE.Group;
+  // sceneGroup: THREE.Group;
+  // sceneGroupArray: THREE.Group[];
+  // edgeGroup: THREE.Group;
   gltfLoader: GLTFLoader;
-  gltfModel: THREE.Group;
+  // gltfModel: THREE.Group;
   animations: THREE.AnimationClip[] | undefined;
   mixer: THREE.AnimationMixer;
   renderer: THREE.WebGLRenderer;
@@ -56,28 +53,28 @@ class ArCube {
   resolve: any;
   deltaTime: number;
   totalTime: number;
-  readonly markerControls: any;
-  readonly ambientLight: THREE.AmbientLight;
-  readonly rotationArray: THREE.Vector3[];
-  readonly markerRoot: THREE.Group;
-  readonly markerGroup: THREE.Group;
-  readonly pointLight: THREE.PointLight;
-  readonly loader: THREE.TextureLoader;
-  readonly stageMesh: THREE.MeshBasicMaterial;
-  readonly stage: THREE.Mesh;
-  readonly edgeGeometry: THREE.CylinderGeometry;
-  readonly edgeCenters: THREE.Vector3[];
-  readonly edgeRotations: THREE.Vector3[];
+  // readonly markerControls: any;
+  // readonly ambientLight: THREE.AmbientLight;
+  // readonly rotationArray: THREE.Vector3[];
+  // readonly markerRoot: THREE.Group;
+  // readonly markerGroup: THREE.Group;
+  // readonly pointLight: THREE.PointLight;
+  // readonly loader: THREE.TextureLoader;
+  // readonly stageMesh: THREE.MeshBasicMaterial;
+  // readonly stage: THREE.Mesh;
+  // readonly edgeGeometry: THREE.CylinderGeometry;
+  // readonly edgeCenters: THREE.Vector3[];
+  // readonly edgeRotations: THREE.Vector3[];
   okToLoadModel: boolean;
-  readonly animationRequestId: number | undefined;
-  readonly now: number;
-  readonly then: number;
-  readonly elapsed: number;
-  readonly fpsInterval: number;
+  // readonly animationRequestId: number | undefined;
+  // readonly now: number;
+  // readonly then: number;
+  // readonly elapsed: number;
+  // readonly fpsInterval: number;
   //   readonly webcamFromArjs: HTMLElement | null;
-  readonly node: HTMLElement;
+  // readonly node: HTMLElement;
   renderTarget: THREE.WebGLRenderTarget;
-  model: IModelRegistryData;
+  // model: IModelRegistryData;
   sceneGroups: THREE.Group[];
 
   initialize() {
@@ -521,28 +518,6 @@ class ArCube {
         break;
       }
     }
-  }
-
-  // attachToVideo() {
-  //   const vid = document.getElementById('target');
-  //   console.log('vid', vid);
-  //   vid!.appendChild(this.renderer.domElement);
-  // }
-
-  // TODO: Casting is ok?
-  async setUpVideo() {
-    await this.webcam_loaded;
-    // Create new webcam element
-    this.existingWebcam = document.getElementById(
-      'arjs-video'
-    ) as HTMLVideoElement;
-    this.newWebcam = this.existingWebcam?.cloneNode(true) as HTMLVideoElement;
-    this.newWebcam.srcObject = this.existingWebcam?.srcObject;
-    this.newWebcam.id = 'webcamViewNew';
-    this.newWebcam.style.display = '';
-    this.newWebcam.style.zIndex = '-2';
-    // this.newWebcam.classList.add("jl-vid");
-    this.node.appendChild(this.newWebcam);
   }
 }
 
