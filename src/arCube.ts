@@ -92,7 +92,7 @@ class ArCube {
     this.setupMarkerRoots();
 
     this.setupScene(0);
-    // this.setupScene(1);
+    this.setupScene(1);
   }
 
   setupThreeStuff() {
@@ -353,7 +353,7 @@ class ArCube {
     console.log('fin');
   }
 
-  loadModel(sceneNumber: number) {
+  loadModel(sceneNumber: number, modelName?: string) {
     console.log('loading model');
     if (!this.gltfLoader) {
       this.gltfLoader = new GLTFLoader();
@@ -362,7 +362,7 @@ class ArCube {
     const modelRegistry = hmsStore.getState(selectAppData('modelRegistry'));
     console.log('modelRegistry', modelRegistry);
 
-    const model = this.findModelByName('duck');
+    const model = this.findModelByName(modelName ? modelName : 'duck');
     console.log('load model', model);
 
     // remove old model first
@@ -405,14 +405,6 @@ class ArCube {
     }
   }
 
-  findModelByName(name: string) {
-    const modelRegistry = hmsStore.getState(selectAppData('modelRegistry'));
-
-    return modelRegistry.find(
-      (model: IModelRegistryData) => model.name === name
-    );
-  }
-
   onSuccessfulLoad = (gltf: GLTF, sceneNumber: number) => {
     console.log('on successful load');
     const scale = 1.0;
@@ -420,6 +412,7 @@ class ArCube {
     gltfModel.scale.set(scale, scale, scale);
     gltfModel.position.fromArray([0, -1, 0]);
 
+    gltfModel.name = `model${sceneNumber}`;
     this.animations = gltf.animations;
     this.mixer = new THREE.AnimationMixer(gltfModel);
 
@@ -430,10 +423,30 @@ class ArCube {
     }
 
     this.sceneGroups[sceneNumber].add(gltfModel);
+    console.log('this.sceneGroups[sceneNumber]', this.sceneGroups[sceneNumber]);
     this.okToLoadModel = true;
     hmsActions.setAppData('canLoadModel', true);
     console.log('model loaded parse');
   };
+
+  findModelByName(name: string) {
+    const modelRegistry = hmsStore.getState(selectAppData('modelRegistry'));
+
+    return modelRegistry.find(
+      (model: IModelRegistryData) => model.name === name
+    );
+  }
+
+  changeModelInScene(sceneNumber: number, modelName: string) {
+    const sceneGroup = this.sceneGroups[sceneNumber];
+    const modelToRemove = sceneGroup.getObjectByName(`model${sceneNumber}`);
+
+    if (modelToRemove) {
+      sceneGroup.remove(modelToRemove);
+    }
+
+    this.loadModel(sceneNumber, modelName);
+  }
 
   removeFromScene(sceneNumber: number, object3d: THREE.Object3D) {
     this.sceneGroups[sceneNumber].remove(object3d);

@@ -282,6 +282,11 @@ form h2,
   color: var(--jp-ui-font-color3);
 }
 
+.model-list-item-selected {
+  font-weight: bold;
+  background-color: var(--jp-layout-color2) !important;
+}
+
 .sidebar-widget .sidebar-parent {
   height: 100%;
 }

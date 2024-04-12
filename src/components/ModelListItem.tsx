@@ -6,13 +6,19 @@ interface IModelListItem {
   model: IModelRegistryData;
   isDisabled: boolean;
   handleClick: (model: IModelRegistryData) => void;
+  className?: string;
 }
 
-const ModelListItem = ({ model, isDisabled, handleClick }: IModelListItem) => {
+const ModelListItem = ({
+  model,
+  isDisabled,
+  handleClick,
+  className
+}: IModelListItem) => {
   return (
     <Button
       minimal
-      className="model-list-item"
+      className={`${className} model-list-item`}
       disabled={isDisabled}
       onClick={() => handleClick(model)}
     >

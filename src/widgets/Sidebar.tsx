@@ -3,7 +3,7 @@ import { ReactWidget } from '@jupyterlab/apputils';
 import { Button, SidePanel, UseSignal } from '@jupyterlab/ui-components';
 import { ISignal } from '@lumino/signaling';
 import { Panel, Widget } from '@lumino/widgets';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ArCube from '../arCube';
 import ModelListItem from '../components/ModelListItem';
 import { hmsActions, hmsStore } from '../hms';
@@ -21,24 +21,13 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
   const [selected, setSelected] = useState<IModelRegistryData>();
-  const childRef = useRef(null);
 
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData('arCube')));
 
     hmsActions.setAppData('modelRegistry', [...modelList]);
-    console.log('botty');
     hmsStore.subscribe(updateModelLoadingState, selectAppData('canLoadModel'));
   }, []);
-
-  // TODO: There's probably a better way to do this
-  // add height: 100% to parent container
-  useEffect(() => {
-    if (childRef.current) {
-      const parent = (childRef.current as HTMLElement).parentElement;
-      parent?.classList.add('sidebar-parent');
-    }
-  }, [childRef]);
 
   const updateModelLoadingState = () => {
     const canLoadModel = hmsStore.getState(selectAppData('canLoadModel'));
@@ -49,17 +38,22 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
     setSelected(model);
   };
 
-  const handleModelSelectClick = (modelNumber: number) => {
-    // if (!arCube) {
-    //   setArCube(hmsStore.getState(selectAppData('arCube')));
-    // }
+  const handleModelSelectClick = (sceneNumber: number) => {
+    if (!arCube) {
+      setArCube(hmsStore.getState(selectAppData('arCube')));
+    }
 
-    // arCube?.loadModel(modelNumber);
-    // console.log('cube', arCube);
+    if (!selected) {
+      console.log('Model must be selected');
+      return;
+    }
+
+    arCube?.changeModelInScene(sceneNumber, selected.name);
 
     console.log('modelList', modelList);
   };
 
+  //TODO Add bg color to selected item
   return (
     <div className="sidebar-container">
       <div className="sidebar-description">
@@ -72,6 +66,9 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
               model={model}
               isDisabled={!isDisabled}
               handleClick={handleModelNameClick}
+              className={
+                selected?.name === model.name ? 'model-list-item-selected' : ''
+              }
             />
           );
         })}
@@ -84,6 +81,7 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
           Set as second model
         </Button>
       </div>
+      <Button>Load second model</Button>
     </div>
   );
 };
