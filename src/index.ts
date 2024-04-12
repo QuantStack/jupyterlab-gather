@@ -62,7 +62,10 @@ const plugin: JupyterFrontEndPlugin<void> = {
       execute: () => {
         // Regenerate the widget if disposed
         if (!widget || widget.isDisposed) {
-          const content = new RootDisplayWidget(registry.modelRegistry);
+          const content = new RootDisplayWidget(
+            registry.modelRegistry,
+            registry.modelRegistryChanged
+          );
           widget = new MainAreaWidget({ content });
           widget.id = 'arpresent-jupyterlab';
           widget.title.label = 'AR Presentation';
@@ -139,9 +142,9 @@ const duckPlugin: JupyterFrontEndPlugin<void> = {
       label: 'The Duck',
       execute: () => {
         console.log('executing the duck');
-        const data = JSON.stringify(threeCube);
+        // const data = JSON.stringify(threeCube);
         // const data = JSON.parse(threeCube);
-        // const data = threeCube;
+        const data = threeCube;
         registry.registerModel({
           name: 'Three Cube',
           gltf: data

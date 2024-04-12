@@ -31,6 +31,7 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
 
   const updateModelLoadingState = () => {
     const canLoadModel = hmsStore.getState(selectAppData('canLoadModel'));
+    console.log('isDisabled', isDisabled);
     setIsDisabled(canLoadModel);
   };
 
@@ -81,7 +82,7 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
           Set as second model
         </Button>
       </div>
-      <Button>Load second model</Button>
+      <Button style={{ padding: '0.5rem' }}>Load second model</Button>
     </div>
   );
 };

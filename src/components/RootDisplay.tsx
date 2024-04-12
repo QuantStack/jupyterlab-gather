@@ -1,16 +1,30 @@
 import { ReactWidget } from '@jupyterlab/ui-components';
+import { ISignal } from '@lumino/signaling';
 import React, { useEffect, useRef } from 'react';
 import { TypedHMSRoomProvider, hmsActions } from '../hms';
 import { MainDisplay } from '../layouts/MainDisplay';
-import { IModelRegistryData } from '../registry';
+import { IModelRegistry, IModelRegistryData } from '../registry';
 
 interface IRootDisplayProps {
   node: HTMLElement;
   modelList: IModelRegistryData[];
+  modelRegistryChanged: ISignal<IModelRegistry, void>;
 }
 
-const RootDisplay = ({ node, modelList }: IRootDisplayProps) => {
+const RootDisplay = ({
+  node,
+  modelList,
+  modelRegistryChanged
+}: IRootDisplayProps) => {
   const childRef = useRef(null);
+  // const hmsActions = useHMSActions();
+
+  useEffect(() => {
+    modelRegistryChanged.connect(() => {
+      hmsActions.setAppData('modelRegistry', [...modelList]);
+      console.log('modelList in root', modelList);
+    });
+  }, []);
 
   // TODO: Replace this with session store?
   useEffect(() => {
@@ -42,17 +56,26 @@ const RootDisplay = ({ node, modelList }: IRootDisplayProps) => {
 };
 
 export class RootDisplayWidget extends ReactWidget {
-  _modelList: IModelRegistryData[];
+  private _modelList: IModelRegistryData[];
+  private _modelRegistryChanged: ISignal<IModelRegistry, void>;
 
-  constructor(modelList: IModelRegistryData[]) {
+  constructor(
+    modelList: IModelRegistryData[],
+    modelRegistryChanged: ISignal<IModelRegistry, void>
+  ) {
     super();
     this._modelList = modelList;
+    this._modelRegistryChanged = modelRegistryChanged;
   }
 
   render() {
     return (
       <TypedHMSRoomProvider>
-        <RootDisplay node={this.node} modelList={this._modelList} />
+        <RootDisplay
+          node={this.node}
+          modelList={this._modelList}
+          modelRegistryChanged={this._modelRegistryChanged}
+        />
       </TypedHMSRoomProvider>
     );
   }

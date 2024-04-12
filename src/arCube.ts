@@ -360,8 +360,9 @@ class ArCube {
     }
 
     const modelRegistry = hmsStore.getState(selectAppData('modelRegistry'));
-    console.log('modelRegistry', modelRegistry);
+    console.log('modelRegistry load model', modelRegistry);
 
+    console.log('modelName', modelName);
     const model = this.findModelByName(modelName ? modelName : 'duck');
     console.log('load model', model);
 
