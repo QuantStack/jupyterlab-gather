@@ -6,7 +6,7 @@ export const EXTENSION_ID = 'jupyter.extensions.arpresent_plugin';
 export const IArPresentRegistryToken = new Token<IModelRegistry>(EXTENSION_ID);
 
 export interface IModelRegistry {
-  modelRegistry: IModelRegistryData[];
+  modelRegistry: Set<IModelRegistryData>;
   modelRegistryChanged: ISignal<IModelRegistry, void>;
   registerModel(data: IModelRegistryData): void;
 }
@@ -24,11 +24,11 @@ export interface IModelRegistryDataGltf {
 export type IModelRegistryData = IModelRegistryDataUrl | IModelRegistryDataGltf;
 
 export class ModelManager implements IModelRegistry {
-  modelRegistry: IModelRegistryData[] = [];
+  modelRegistry: Set<IModelRegistryData> = new Set<IModelRegistryData>();
   modelRegistryChanged = new Signal<this, void>(this);
 
   registerModel(data: IModelRegistryData): void {
-    this.modelRegistry.push(data);
+    this.modelRegistry.add(data);
     this.modelRegistryChanged.emit();
   }
 }
