@@ -14,7 +14,7 @@ import { IModelRegistry, IModelRegistryData } from '../registry';
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/IridescenceAbalone/glTF/IridescenceAbalone.gltf
 
 interface IModelInfoList {
-  modelList: IModelRegistryData[];
+  modelList: Set<IModelRegistryData>;
 }
 
 const SidebarComponent = ({ modelList }: IModelInfoList) => {
@@ -61,7 +61,7 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
         Select a model from the list below
       </div>
       <div className="sidebar-list">
-        {modelList.map(model => {
+        {[...modelList].map(model => {
           return (
             <ModelListItem
               model={model}
@@ -89,10 +89,10 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
 
 export class SidebarWidget extends SidePanel {
   private _signal: ISignal<IModelRegistry, void>;
-  private _modelRegistry: IModelRegistryData[];
+  private _modelRegistry: Set<IModelRegistryData>;
 
   constructor(
-    modelRegistry: IModelRegistryData[],
+    modelRegistry: Set<IModelRegistryData>,
     modelRegistryChanged: ISignal<IModelRegistry, void>
   ) {
     super({ content: new Panel() });

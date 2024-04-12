@@ -7,7 +7,7 @@ import { IModelRegistry, IModelRegistryData } from '../registry';
 
 interface IRootDisplayProps {
   node: HTMLElement;
-  modelList: IModelRegistryData[];
+  modelList: Set<IModelRegistryData>;
   modelRegistryChanged: ISignal<IModelRegistry, void>;
 }
 
@@ -56,11 +56,11 @@ const RootDisplay = ({
 };
 
 export class RootDisplayWidget extends ReactWidget {
-  private _modelList: IModelRegistryData[];
+  private _modelList: Set<IModelRegistryData>;
   private _modelRegistryChanged: ISignal<IModelRegistry, void>;
 
   constructor(
-    modelList: IModelRegistryData[],
+    modelList: Set<IModelRegistryData>,
     modelRegistryChanged: ISignal<IModelRegistry, void>
   ) {
     super();
