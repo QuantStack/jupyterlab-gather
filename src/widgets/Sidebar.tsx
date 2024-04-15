@@ -5,6 +5,7 @@ import { ISignal } from '@lumino/signaling';
 import { Panel, Widget } from '@lumino/widgets';
 import React, { useEffect, useState } from 'react';
 import ArCube from '../arCube';
+import { Icons } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
 import { hmsActions, hmsStore } from '../hms';
 import { arIcon } from '../icons';
@@ -37,11 +38,12 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
 
   const updateModelLoadingState = () => {
     const canLoadModel = hmsStore.getState(selectAppData('canLoadModel'));
-    setIsDisabled(canLoadModel);
+    setIsDisabled(!canLoadModel);
   };
 
   const handleModelNameClick = (model: IModelRegistryData) => {
     setSelected(model);
+    hmsActions.setAppData('selectedModel', model);
   };
 
   const handleModelSelectClick = (sceneNumber: number) => {
@@ -65,9 +67,9 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
     } else {
       arCube?.enableSecondScene();
     }
+    setIsSecondScene(!isSecondScene);
   };
 
-  //TODO Add bg color to selected item
   return (
     <div className="sidebar-container">
       <div className="sidebar-description">
@@ -78,7 +80,6 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
           return (
             <ModelListItem
               model={model}
-              isDisabled={!isDisabled}
               handleClick={handleModelNameClick}
               className={
                 selected?.name === model.name ? 'model-list-item-selected' : ''
@@ -95,8 +96,16 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
           Set as second model
         </Button>
       </div>
-      <Button style={{ padding: '0.5rem' }} onClick={handleLoadSecondScene}>
-        Load second model
+      <Button
+        style={{ padding: '0.5rem' }}
+        onClick={handleLoadSecondScene}
+        disabled={isDisabled}
+      >
+        {isDisabled ? (
+          <Icons.spinner className="spinner" />
+        ) : (
+          'Load second model'
+        )}
       </Button>
     </div>
   );

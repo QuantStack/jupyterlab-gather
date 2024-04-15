@@ -20,13 +20,13 @@ class ArCube {
   constructor(node: HTMLElement) {
     this.initialize();
     // this.animate();
-    window.addEventListener('markerFound', () => {
-      // console.log('Marker found');
-    });
+    // window.addEventListener('markerFound', () => {
+    //   console.log('Marker found');
+    // });
 
-    window.addEventListener('markerLost', () => {
-      // console.log('Marker lost');
-    });
+    // window.addEventListener('markerLost', () => {
+    //   console.log('Marker lost');
+    // });
   }
 
   clock: THREE.Clock;

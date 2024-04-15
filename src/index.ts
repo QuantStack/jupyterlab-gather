@@ -15,6 +15,7 @@ import {
   ModelManager
 } from './registry';
 import { SidebarWidget } from './widgets/Sidebar';
+export { IArPresentRegistryToken, IModelRegistry };
 
 /**
  * Initialization data for the jupyterlab_arpresent extension.

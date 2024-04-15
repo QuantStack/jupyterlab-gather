@@ -351,3 +351,17 @@ form h2,
   animation: breathe 3s infinite alternate;
   fill: #f37726;
 }
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spinner {
+  animation: spin 3s linear infinite;
+  height: 1rem;
+  width: 1rem;
+}

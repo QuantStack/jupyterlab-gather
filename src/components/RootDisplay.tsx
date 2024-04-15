@@ -33,7 +33,8 @@ const RootDisplay = ({
       canLoadModel: true,
       modelRegistry: [...modelList],
       isPresenting: false,
-      presenterId: ''
+      presenterId: '',
+      selectedModel: null
     };
 
     hmsActions.initAppData(initialAppData);
