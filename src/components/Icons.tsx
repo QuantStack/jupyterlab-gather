@@ -28,6 +28,6 @@ export const Icons = {
 };
 
 export const LogoIcon = new LabIcon({
-  name: 'arpresent:icon_logo',
+  name: 'jupyterlab-gather:icon_logo',
   svgstr: duckLogo
 });

@@ -18,7 +18,7 @@ class RouteHandler(APIHandler):
     # Jupyter server
     @tornado.web.authenticated
     def get(self, room_id, user_id, role):
-        # jupyterlab-arpresent/get-token
+        # jupyterlab-gather/get-token
         # generate auth token
         os.gete
         expires = 24 * 3600
@@ -48,6 +48,6 @@ def setup_handlers(web_app):
     host_pattern = ".*$"
 
     base_url = web_app.settings["base_url"]
-    route_pattern = url_path_join(base_url, "jupyterlab-arpresent", "get-token")
+    route_pattern = url_path_join(base_url, "jupyterlab-gather", "get-token")
     handlers = [(route_pattern, RouteHandler)]
     web_app.add_handlers(host_pattern, handlers)

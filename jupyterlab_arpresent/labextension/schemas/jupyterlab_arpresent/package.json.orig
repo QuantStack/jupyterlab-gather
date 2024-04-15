@@ -1,5 +1,5 @@
 {
-    "name": "jupyterlab_gather",
+    "name": "jupyterlab_arpresent",
     "version": "0.1.0",
     "description": "Video presentation over WebRTC with AR capabilities.",
     "keywords": [
@@ -7,9 +7,9 @@
         "jupyterlab",
         "jupyterlab-extension"
     ],
-    "homepage": "https://github.com/gjmooney/jupyterlab-gather",
+    "homepage": "https://github.com/gjmooney/jupyterlab-arpresent",
     "bugs": {
-        "url": "https://github.com/gjmooney/jupyterlab-gather/issues"
+        "url": "https://github.com/gjmooney/jupyterlab-arpresent/issues"
     },
     "license": "BSD-3-Clause",
     "author": {
@@ -27,7 +27,7 @@
     "style": "style/index.css",
     "repository": {
         "type": "git",
-        "url": "https://github.com/gjmooney/jupyterlab-gather.git"
+        "url": "https://github.com/gjmooney/jupyterlab-arpresent.git"
     },
     "scripts": {
         "build": "jlpm build:lib && jlpm build:labextension:dev",
@@ -39,7 +39,7 @@
         "clean": "jlpm clean:lib",
         "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
         "clean:lintcache": "rimraf .eslintcache .stylelintcache",
-        "clean:labextension": "rimraf jupyterlab_gather/labextension jupyterlab_gather/_version.py",
+        "clean:labextension": "rimraf jupyterlab_arpresent/labextension jupyterlab_arpresent/_version.py",
         "clean:all": "jlpm clean:lib && jlpm clean:labextension && jlpm clean:lintcache",
         "eslint": "jlpm eslint:check --fix",
         "eslint:check": "eslint . --cache --ext .ts,.tsx",
@@ -117,12 +117,12 @@
                     "pip"
                 ],
                 "base": {
-                    "name": "jupyterlab_gather"
+                    "name": "jupyterlab_arpresent"
                 }
             }
         },
         "extension": true,
-        "outputDir": "jupyterlab_gather/labextension",
+        "outputDir": "jupyterlab_arpresent/labextension",
         "schemaDir": "schema"
     },
     "eslintIgnore": [

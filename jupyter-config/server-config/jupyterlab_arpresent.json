@@ -1,7 +1,7 @@
 {
   "ServerApp": {
     "jpserver_extensions": {
-      "jupyterlab_arpresent": true
+      "jupyterlab_gather": true
     }
   }
 }

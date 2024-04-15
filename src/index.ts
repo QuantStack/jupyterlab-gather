@@ -9,22 +9,18 @@ import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { LogoIcon } from './components/Icons';
 import { RootDisplayWidget } from './components/RootDisplay';
 import { threeCube } from './model-examples/models';
-import {
-  IArPresentRegistryToken,
-  IModelRegistry,
-  ModelManager
-} from './registry';
+import { IGatherRegistryToken, IModelRegistry, ModelManager } from './registry';
 import { SidebarWidget } from './widgets/Sidebar';
-export { IArPresentRegistryToken, IModelRegistry };
+export { IGatherRegistryToken, IModelRegistry };
 
 /**
- * Initialization data for the jupyterlab_arpresent extension.
+ * Initialization data for the jupyterlab_gather extension.
  */
 const plugin: JupyterFrontEndPlugin<void> = {
-  id: 'jupyterlab_arpresent',
+  id: 'jupyterlab_gather',
   description: 'Video presentation over WebRTC with AR capabilities.',
   autoStart: true,
-  requires: [ICommandPalette, ILauncher, IArPresentRegistryToken],
+  requires: [ICommandPalette, ILauncher, IGatherRegistryToken],
   optional: [ILayoutRestorer, ISettingRegistry],
   activate: (
     app: JupyterFrontEnd,
@@ -34,7 +30,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     settingRegistry: ISettingRegistry | null,
     restorer: ILayoutRestorer | null
   ) => {
-    console.log('JupyterLab extension jupyterlab_arpresent is activated!');
+    console.log('JupyterLab extension jupyterlab_gather is activated!');
 
     // Register default models
     registry.registerModel({
@@ -53,12 +49,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
       registry.modelRegistry,
       registry.modelRegistryChanged
     );
-    sidebarPanel.id = 'AR-sidepanel';
+    sidebarPanel.id = 'gather-sidepanel';
 
     // Add an application command
-    const arPresentCommand: string = 'arpresent:open';
-    app.commands.addCommand(arPresentCommand, {
-      label: 'AR Presentation',
+    const gatherCommand: string = 'gather:open';
+    app.commands.addCommand(gatherCommand, {
+      label: 'Start Gather',
       icon: LogoIcon,
       execute: () => {
         // Regenerate the widget if disposed
@@ -68,7 +64,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             registry.modelRegistryChanged
           );
           widget = new MainAreaWidget({ content });
-          widget.id = 'arpresent-jupyterlab';
+          widget.id = 'gather-jupyterlab';
           widget.title.label = 'AR Presentation';
           widget.title.closable = true;
           widget.title.icon = LogoIcon;
@@ -90,11 +86,11 @@ const plugin: JupyterFrontEndPlugin<void> = {
     });
 
     // Add the command to the palette.
-    palette.addItem({ command: arPresentCommand, category: 'Video Chat' });
+    palette.addItem({ command: gatherCommand, category: 'Video Chat' });
 
     if (launcher) {
       launcher.add({
-        command: arPresentCommand,
+        command: gatherCommand,
         category: 'Video Chat',
         rank: 2
       });
@@ -114,11 +110,11 @@ const plugin: JupyterFrontEndPlugin<void> = {
 };
 
 const modelRegistryPlugin: JupyterFrontEndPlugin<IModelRegistry> = {
-  id: 'jupyterlab_arpresent:registry',
+  id: 'jupyterlab_gather:registry',
   description: 'Registry of available models to display in ar present',
   autoStart: true,
   requires: [],
-  provides: IArPresentRegistryToken,
+  provides: IGatherRegistryToken,
   activate: () => {
     const modelRegistryManager = new ModelManager();
 
@@ -130,7 +126,7 @@ const duckPlugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyterlab_duck',
   description: 'a duck.',
   autoStart: true,
-  requires: [ICommandPalette, IArPresentRegistryToken],
+  requires: [ICommandPalette, IGatherRegistryToken],
   activate: (
     app: JupyterFrontEnd,
     palette: ICommandPalette,

@@ -1,10 +1,10 @@
-# a mybinder.org-ready environment for demoing jupyterlab_arpresent
+# a mybinder.org-ready environment for demoing jupyterlab_gather
 # this environment may also be used locally on Linux/MacOS/Windows, e.g.
 #
 #   conda env update --file binder/environment.yml
-#   conda activate jupyterlab-arpresent-demo
+#   conda activate jupyterlab-gather-demo
 #
-name: jupyterlab-arpresent-demo
+name: jupyterlab-gather-demo
 
 channels:
   - conda-forge

@@ -1,10 +1,10 @@
-# jupyterlab_arpresent
+# jupyterlab_gather
 
-[![Github Actions Status](https://github.com/gjmooney/jupyterlab-arpresent/workflows/Build/badge.svg)](https://github.com/gjmooney/jupyterlab-arpresent/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gjmooney/jupyterlab-arpresent/main?urlpath=lab)
+[![Github Actions Status](https://github.com/gjmooney/jupyterlab-gather/workflows/Build/badge.svg)](https://github.com/gjmooney/jupyterlab-gather/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gjmooney/jupyterlab-gather/main?urlpath=lab)
 Video presentation over WebRTC with AR capabilities.
 
-This extension is composed of a Python package named `jupyterlab_arpresent`
-for the server extension and a NPM package named `jupyterlab_arpresent`
+This extension is composed of a Python package named `jupyterlab_gather`
+for the server extension and a NPM package named `jupyterlab_gather`
 for the frontend extension.
 
 ## Requirements
@@ -16,7 +16,7 @@ for the frontend extension.
 To install the extension, execute:
 
 ```bash
-pip install jupyterlab_arpresent
+pip install jupyterlab_gather
 ```
 
 ## Uninstall
@@ -24,7 +24,7 @@ pip install jupyterlab_arpresent
 To remove the extension, execute:
 
 ```bash
-pip uninstall jupyterlab_arpresent
+pip uninstall jupyterlab_gather
 ```
 
 ## Troubleshoot
@@ -55,13 +55,13 @@ The `jlpm` command is JupyterLab's pinned version of
 
 ```bash
 # Clone the repo to your local environment
-# Change directory to the jupyterlab_arpresent directory
+# Change directory to the jupyterlab_gather directory
 # Install package in development mode
 pip install -e ".[test]"
 # Link your development version of the extension with JupyterLab
 jupyter labextension develop . --overwrite
 # Server extension must be manually installed in develop mode
-jupyter server extension enable jupyterlab_arpresent
+jupyter server extension enable jupyterlab_gather
 # Rebuild extension Typescript source after making changes
 jlpm build
 ```
@@ -87,13 +87,13 @@ jupyter lab build --minimize=False
 
 ```bash
 # Server extension must be manually disabled in develop mode
-jupyter server extension disable jupyterlab_arpresent
-pip uninstall jupyterlab_arpresent
+jupyter server extension disable jupyterlab_gather
+pip uninstall jupyterlab_gather
 ```
 
 In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
 command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
-folder is located. Then you can remove the symlink named `jupyterlab_arpresent` within that folder.
+folder is located. Then you can remove the symlink named `jupyterlab_gather` within that folder.
 
 ### Testing the extension
 
@@ -112,7 +112,7 @@ jupyter labextension develop . --overwrite
 To execute them, run:
 
 ```sh
-pytest -vv -r ap --cov jupyterlab_arpresent
+pytest -vv -r ap --cov jupyterlab_gather
 ```
 
 #### Frontend tests

@@ -5,22 +5,18 @@ except ImportError:
     # in editable mode with pip. It is highly recommended to install
     # the package from a stable release or in editable mode: https://pip.pypa.io/en/stable/topics/local-project-installs/#editable-installs
     import warnings
-    warnings.warn("Importing 'jupyterlab_arpresent' outside a proper installation.")
+
+    warnings.warn("Importing 'jupyterlab_gather' outside a proper installation.")
     __version__ = "dev"
 from .handlers import setup_handlers
 
 
 def _jupyter_labextension_paths():
-    return [{
-        "src": "labextension",
-        "dest": "jupyterlab_arpresent"
-    }]
+    return [{"src": "labextension", "dest": "jupyterlab_gather"}]
 
 
 def _jupyter_server_extension_points():
-    return [{
-        "module": "jupyterlab_arpresent"
-    }]
+    return [{"module": "jupyterlab_gather"}]
 
 
 def _load_jupyter_server_extension(server_app):
@@ -32,5 +28,5 @@ def _load_jupyter_server_extension(server_app):
         JupyterLab application instance
     """
     setup_handlers(server_app.web_app)
-    name = "jupyterlab_arpresent"
+    name = "jupyterlab_gather"
     server_app.log.info(f"Registered {name} server extension")

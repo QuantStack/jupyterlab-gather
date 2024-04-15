@@ -15,7 +15,7 @@ class ArCube {
   sceneGroup2: THREE.Group<THREE.Object3DEventMap>;
   gltfModel2: THREE.Group<THREE.Object3DEventMap>;
   /**
-   * Construct a new arpresent widget.
+   * Construct a new JupyterLab-Gather widget.
    */
   constructor(node: HTMLElement) {
     this.initialize();
@@ -267,7 +267,7 @@ class ArCube {
         {
           type: 'pattern',
           patternUrl:
-            'https://raw.githubusercontent.com/gjmooney/jupyterlab-arpresent/main/pattern-files/pattern-' +
+            'https://raw.githubusercontent.com/gjmooney/jupyterlab-gather/main/pattern-files/pattern-' +
             this.patternArraySecondModel[i] +
             '.patt'
         }

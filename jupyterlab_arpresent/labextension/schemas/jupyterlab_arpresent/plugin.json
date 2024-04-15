@@ -1,7 +1,7 @@
 {
   "jupyter.lab.shortcuts": [],
-  "title": "jupyterlab_gather",
-  "description": "jupyterlab_gather settings.",
+  "title": "jupyterlab_arpresent",
+  "description": "jupyterlab_arpresent settings.",
   "type": "object",
   "properties": {},
   "additionalProperties": false

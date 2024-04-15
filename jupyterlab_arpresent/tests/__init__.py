@@ -1,1 +1,1 @@
-"""Python unit tests for jupyterlab_arpresent."""
+"""Python unit tests for jupyterlab_gather."""

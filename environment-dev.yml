@@ -1,4 +1,4 @@
-name: jupyterlab-arpresent
+name: jupyterlab-gather
 channels:
   - conda-forge
 dependencies:
