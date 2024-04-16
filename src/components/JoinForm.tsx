@@ -16,8 +16,11 @@ const JoinForm = () => {
   };
 
   const handleSubmit = async (e: any) => {
-    console.log('clicking join');
     e.preventDefault();
+
+    console.log('clicking join');
+    hmsActions.setAppData('isConnecting', true);
+
     const { userName = '', roomCode = '' } = inputValues;
 
     // use room code to fetch auth token

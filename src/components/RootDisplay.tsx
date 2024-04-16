@@ -34,7 +34,8 @@ const RootDisplay = ({
       modelRegistry: [...modelList],
       isPresenting: false,
       presenterId: '',
-      selectedModel: null
+      selectedModel: null,
+      isConnecting: false
     };
 
     hmsActions.initAppData(initialAppData);
