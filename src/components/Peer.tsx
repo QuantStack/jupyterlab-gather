@@ -1,5 +1,5 @@
 import { HMSPeer, useVideo } from '@100mslive/react-sdk';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Icons } from './Icons';
 
 interface IPeer {

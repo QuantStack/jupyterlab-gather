@@ -1,5 +1,6 @@
 import {
   selectLocalPeer,
+  useHMSActions,
   useHMSStore,
   usePreviewJoin
 } from '@100mslive/react-sdk';
@@ -9,6 +10,7 @@ import Video from '../components/Video';
 
 const PreviewView = () => {
   console.log('preview');
+  const hmsActions = useHMSActions();
   const [isJoining, setIsJoining] = useState(false);
 
   const localPeer = useHMSStore(selectLocalPeer);
@@ -22,11 +24,16 @@ const PreviewView = () => {
       isVideoMuted: false
     }
   });
+
   const handleClick = () => {
     setIsJoining(true);
     console.log('isConnnected', isConnected);
     join();
     setIsJoining(false);
+  };
+
+  const handleBack = () => {
+    hmsActions.setAppData('isConnecting', false);
   };
 
   return (
@@ -40,7 +47,7 @@ const PreviewView = () => {
             trackId={localPeer.videoTrack}
           />
         ) : (
-          <Icons.spinner className="spinner" />
+          <Icons.spinner className="spinner large" />
         )}
         <div className="preview-control-bar">
           <button
@@ -50,7 +57,9 @@ const PreviewView = () => {
           >
             {isJoining ? <Icons.spinner className="spinner large" /> : 'Join'}
           </button>
-          <button className="btn-danger">Back</button>
+          <button className="btn-danger" onClick={handleBack}>
+            Back
+          </button>
         </div>
       </div>
     </div>

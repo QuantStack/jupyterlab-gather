@@ -4,8 +4,8 @@ import {
   useHMSStore
 } from '@100mslive/react-sdk';
 import React from 'react';
-import Peer from '../components/Peer';
 import PeerSidePane from '../components/PeerSidePane';
+import Presenter from '../components/PresenterTile';
 
 const PresenterView = () => {
   const peers = useHMSStore(selectPeers);
@@ -16,7 +16,7 @@ const PresenterView = () => {
       <div className="presenter-container">
         {presenter ? (
           <>
-            <Peer peer={presenter} className="presenter-video" />
+            <Presenter peer={presenter} className="presenter-video" />
             <PeerSidePane
               peers={peers.filter(peer => peer.id !== presenter.id)}
             />
