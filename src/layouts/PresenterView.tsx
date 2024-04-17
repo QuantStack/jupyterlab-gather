@@ -5,7 +5,7 @@ import {
 } from '@100mslive/react-sdk';
 import React from 'react';
 import Peer from '../components/Peer';
-import PeerSidePane from './PeerSidePane';
+import PeerSidePane from '../components/PeerSidePane';
 
 const PresenterView = () => {
   const peers = useHMSStore(selectPeers);

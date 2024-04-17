@@ -8,11 +8,11 @@ import {
 } from '@100mslive/react-sdk';
 import React, { useEffect } from 'react';
 
-import ControlBar from '../components/ControlBar';
-import JoinForm from '../components/JoinForm';
-import GridView from './GridView';
-import PresenterView from './PresenterView';
-import PreviewView from './PreviewView';
+import GridView from '../layouts/GridView';
+import PresenterView from '../layouts/PresenterView';
+import PreviewView from '../layouts/PreviewView';
+import ControlBar from './ControlBar';
+import JoinForm from './JoinForm';
 
 export const MainDisplay = () => {
   const isConnected = useHMSStore(selectIsConnectedToRoom);

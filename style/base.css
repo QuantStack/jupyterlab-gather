@@ -405,3 +405,8 @@ form h2,
   height: 4rem;
   width: 4rem;
 }
+
+.preview-video {
+  width: 95%;
+  border-radius: 8px;
+}

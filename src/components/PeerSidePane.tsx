@@ -1,6 +1,6 @@
 import { HMSPeer } from '@100mslive/hms-video-store';
 import React from 'react';
-import Peer from '../components/Peer';
+import Peer from './Peer';
 
 interface IPeerSidePane {
   peers: HMSPeer[];

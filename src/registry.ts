@@ -1,7 +1,7 @@
 import { Token } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
 
-export const EXTENSION_ID = 'jupyter.extensions.jupyterlab-gather_plugin';
+export const EXTENSION_ID = 'jupyter.extensions.jupyterlab_gather_plugin';
 
 export const IGatherRegistryToken = new Token<IModelRegistry>(EXTENSION_ID);
 

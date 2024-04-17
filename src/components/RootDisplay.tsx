@@ -2,8 +2,8 @@ import { ReactWidget } from '@jupyterlab/ui-components';
 import { ISignal } from '@lumino/signaling';
 import React, { useEffect, useRef } from 'react';
 import { TypedHMSRoomProvider, hmsActions } from '../hms';
-import { MainDisplay } from '../layouts/MainDisplay';
 import { IModelRegistry, IModelRegistryData } from '../registry';
+import { MainDisplay } from './MainDisplay';
 
 interface IRootDisplayProps {
   node: HTMLElement;

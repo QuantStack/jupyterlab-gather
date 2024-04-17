@@ -35,7 +35,10 @@ const PreviewView = () => {
         <h2>Get Started</h2>
         <div>Setup audio and video</div>
         {localPeer ? (
-          <Video className="local peer-video" trackId={localPeer.videoTrack} />
+          <Video
+            className="preview-video local"
+            trackId={localPeer.videoTrack}
+          />
         ) : (
           <Icons.spinner className="spinner" />
         )}
