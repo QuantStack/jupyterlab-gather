@@ -384,6 +384,7 @@ form h2,
 
 .preview-control-bar {
   display: flex;
+  gap: 2rem;
 }
 
 @keyframes spin {
@@ -398,4 +399,9 @@ form h2,
   animation: spin 3s linear infinite;
   height: 1rem;
   width: 1rem;
+}
+
+.spinner.large {
+  height: 4rem;
+  width: 4rem;
 }
