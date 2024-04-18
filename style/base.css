@@ -87,7 +87,7 @@ form h2,
   width: 100%;
   margin: auto 1rem;
   flex-wrap: wrap;
-  gap: 3rem;
+  gap: 1rem;
 }
 
 .overflow {
@@ -116,8 +116,8 @@ form h2,
   width: 2rem;
   height: 2rem;
   position: absolute;
-  top: 2rem;
-  right: 2rem;
+  top: 0.2rem;
+  right: 0.2rem;
   fill: #f37726;
 }
 
@@ -136,6 +136,7 @@ form h2,
 .peer-name {
   font-size: 14px;
   text-align: center;
+  padding-bottom: 0.2rem;
 }
 
 .peer-container {
@@ -273,20 +274,21 @@ form h2,
 }
 
 .presenter-container-main {
-  display: flex;
-  justify-content: center;
   padding: 4rem;
-  gap: 6rem;
-  background-origin: padding-box;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* gap: 6rem; */
+  /* background-origin: padding-box; */
 }
 
 .presenter-container {
   /* flex: 1 1 0; */
-  /* display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem; */
-  max-width: 100%;
+  display: flex;
+  align-items: start;
+  /* flex-direction: column; */
+  /* align-items: center; */
+  gap: 1rem;
+  /* max-width: 100%; */
 }
 
 .presenter-video {
@@ -294,16 +296,20 @@ form h2,
   height: 100%; */
   max-width: inherit;
   border-radius: 8px;
+  position: sticky;
+  top: 0;
 }
 
 .peer-sidepane-list {
   display: flex;
   flex-direction: column;
   flex: 0 1 0;
+  gap: 0.3rem;
 }
 
 .peer-hand-raised {
-  outline: thick solid #f37726;
+  border: 3px solid #f37726;
+  margin: -3px;
 }
 
 .icon {
