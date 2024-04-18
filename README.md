@@ -1,7 +1,16 @@
 # jupyterlab_gather
 
 [![Github Actions Status](https://github.com/gjmooney/jupyterlab-gather/workflows/Build/badge.svg)](https://github.com/gjmooney/jupyterlab-gather/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gjmooney/jupyterlab-gather/main?urlpath=lab)
-Video presentation over WebRTC with AR capabilities.
+
+**JupyterLab-Gather** enables video conferencing capabilities directly within Jupyter Lab, and also introduces the feature of using an AR cube marker to display GLTF models in real-time during video calls.
+
+Imagine being able to share your work, collaborate on projects, or even teach in a more immersive and interactive way, all within the familiar Jupyter Lab environment. With this extension, you can now:
+
+- **Video Conferencing**: Engage in real-time video calls directly from Jupyter Lab, facilitating seamless collaboration and communication among team members or students.
+- **AR Cube Marker**: Utilize an AR cube marker to display GLTF models in real-time during video calls. This feature allows for the dynamic integration of 3D models into your presentations or collaborative sessions, enhancing the learning experience and making complex concepts more tangible.
+- **Integration with JupyterCAD**: Using [JupyterCAD-Gather](https://github.com/gjmooney/jupytercad-gather), seamlessly integrate models created with JupyterCAD, a powerful JupyterLab extension for 3D geometry modeling, directly into your video calls. This allows you to share and collaborate on complex 3D designs in real-time, enhancing the learning and collaboration experience by making it more interactive and tangible
+
+This extension is built on the foundation of JupyterLab's robust ecosystem, ensuring compatibility with existing JupyterLab features and extensions. Whether you're a teacher looking to make your lessons more interactive, a researcher wanting to share your findings in a more engaging way, or a student seeking a more immersive learning experience, this extension is designed to meet your needs.
 
 This extension is composed of a Python package named `jupyterlab_gather`
 for the server extension and a NPM package named `jupyterlab_gather`
