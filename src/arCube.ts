@@ -388,7 +388,9 @@ class ArCube {
           }
         );
       } else if ('gltf' in model) {
-        const data = JSON.stringify(model.gltf);
+        // const data = JSON.stringify(model.gltf);
+        const data = model.gltf;
+        console.log('data', data);
         this.gltfLoader.parse(
           data,
           '',
