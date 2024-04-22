@@ -7,7 +7,6 @@ import * as THREEx from '@ar-js-org/ar.js/three.js/build/ar-threex.js';
 import * as THREE from 'three';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { hmsActions, hmsStore } from './hms';
-import { IModelRegistryData } from './registry';
 const FIRST_SCENE = 0;
 const SECOND_SCENE = 1;
 
@@ -361,7 +360,9 @@ class ArCube {
       this.gltfLoader = new GLTFLoader();
     }
 
+    console.log('test1');
     const model = this.findModelByName(modelName ? modelName : 'duck');
+    console.log('test2', model);
 
     // remove old model first
     // if (this.gltfModel) {
@@ -429,11 +430,11 @@ class ArCube {
   };
 
   findModelByName(name: string) {
+    console.log('test3');
     const modelRegistry = hmsStore.getState(selectAppData('modelRegistry'));
 
-    return modelRegistry.find(
-      (model: IModelRegistryData) => model.name === name
-    );
+    console.log('test4', modelRegistry);
+    return modelRegistry.get(name);
   }
 
   changeModelInScene(sceneNumber: number, modelName: string) {

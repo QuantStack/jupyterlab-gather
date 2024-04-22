@@ -15,7 +15,7 @@ import { IModelRegistry, IModelRegistryData } from '../registry';
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/IridescenceAbalone/glTF/IridescenceAbalone.gltf
 
 interface IModelInfoList {
-  modelList: Set<IModelRegistryData>;
+  modelList: Map<string, IModelRegistryData>;
 }
 
 const SidebarComponent = ({ modelList }: IModelInfoList) => {
@@ -27,7 +27,7 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData('arCube')));
 
-    hmsActions.setAppData('modelRegistry', [...modelList]);
+    hmsActions.setAppData('modelRegistry', modelList);
     hmsStore.subscribe(updateModelLoadingState, selectAppData('canLoadModel'));
     hmsStore.subscribe(updateArCube, selectAppData('arCube'));
   }, []);
@@ -76,7 +76,7 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
         Select a model from the list below
       </div>
       <div className="sidebar-list">
-        {[...modelList].map(model => {
+        {[...modelList].map(([key, model]) => {
           return (
             <ModelListItem
               model={model}
@@ -113,10 +113,10 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
 
 export class SidebarWidget extends SidePanel {
   private _signal: ISignal<IModelRegistry, void>;
-  private _modelRegistry: Set<IModelRegistryData>;
+  private _modelRegistry: Map<string, IModelRegistryData>;
 
   constructor(
-    modelRegistry: Set<IModelRegistryData>,
+    modelRegistry: Map<string, IModelRegistryData>,
     modelRegistryChanged: ISignal<IModelRegistry, void>
   ) {
     super({ content: new Panel() });

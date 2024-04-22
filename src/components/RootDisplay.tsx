@@ -7,7 +7,7 @@ import { MainDisplay } from './MainDisplay';
 
 interface IRootDisplayProps {
   node: HTMLElement;
-  modelList: Set<IModelRegistryData>;
+  modelList: Map<string, IModelRegistryData>;
   modelRegistryChanged: ISignal<IModelRegistry, void>;
 }
 
@@ -21,7 +21,7 @@ const RootDisplay = ({
 
   useEffect(() => {
     modelRegistryChanged.connect(() => {
-      hmsActions.setAppData('modelRegistry', [...modelList]);
+      hmsActions.setAppData('modelRegistry', modelList, true);
       console.log('modelList in root', modelList);
     });
   }, []);
@@ -31,7 +31,7 @@ const RootDisplay = ({
     const initialAppData = {
       node: node,
       canLoadModel: true,
-      modelRegistry: [...modelList],
+      modelRegistry: modelList,
       isPresenting: false,
       presenterId: '',
       selectedModel: null,
@@ -58,11 +58,11 @@ const RootDisplay = ({
 };
 
 export class RootDisplayWidget extends ReactWidget {
-  private _modelList: Set<IModelRegistryData>;
+  private _modelList: Map<string, IModelRegistryData>;
   private _modelRegistryChanged: ISignal<IModelRegistry, void>;
 
   constructor(
-    modelList: Set<IModelRegistryData>,
+    modelList: Map<string, IModelRegistryData>,
     modelRegistryChanged: ISignal<IModelRegistry, void>
   ) {
     super();

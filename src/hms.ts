@@ -7,7 +7,7 @@ interface ISessionStore {
   isPresenting: boolean;
   node: HTMLElement;
   canLoadModel: boolean;
-  modelRegistry: IModelRegistryData[];
+  modelRegistry: Map<string, IModelRegistryData>;
   selectedModel: IModelRegistryData;
 }
 const hmsManager = new HMSReactiveStore<{ sessionStore: ISessionStore }>();

@@ -8,7 +8,6 @@ import { ILauncher } from '@jupyterlab/launcher';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { LogoIcon } from './components/Icons';
 import { RootDisplayWidget } from './components/RootDisplay';
-import { threeCube } from './model-examples/models';
 import { IGatherRegistryToken, IModelRegistry, ModelManager } from './registry';
 import { SidebarWidget } from './widgets/Sidebar';
 export { IGatherRegistryToken, IModelRegistry };
@@ -122,35 +121,35 @@ const modelRegistryPlugin: JupyterFrontEndPlugin<IModelRegistry> = {
   }
 };
 
-const duckPlugin: JupyterFrontEndPlugin<void> = {
-  id: 'jupyterlab_duck',
-  description: 'a duck.',
-  autoStart: true,
-  requires: [ICommandPalette, IGatherRegistryToken],
-  activate: (
-    app: JupyterFrontEnd,
-    palette: ICommandPalette,
-    registry: IModelRegistry
-  ) => {
-    console.log('JupyterLab extension The Duck is activated!');
+// const duckPlugin: JupyterFrontEndPlugin<void> = {
+//   id: 'jupyterlab_duck',
+//   description: 'a duck.',
+//   autoStart: true,
+//   requires: [ICommandPalette, IGatherRegistryToken],
+//   activate: (
+//     app: JupyterFrontEnd,
+//     palette: ICommandPalette,
+//     registry: IModelRegistry
+//   ) => {
+//     console.log('JupyterLab extension The Duck is activated!');
 
-    const duckPluginCommand: string = 'duckPlugin:open';
-    app.commands.addCommand(duckPluginCommand, {
-      label: 'The Duck',
-      execute: () => {
-        console.log('executing the duck');
-        // const data = JSON.stringify(threeCube);
-        // const data = JSON.parse(threeCube);
-        const data = threeCube;
-        registry.registerModel({
-          name: 'Three Cube',
-          gltf: data
-        });
-      }
-    });
+//     const duckPluginCommand: string = 'duckPlugin:open';
+//     app.commands.addCommand(duckPluginCommand, {
+//       label: 'The Duck',
+//       execute: () => {
+//         console.log('executing the duck');
+//         // const data = JSON.stringify(threeCube);
+//         // const data = JSON.parse(threeCube);
+//         const data = threeCube;
+//         registry.registerModel({
+//           name: 'Three Cube',
+//           gltf: data
+//         });
+//       }
+//     });
 
-    palette.addItem({ command: duckPluginCommand, category: 'Video Chat' });
-  }
-};
+//     palette.addItem({ command: duckPluginCommand, category: 'Video Chat' });
+//   }
+// };
 
-export default [plugin, modelRegistryPlugin, duckPlugin];
+export default [plugin, modelRegistryPlugin];
