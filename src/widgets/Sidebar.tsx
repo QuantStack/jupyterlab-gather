@@ -54,6 +54,12 @@ const SidebarComponent = ({
     });
   }, []);
 
+  useEffect(() => {
+    if (!arCube) {
+      return;
+    }
+  }, [modelList]);
+
   const updateArCube = () => {
     setArCube(hmsStore.getState(selectAppData('arCube')));
   };
@@ -142,6 +148,7 @@ export class SidebarWidget extends SidePanel {
     isPresenting: false,
     presenterId: '',
     selectedModel: null,
+    loadedModels: [],
     isConnecting: false
   };
 
@@ -178,10 +185,14 @@ export class SidebarWidget extends SidePanel {
 
     this._signal.connect((sender, value) => {
       this._modelList = value;
-      console.log('value', value);
-      const l = Array.from(value.values());
-      console.log('l', l);
-      hmsActions.setAppData('modelRegistry', l);
+      // console.log('value', value);
+      // const l = Array.from(value.values());
+      // console.log('l', l);
+      hmsActions.setAppData('modelRegistry', [...value.values()]);
     });
+  }
+
+  updateModel() {
+    const loadedModels = hmsStore.getState(selectAppData('loadedModels'));
   }
 }

@@ -29,6 +29,7 @@ class ArCube {
     // });
   }
 
+  loadedModels: string[];
   clock: THREE.Clock;
   scene: THREE.Scene;
   camera: THREE.Camera;
@@ -83,6 +84,7 @@ class ArCube {
 
   initialize() {
     this.sceneGroups = [];
+    this.loadedModels = [];
 
     this.setupThreeStuff();
 
@@ -362,7 +364,8 @@ class ArCube {
     }
 
     console.log('test1');
-    const model = this.findModelByName(modelName ? modelName : 'duck');
+    const modelNameOrDuck = modelName ? modelName : 'duck';
+    const model = this.findModelByName(modelNameOrDuck);
     console.log('test2', model);
 
     // remove old model first
@@ -381,6 +384,8 @@ class ArCube {
           model.url,
           gltf => {
             this.onSuccessfulLoad(gltf, sceneNumber);
+            this.loadedModels[sceneNumber] = modelNameOrDuck;
+            hmsActions.setAppData('loadedModels', this.loadedModels);
           },
           () => {
             console.log('model loading');
@@ -398,6 +403,8 @@ class ArCube {
           '',
           gltf => {
             this.onSuccessfulLoad(gltf, sceneNumber);
+            this.loadedModels[sceneNumber] = modelNameOrDuck;
+            hmsActions.setAppData('loadedModels', this.loadedModels);
           },
           error => {
             console.log('Error loading model gltf', error);
