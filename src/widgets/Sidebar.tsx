@@ -4,6 +4,7 @@ import { Button, SidePanel, UseSignal } from '@jupyterlab/ui-components';
 import { ISignal } from '@lumino/signaling';
 import { Panel, Widget } from '@lumino/widgets';
 import React, { useEffect, useState } from 'react';
+import { RGBA_ASTC_10x10_Format } from 'three';
 import ArCube from '../arCube';
 import { Icons } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
@@ -14,12 +15,11 @@ import { IModelRegistry, IModelRegistryData } from '../registry';
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/IridescenceAbalone/glTF/IridescenceAbalone.gltf
 
+const MODEL_NOT_FOUND = -RGBA_ASTC_10x10_Format;
+
 interface IModelInfoList {
-  modelList: Map<string, IModelRegistryData>;
-  modelRegistryChanged: ISignal<
-    IModelRegistry,
-    Map<string, IModelRegistryData>
-  >;
+  modelList: IModelRegistryData[];
+  modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>;
 }
 
 const SidebarComponent = ({
@@ -39,19 +39,6 @@ const SidebarComponent = ({
     hmsStore.subscribe(updateModelLoadingState, selectAppData('canLoadModel'));
     hmsStore.subscribe(updateArCube, selectAppData('arCube'));
     console.log('sidebar use effect');
-
-    modelRegistryChanged.connect((sender, value) => {
-      console.log('emit connect', value);
-      // const registry = hmsStore.getState(selectAppData('modelRegistry'));
-      // const copy = new Map(JSON.parse(JSON.stringify(Array.from(registry))));
-      // copy.set(value.name, value);
-
-      // console.log('registry1', registry);
-      // // registry.set(value.name, value);
-      // console.log('registry2', registry);
-      // const registry2 = hmsStore.getState(selectAppData('modelRegistry'));
-      // console.log('modelList in root', registry2);
-    });
   }, []);
 
   useEffect(() => {
@@ -102,7 +89,7 @@ const SidebarComponent = ({
         Select a model from the list below
       </div>
       <div className="sidebar-list">
-        {[...modelList].map(([key, model]) => {
+        {modelList.map(model => {
           return (
             <ModelListItem
               model={model}
@@ -138,13 +125,13 @@ const SidebarComponent = ({
 };
 
 export class SidebarWidget extends SidePanel {
-  private _signal: ISignal<IModelRegistry, Map<string, IModelRegistryData>>;
-  private _modelList: Map<string, IModelRegistryData>;
+  private _signal: ISignal<IModelRegistry, IModelRegistryData>;
+  private _modelList: IModelRegistryData[];
 
   private initialAppData = {
     // node: node,
     canLoadModel: true,
-    modelRegistry: ['pawg'],
+    modelRegistry: [],
     isPresenting: false,
     presenterId: '',
     selectedModel: null,
@@ -153,10 +140,7 @@ export class SidebarWidget extends SidePanel {
   };
 
   constructor(
-    modelRegistryChanged: ISignal<
-      IModelRegistry,
-      Map<string, IModelRegistryData>
-    >
+    modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>
   ) {
     super({ content: new Panel() });
     this._signal = modelRegistryChanged;
@@ -183,16 +167,41 @@ export class SidebarWidget extends SidePanel {
     );
     this.content.addWidget(widget);
 
-    this._signal.connect((sender, value) => {
-      this._modelList = value;
-      // console.log('value', value);
-      // const l = Array.from(value.values());
-      // console.log('l', l);
-      hmsActions.setAppData('modelRegistry', [...value.values()]);
+    this._signal.connect((sender, model) => {
+      const registryFromStore = [
+        ...hmsStore.getState(selectAppData('modelRegistry'))
+      ];
+
+      // TODO need to replace not push
+      registryFromStore.push(model);
+      this._modelList = registryFromStore;
+
+      hmsActions.setAppData('modelRegistry', registryFromStore);
+
+      this.updateModel(model.name);
     });
   }
 
-  updateModel() {
+  updateModel(modelName: string) {
+    console.log('update model modelName', modelName);
     const loadedModels = hmsStore.getState(selectAppData('loadedModels'));
+    console.log('update model loadedModels', loadedModels);
+    const arCube: ArCube = hmsStore.getState(selectAppData('arCube'));
+
+    const sceneToReload = loadedModels.findIndex(
+      (model: string) => model === modelName
+    );
+
+    //const index = users.findIndex(user => user.name === 'Charlie');
+
+    console.log('sceneToReload', sceneToReload);
+    if (!arCube) {
+      console.log('update model return');
+      return;
+    }
+
+    if (sceneToReload !== -1) {
+      arCube.loadModel(sceneToReload, loadedModels[sceneToReload]);
+    }
   }
 }

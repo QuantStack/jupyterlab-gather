@@ -358,15 +358,14 @@ class ArCube {
   }
 
   loadModel(sceneNumber: number, modelName?: string) {
-    console.log('loading model');
+    console.log('loading model', sceneNumber, modelName);
     if (!this.gltfLoader) {
       this.gltfLoader = new GLTFLoader();
     }
 
-    console.log('test1');
     const modelNameOrDuck = modelName ? modelName : 'duck';
     const model = this.findModelByName(modelNameOrDuck);
-    console.log('test2', model);
+    console.log('model', model);
 
     // remove old model first
     // if (this.gltfModel) {
@@ -383,9 +382,7 @@ class ArCube {
         this.gltfLoader.load(
           model.url,
           gltf => {
-            this.onSuccessfulLoad(gltf, sceneNumber);
-            this.loadedModels[sceneNumber] = modelNameOrDuck;
-            hmsActions.setAppData('loadedModels', this.loadedModels);
+            this.onSuccessfulLoad(gltf, sceneNumber, modelNameOrDuck);
           },
           () => {
             console.log('model loading');
@@ -397,14 +394,11 @@ class ArCube {
       } else if ('gltf' in model) {
         // const data = JSON.stringify(model.gltf);
         const data = model.gltf;
-        console.log('data', data);
         this.gltfLoader.parse(
           data,
           '',
           gltf => {
-            this.onSuccessfulLoad(gltf, sceneNumber);
-            this.loadedModels[sceneNumber] = modelNameOrDuck;
-            hmsActions.setAppData('loadedModels', this.loadedModels);
+            this.onSuccessfulLoad(gltf, sceneNumber, modelNameOrDuck);
           },
           error => {
             console.log('Error loading model gltf', error);
@@ -414,7 +408,7 @@ class ArCube {
     }
   }
 
-  onSuccessfulLoad = (gltf: GLTF, sceneNumber: number) => {
+  onSuccessfulLoad = (gltf: GLTF, sceneNumber: number, modelName: string) => {
     console.log('on successful load');
     const scale = 1.0;
     const gltfModel = gltf.scene;
@@ -431,16 +425,31 @@ class ArCube {
       });
     }
 
+    console.log('sceneNumber', sceneNumber);
     this.sceneGroups[sceneNumber].add(gltfModel);
     this.okToLoadModel = true;
     hmsActions.setAppData('canLoadModel', true);
+
+    // this.loadedModels[sceneNumber] = modelName;
+    // this.loadedModels.splice(sceneNumber, 0, modelName);
+
+    if (Object.isFrozen(this.loadedModels)) {
+      console.log('FROZE');
+    }
+
+    const newArray = [
+      ...this.loadedModels.slice(0, sceneNumber),
+      modelName,
+      ...this.loadedModels.slice(sceneNumber)
+    ];
+
+    hmsActions.setAppData('loadedModels', newArray);
+
     console.log('model loaded parse');
   };
 
   findModelByName(name: string) {
-    console.log('test3');
     const modelRegistry = hmsStore.getState(selectAppData('modelRegistry'));
-    console.log('test4', modelRegistry);
     return modelRegistry.find(
       (model: IModelRegistryData) => model.name === name
     );
