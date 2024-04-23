@@ -1,14 +1,15 @@
+import { selectAppData } from '@100mslive/react-sdk';
 import { ReactWidget } from '@jupyterlab/ui-components';
 import { ISignal } from '@lumino/signaling';
 import React, { useEffect, useRef } from 'react';
-import { TypedHMSRoomProvider, hmsActions } from '../hms';
+import { TypedHMSRoomProvider, hmsActions, hmsStore } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
 import { MainDisplay } from './MainDisplay';
 
 interface IRootDisplayProps {
   node: HTMLElement;
   modelList: Map<string, IModelRegistryData>;
-  modelRegistryChanged: ISignal<IModelRegistry, void>;
+  modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>;
 }
 
 const RootDisplay = ({
@@ -20,9 +21,18 @@ const RootDisplay = ({
   // const hmsActions = useHMSActions();
 
   useEffect(() => {
-    modelRegistryChanged.connect(() => {
-      hmsActions.setAppData('modelRegistry', modelList, true);
-      console.log('modelList in root', modelList);
+    modelRegistryChanged.connect((sender, value) => {
+      console.log('emit connect');
+      const registry = hmsStore.getState(selectAppData('modelRegistry'));
+      const copy = new Map(JSON.parse(JSON.stringify(Array.from(registry))));
+      copy.set(value.name, value);
+
+      console.log('registry1', registry);
+      // registry.set(value.name, value);
+      console.log('registry2', registry);
+      hmsActions.setAppData('modelRegistry', copy, true);
+      const registry2 = hmsStore.getState(selectAppData('modelRegistry'));
+      console.log('modelList in root', registry2);
     });
   }, []);
 
@@ -31,7 +41,7 @@ const RootDisplay = ({
     const initialAppData = {
       node: node,
       canLoadModel: true,
-      modelRegistry: modelList,
+      modelRegistry: null,
       isPresenting: false,
       presenterId: '',
       selectedModel: null,
@@ -59,11 +69,11 @@ const RootDisplay = ({
 
 export class RootDisplayWidget extends ReactWidget {
   private _modelList: Map<string, IModelRegistryData>;
-  private _modelRegistryChanged: ISignal<IModelRegistry, void>;
+  private _modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>;
 
   constructor(
     modelList: Map<string, IModelRegistryData>,
-    modelRegistryChanged: ISignal<IModelRegistry, void>
+    modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>
   ) {
     super();
     this._modelList = modelList;

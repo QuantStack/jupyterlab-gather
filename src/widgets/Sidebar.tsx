@@ -112,12 +112,12 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
 };
 
 export class SidebarWidget extends SidePanel {
-  private _signal: ISignal<IModelRegistry, void>;
+  private _signal: ISignal<IModelRegistry, IModelRegistryData>;
   private _modelRegistry: Map<string, IModelRegistryData>;
 
   constructor(
     modelRegistry: Map<string, IModelRegistryData>,
-    modelRegistryChanged: ISignal<IModelRegistry, void>
+    modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>
   ) {
     super({ content: new Panel() });
     this._modelRegistry = modelRegistry;
