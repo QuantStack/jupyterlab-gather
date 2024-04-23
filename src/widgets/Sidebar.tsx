@@ -39,6 +39,19 @@ const SidebarComponent = ({
     hmsStore.subscribe(updateModelLoadingState, selectAppData('canLoadModel'));
     hmsStore.subscribe(updateArCube, selectAppData('arCube'));
     console.log('sidebar use effect');
+
+    modelRegistryChanged.connect((sender, value) => {
+      console.log('emit connect', value);
+      // const registry = hmsStore.getState(selectAppData('modelRegistry'));
+      // const copy = new Map(JSON.parse(JSON.stringify(Array.from(registry))));
+      // copy.set(value.name, value);
+
+      // console.log('registry1', registry);
+      // // registry.set(value.name, value);
+      // console.log('registry2', registry);
+      // const registry2 = hmsStore.getState(selectAppData('modelRegistry'));
+      // console.log('modelList in root', registry2);
+    });
   }, []);
 
   const updateArCube = () => {
@@ -122,6 +135,16 @@ export class SidebarWidget extends SidePanel {
   private _signal: ISignal<IModelRegistry, Map<string, IModelRegistryData>>;
   private _modelList: Map<string, IModelRegistryData>;
 
+  private initialAppData = {
+    // node: node,
+    canLoadModel: true,
+    modelRegistry: ['pawg'],
+    isPresenting: false,
+    presenterId: '',
+    selectedModel: null,
+    isConnecting: false
+  };
+
   constructor(
     modelRegistryChanged: ISignal<
       IModelRegistry,
@@ -139,6 +162,8 @@ export class SidebarWidget extends SidePanel {
     headerNode.textContent = 'augmented reality';
     this.header.addWidget(new Widget({ node: headerNode }));
 
+    hmsActions.initAppData(this.initialAppData);
+
     const widget = ReactWidget.create(
       <UseSignal signal={this._signal}>
         {() => (
@@ -153,6 +178,10 @@ export class SidebarWidget extends SidePanel {
 
     this._signal.connect((sender, value) => {
       this._modelList = value;
+      console.log('value', value);
+      const l = Array.from(value.values());
+      console.log('l', l);
+      hmsActions.setAppData('modelRegistry', l);
     });
   }
 }

@@ -33,9 +33,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     let widget: MainAreaWidget<RootDisplayWidget>;
 
-    const sidebarPanel = new SidebarWidget(registry.modelRegistryChanged);
-    sidebarPanel.id = 'gather-sidepanel';
-
     // Add an application command
     const gatherCommand: string = 'gather:open';
     app.commands.addCommand(gatherCommand, {
@@ -59,6 +56,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
           // Attach the widget to the main work area if it's not there
           app.shell.add(widget, 'main');
         }
+
+        const sidebarPanel = new SidebarWidget(registry.modelRegistryChanged);
+        sidebarPanel.id = 'gather-sidepanel';
 
         // Activate the widget
         app.shell.activateById(widget.id);
