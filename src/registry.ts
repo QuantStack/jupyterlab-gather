@@ -8,7 +8,10 @@ export const IGatherRegistryToken = new Token<IModelRegistry>(EXTENSION_ID);
 export interface IModelRegistry {
   modelRegistry: Map<string, IModelRegistryData>;
   test: Map<string, IModelRegistryData>;
-  modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>;
+  modelRegistryChanged: ISignal<
+    IModelRegistry,
+    Map<string, IModelRegistryData>
+  >;
   registerModel(data: IModelRegistryData): void;
 }
 
@@ -26,13 +29,14 @@ export type IModelRegistryData = IModelRegistryDataUrl | IModelRegistryDataGltf;
 
 export class ModelManager implements IModelRegistry {
   modelRegistry = new Map<string, IModelRegistryData>();
-  modelRegistryChanged = new Signal<this, IModelRegistryData>(this);
+  modelRegistryChanged = new Signal<this, Map<string, IModelRegistryData>>(
+    this
+  );
 
   test = new Map<string, IModelRegistryData>();
 
   registerModel(data: IModelRegistryData): void {
-    this.test.set(data.name, data);
-    console.log('modelRegistry', this.modelRegistry);
-    this.modelRegistryChanged.emit(data);
+    this.modelRegistry.set(data.name, data);
+    this.modelRegistryChanged.emit(this.modelRegistry);
   }
 }

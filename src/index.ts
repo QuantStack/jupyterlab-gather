@@ -31,23 +31,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
   ) => {
     console.log('JupyterLab extension jupyterlab_gather is activated!');
 
-    // Register default models
-    registry.registerModel({
-      name: 'duck',
-      url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf'
-    });
-
-    registry.registerModel({
-      name: 'brain stem',
-      url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf'
-    });
-
     let widget: MainAreaWidget<RootDisplayWidget>;
 
-    const sidebarPanel = new SidebarWidget(
-      registry.modelRegistry,
-      registry.modelRegistryChanged
-    );
+    const sidebarPanel = new SidebarWidget(registry.modelRegistryChanged);
     sidebarPanel.id = 'gather-sidepanel';
 
     // Add an application command
@@ -58,10 +44,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       execute: () => {
         // Regenerate the widget if disposed
         if (!widget || widget.isDisposed) {
-          const content = new RootDisplayWidget(
-            registry.modelRegistry,
-            registry.modelRegistryChanged
-          );
+          const content = new RootDisplayWidget(registry.modelRegistryChanged);
           widget = new MainAreaWidget({ content });
           widget.id = 'gather-jupyterlab';
           widget.title.label = 'AR Presentation';
@@ -81,6 +64,17 @@ const plugin: JupyterFrontEndPlugin<void> = {
         app.shell.activateById(widget.id);
         app.shell.add(widget, 'main');
         app.shell.add(sidebarPanel, 'left', { rank: 2000 });
+
+        // Register default models
+        registry.registerModel({
+          name: 'duck',
+          url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf'
+        });
+
+        registry.registerModel({
+          name: 'brain stem',
+          url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf'
+        });
       }
     });
 

@@ -16,20 +16,29 @@ import { IModelRegistry, IModelRegistryData } from '../registry';
 
 interface IModelInfoList {
   modelList: Map<string, IModelRegistryData>;
+  modelRegistryChanged: ISignal<
+    IModelRegistry,
+    Map<string, IModelRegistryData>
+  >;
 }
 
-const SidebarComponent = ({ modelList }: IModelInfoList) => {
+const SidebarComponent = ({
+  modelList,
+  modelRegistryChanged
+}: IModelInfoList) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [isSecondScene, setIsSecondScene] = useState(false);
   const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
   const [selected, setSelected] = useState<IModelRegistryData>();
+  // const [modelList, setModelList] = useState<Map<string, IModelRegistryData>>();
 
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData('arCube')));
 
-    hmsActions.setAppData('modelRegistry', modelList);
+    // hmsActions.setAppData('modelRegistry', modelList);
     hmsStore.subscribe(updateModelLoadingState, selectAppData('canLoadModel'));
     hmsStore.subscribe(updateArCube, selectAppData('arCube'));
+    console.log('sidebar use effect');
   }, []);
 
   const updateArCube = () => {
@@ -57,8 +66,6 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
     }
 
     arCube?.changeModelInScene(sceneNumber, selected.name);
-
-    console.log('modelList', modelList);
   };
 
   const handleLoadSecondScene = () => {
@@ -112,15 +119,16 @@ const SidebarComponent = ({ modelList }: IModelInfoList) => {
 };
 
 export class SidebarWidget extends SidePanel {
-  private _signal: ISignal<IModelRegistry, IModelRegistryData>;
-  private _modelRegistry: Map<string, IModelRegistryData>;
+  private _signal: ISignal<IModelRegistry, Map<string, IModelRegistryData>>;
+  private _modelList: Map<string, IModelRegistryData>;
 
   constructor(
-    modelRegistry: Map<string, IModelRegistryData>,
-    modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>
+    modelRegistryChanged: ISignal<
+      IModelRegistry,
+      Map<string, IModelRegistryData>
+    >
   ) {
     super({ content: new Panel() });
-    this._modelRegistry = modelRegistry;
     this._signal = modelRegistryChanged;
 
     this.addClass('sidebar-widget');
@@ -133,9 +141,18 @@ export class SidebarWidget extends SidePanel {
 
     const widget = ReactWidget.create(
       <UseSignal signal={this._signal}>
-        {() => <SidebarComponent modelList={this._modelRegistry} />}
+        {() => (
+          <SidebarComponent
+            modelList={this._modelList}
+            modelRegistryChanged={this._signal}
+          />
+        )}
       </UseSignal>
     );
     this.content.addWidget(widget);
+
+    this._signal.connect((sender, value) => {
+      this._modelList = value;
+    });
   }
 }
