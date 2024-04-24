@@ -271,8 +271,20 @@ form h2,
   gap: 1rem;
   padding: 0.5rem;
   flex-grow: 0;
+  color: var(--jp-inverse-layout-color3);
   border-bottom: var(--jp-border-width) solid var(--jp-border-color2);
   border-top: var(--jp-border-width) solid var(--jp-border-color2);
+}
+
+.sidebar-button {
+  color: var(--jp-inverse-layout-color4);
+}
+
+.sidebar-load-button {
+  padding: 0.5rem;
+  margin: 0.5rem;
+  max-width: 313px;
+  color: var(--jp-inverse-layout-color4);
 }
 
 .presenter-container-main {
@@ -316,7 +328,7 @@ form h2,
 
 .icon {
   scale: 0.8;
-  fill: whitesmoke;
+  fill: var(--jp-inverse-layout-color3);
 }
 
 .icon-breathe {

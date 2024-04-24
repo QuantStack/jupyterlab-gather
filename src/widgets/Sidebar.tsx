@@ -98,25 +98,33 @@ const SidebarComponent = ({
           );
         })}
       </div>
-      <div className="sidebar-buttons">
-        <Button onClick={() => handleModelSelectClick(0)}>
-          Set as first model
-        </Button>
-        <Button onClick={() => handleModelSelectClick(1)}>
-          Set as second model
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className="sidebar-buttons">
+          <Button
+            className="sidebar-button"
+            onClick={() => handleModelSelectClick(0)}
+          >
+            Set as first model
+          </Button>
+          <Button
+            className="sidebar-button"
+            onClick={() => handleModelSelectClick(1)}
+          >
+            Set as second model
+          </Button>
+        </div>
+        <Button
+          className="sidebar-load-button"
+          onClick={handleLoadSecondScene}
+          disabled={isDisabled}
+        >
+          {isDisabled ? (
+            <Icons.spinner className="spinner" />
+          ) : (
+            'Load second model'
+          )}
         </Button>
       </div>
-      <Button
-        style={{ padding: '0.5rem' }}
-        onClick={handleLoadSecondScene}
-        disabled={isDisabled}
-      >
-        {isDisabled ? (
-          <Icons.spinner className="spinner" />
-        ) : (
-          'Load second model'
-        )}
-      </Button>
     </div>
   );
 };
@@ -144,6 +152,7 @@ export class SidebarWidget extends SidePanel {
 
     this.addClass('sidebar-widget');
     this.title.icon = arIcon;
+    this.title.className;
     this.title.caption = 'Augmented reality';
 
     const headerNode = document.createElement('h2');
