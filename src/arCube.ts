@@ -471,13 +471,11 @@ class ArCube {
   }
 
   enableSecondScene() {
-    console.log('enaling');
     this.isSecondScene = true;
     this.setupScene(SECOND_SCENE);
   }
 
   disableSecondScene() {
-    console.log('disabling');
     this.isSecondScene = false;
     //TODO this won't work with more than two scenes but it's fine for now
     this.sceneGroups.pop();

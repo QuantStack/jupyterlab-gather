@@ -4,7 +4,6 @@ import { Button, SidePanel, UseSignal } from '@jupyterlab/ui-components';
 import { ISignal } from '@lumino/signaling';
 import { Panel, Widget } from '@lumino/widgets';
 import React, { useEffect, useState } from 'react';
-import { RGBA_ASTC_10x10_Format } from 'three';
 import ArCube from '../arCube';
 import { Icons } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
@@ -14,8 +13,6 @@ import { IModelRegistry, IModelRegistryData } from '../registry';
 
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/IridescenceAbalone/glTF/IridescenceAbalone.gltf
-
-const MODEL_NOT_FOUND = -RGBA_ASTC_10x10_Format;
 
 interface IModelInfoList {
   modelList: IModelRegistryData[];
@@ -165,43 +162,55 @@ export class SidebarWidget extends SidePanel {
         )}
       </UseSignal>
     );
+
     this.content.addWidget(widget);
 
     this._signal.connect((sender, model) => {
-      const registryFromStore = [
-        ...hmsStore.getState(selectAppData('modelRegistry'))
-      ];
-
-      // TODO need to replace not push
-      registryFromStore.push(model);
-      this._modelList = registryFromStore;
-
-      hmsActions.setAppData('modelRegistry', registryFromStore);
-
+      this._modelList = this.addModelToRegistryArray(model);
       this.updateModel(model.name);
     });
   }
 
+  addModelToRegistryArray(model: IModelRegistryData) {
+    const registryFromStore: IModelRegistryData[] = [
+      ...hmsStore.getState(selectAppData('modelRegistry'))
+    ];
+
+    const existingModels = registryFromStore.map(
+      registryModels => registryModels.name
+    );
+
+    // Add model if it's new
+    if (!existingModels.includes(model.name)) {
+      registryFromStore.push(model);
+    } else {
+      // update model if it already exists
+      registryFromStore.forEach((element, index) => {
+        if (element.name === model.name) {
+          registryFromStore[index] = model;
+        }
+      });
+    }
+
+    hmsActions.setAppData('modelRegistry', registryFromStore);
+
+    return registryFromStore;
+  }
+
   updateModel(modelName: string) {
-    console.log('update model modelName', modelName);
     const loadedModels = hmsStore.getState(selectAppData('loadedModels'));
-    console.log('update model loadedModels', loadedModels);
     const arCube: ArCube = hmsStore.getState(selectAppData('arCube'));
 
     const sceneToReload = loadedModels.findIndex(
       (model: string) => model === modelName
     );
 
-    //const index = users.findIndex(user => user.name === 'Charlie');
-
-    console.log('sceneToReload', sceneToReload);
     if (!arCube) {
-      console.log('update model return');
       return;
     }
 
     if (sceneToReload !== -1) {
-      arCube.loadModel(sceneToReload, loadedModels[sceneToReload]);
+      arCube.changeModelInScene(sceneToReload, loadedModels[sceneToReload]);
     }
   }
 }
