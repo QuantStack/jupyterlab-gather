@@ -409,13 +409,25 @@ class ArCube {
   }
 
   onSuccessfulLoad = (gltf: GLTF, sceneNumber: number, modelName: string) => {
-    console.log('on successful load');
+    console.log('on successful load', gltf);
     const scale = 1.0;
     const gltfModel = gltf.scene;
+
     gltfModel.scale.set(scale, scale, scale);
     gltfModel.position.fromArray([0, -1, 0]);
 
     gltfModel.name = `model${sceneNumber}`;
+
+    // filter out plane mesh
+    const t = gltfModel.children[0].children.filter(
+      obj => !obj.name.startsWith('edge-')
+    );
+
+    gltfModel.children[0].children = t;
+
+    console.log('t', t);
+    console.log('gltfModel', gltfModel);
+
     this.animations = gltf.animations;
     this.mixer = new THREE.AnimationMixer(gltfModel);
 
