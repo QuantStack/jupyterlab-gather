@@ -409,7 +409,7 @@ class ArCube {
   }
 
   onSuccessfulLoad = (gltf: GLTF, sceneNumber: number, modelName: string) => {
-    console.log('on successful load', gltf);
+    console.log('on successful load', gltf, modelName);
     const scale = 1.0;
     const gltfModel = gltf.scene;
 
@@ -417,15 +417,39 @@ class ArCube {
     gltfModel.position.fromArray([0, -1, 0]);
 
     gltfModel.name = `model${sceneNumber}`;
+    if (modelName !== 'duck') {
+      // filter out plane mesh
+      // const t = gltfModel.children[0].children.filter(
+      //   obj => !obj.name.startsWith('edge-')
+      // );
 
-    // filter out plane mesh
-    const t = gltfModel.children[0].children.filter(
-      obj => !obj.name.startsWith('edge-')
-    );
+      // filtering based in isMesh
+      const filterForObjectGroups = gltfModel.children.filter(
+        object =>
+          //@ts-expect-error wip
+          !object.isMesh && !object.isCamera && object.children.length > 0
+      );
+      console.log('filteredObjects1', filterForObjectGroups);
 
-    gltfModel.children[0].children = t;
+      // gltfModel.children[0].children = t;
+      // const fd = [];
+      // fd.push(filteredObjects[3]);
 
-    console.log('t', t);
+      // for each child of filterForObjectGroups i need to goto that obkects children and filter out the edge
+      //  filter out plane mesh
+      filterForObjectGroups[0].children.forEach(objectGroup => {
+        const t = objectGroup.children.filter(
+          obj => !obj.name.startsWith('edge-')
+        );
+        objectGroup.children = t;
+      });
+
+      console.log('filteredObjects2', filterForObjectGroups);
+
+      gltfModel.children = filterForObjectGroups;
+    }
+
+    // console.log('t', t);
     console.log('gltfModel', gltfModel);
 
     this.animations = gltf.animations;

@@ -31,6 +31,7 @@ export class ModelManager implements IModelRegistry {
   test = new Map<string, IModelRegistryData>();
 
   registerModel(data: IModelRegistryData): void {
+    console.log('data', data);
     this.modelRegistry.set(data.name, data);
     this.modelRegistryChanged.emit(data);
   }
