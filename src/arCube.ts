@@ -410,12 +410,17 @@ class ArCube {
 
   onSuccessfulLoad = (gltf: GLTF, sceneNumber: number, modelName: string) => {
     console.log('on successful load', gltf, modelName);
-    const scale = 1.0;
+    let scale = 1.0;
     const gltfModel = gltf.scene;
 
-    gltfModel.scale.set(scale, scale, scale);
     gltfModel.position.fromArray([0, -1, 0]);
 
+    // TODO: This is to work with the freecad arch model for now
+    if (gltfModel.children.length === 32) {
+      scale = 0.01;
+    }
+
+    gltfModel.scale.set(scale, scale, scale);
     gltfModel.name = `model${sceneNumber}`;
 
     //  filter out plane mesh
