@@ -120,8 +120,10 @@ const LeftSidebarComponent = ({
         >
           {isDisabled ? (
             <Icons.spinner className="spinner" />
+          ) : isSecondScene ? (
+            'Disable Second Model'
           ) : (
-            'Load second model'
+            'Load Second Model'
           )}
         </Button>
       </div>
