@@ -417,7 +417,8 @@ class ArCube {
 
     // TODO: This is to work with the freecad arch model for now
     if (gltfModel.children.length === 32) {
-      scale = 0.01;
+      scale = 0.005;
+      gltfModel.position.fromArray([0, 0, 0]);
     }
 
     gltfModel.scale.set(scale, scale, scale);
@@ -504,6 +505,16 @@ class ArCube {
 
       // update any render target sizes here
     }
+  }
+
+  setScale(scale: number, sceneNumber: number) {
+    console.log('scale', scale);
+    console.log('sceneNumber', sceneNumber);
+    console.log('sceneGroups[sceneNumber]', this.sceneGroups[sceneNumber]);
+
+    this.sceneGroups[sceneNumber]
+      .getObjectByName(`model${sceneNumber}`)
+      ?.scale.set(scale, scale, scale);
   }
 
   render() {

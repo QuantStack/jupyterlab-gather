@@ -68,6 +68,7 @@
         "@lumino/signaling": "^2.1.2",
         "@lumino/widgets": "^2.3.1",
         "@types/react-dom": "^18.2.22",
+        "rc-slider": "^10.6.2",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "three": "^0.162.0"

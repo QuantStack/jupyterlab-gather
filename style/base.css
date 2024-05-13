@@ -229,6 +229,7 @@ form h2,
   display: flex;
   flex-direction: column;
   height: 100%;
+  margin-bottom: 1rem;
 }
 
 .sidebar-widget .sidebar-description {
@@ -245,6 +246,10 @@ form h2,
   align-items: start;
   gap: 10px;
   height: 100%;
+}
+
+.sidebar-widget .sidebar-list.sidebar-right {
+  align-items: center;
 }
 
 .sidebar-widget .sidebar-list .model-list-item {
@@ -353,6 +358,11 @@ form h2,
 .preview-control-bar {
   display: flex;
   gap: 2rem;
+}
+
+.rc-slider.slider {
+  padding: 1rem 0;
+  width: 90%;
 }
 
 .spinner {
