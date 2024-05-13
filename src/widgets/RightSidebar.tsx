@@ -43,6 +43,7 @@ const ScaleSlider = ({ sceneNumber, arCube }: IScaleSliderProps) => {
 
 const RightSidebarComponent = () => {
   const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
+  const [isSecondModel, setIsSecondModel] = useState(false);
 
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData('arCube')));
@@ -50,7 +51,17 @@ const RightSidebarComponent = () => {
   }, []);
 
   const updateArCube = () => {
-    setArCube(hmsStore.getState(selectAppData('arCube')));
+    const updatedCube = hmsStore.getState(selectAppData('arCube'));
+
+    if (updatedCube) {
+      updatedCube.secondSceneSignal.connect(updateIsSecondModel);
+      setArCube(updatedCube);
+    }
+  };
+
+  const updateIsSecondModel = (sender: ArCube, value: boolean) => {
+    console.log('updating is second model');
+    setIsSecondModel(value);
   };
 
   return (
@@ -58,7 +69,9 @@ const RightSidebarComponent = () => {
       <div className="sidebar-description">Set Scale</div>
       <div className="sidebar-list sidebar-right">
         <ScaleSlider sceneNumber={FIRST_SCENE} arCube={arCube} />
-        <ScaleSlider sceneNumber={SECOND_SCENE} arCube={arCube} />
+        {isSecondModel ? (
+          <ScaleSlider sceneNumber={SECOND_SCENE} arCube={arCube} />
+        ) : null}
       </div>
     </div>
   );

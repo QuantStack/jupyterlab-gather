@@ -4,6 +4,7 @@ import {
 } from '@100mslive/react-sdk';
 //@ts-expect-error AR.js doesn't have type definitions
 import * as THREEx from '@ar-js-org/ar.js/three.js/build/ar-threex.js';
+import { Signal } from '@lumino/signaling';
 import * as THREE from 'three';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { hmsActions, hmsStore } from './hms';
@@ -19,6 +20,7 @@ class ArCube {
    */
   constructor(node: HTMLElement) {
     this.initialize();
+    this.secondSceneSignal = new Signal(this);
     // this.animate();
     // window.addEventListener('markerFound', () => {
     //   console.log('Marker found');
@@ -81,6 +83,7 @@ class ArCube {
   // model: IModelRegistryData;
   sceneGroups: THREE.Group[];
   isSecondScene: boolean;
+  secondSceneSignal: Signal<this, boolean>;
 
   initialize() {
     this.sceneGroups = [];
@@ -481,12 +484,14 @@ class ArCube {
   enableSecondScene() {
     this.isSecondScene = true;
     this.setupScene(SECOND_SCENE);
+    this.secondSceneSignal.emit(true);
   }
 
   disableSecondScene() {
     this.isSecondScene = false;
     //TODO this won't work with more than two scenes but it's fine for now
     this.sceneGroups.pop();
+    this.secondSceneSignal.emit(false);
   }
 
   resizeCanvasToDisplaySize() {
