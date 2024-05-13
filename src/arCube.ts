@@ -353,6 +353,7 @@ class ArCube {
       edgeGroup.add(edge);
     }
 
+    edgeGroup.name = 'edge-group';
     sceneGroup.add(edgeGroup);
     this.sceneGroups.push(sceneGroup);
 
@@ -413,20 +414,43 @@ class ArCube {
 
   onSuccessfulLoad = (gltf: GLTF, sceneNumber: number, modelName: string) => {
     console.log('on successful load', gltf, modelName);
-    let scale = 1.0;
+
     const gltfModel = gltf.scene;
 
-    gltfModel.position.fromArray([0, -1, 0]);
+    // Set scale of new model to fit inside the BG Cube
+    // TODO bgCube should be only thing in scene at this point, but do it better
+    console.log('sceneGroups', this.sceneGroups);
 
-    // TODO: This is to work with the freecad arch model for now
-    if (gltfModel.children.length === 32) {
-      scale = 0.005;
-      gltfModel.position.fromArray([0, 0, 0]);
-    }
+    const bgCubeBoundingBox = new THREE.Box3().setFromObject(
+      this.sceneGroups[sceneNumber].getObjectByName('edge-group')!
+    );
+    const bgCubeHelper = new THREE.Box3Helper(bgCubeBoundingBox, 0xffff00);
+    this.sceneGroups[sceneNumber].add(bgCubeHelper);
 
-    gltfModel.scale.set(scale, scale, scale);
+    const modelBoundingBox = new THREE.Box3().setFromObject(gltfModel);
+    const modelHelper = new THREE.Box3Helper(bgCubeBoundingBox, 0x121212);
+    this.sceneGroups[sceneNumber].add(modelHelper);
+
+    const minRatio = this.calcScale(bgCubeBoundingBox, modelBoundingBox);
+    gltfModel.scale.set(minRatio, minRatio, minRatio);
+
+    console.log('bgCubeBoundingBox', bgCubeBoundingBox);
+    // const bgCubeCenter = bgCubeBoundingBox
+    //   .getCenter(this.sceneGroups[sceneNumber].position)
+    //   .multiplyScalar(-1);
+
+    // console.log('gltfModel.position', gltfModel.position);
+    // const modelCenter = bgCubeBoundingBox
+    //   .getCenter(gltfModel.position)
+    //   .multiplyScalar(-1);
+
+    // console.log('gltfModel.position2', gltfModel.position);
+    // Center the model inside the BG Cube
+    // const center = bgCubeBoundingBox.getCenter(new THREE.Vector3());
+    // gltfModel.position.sub(center);
+    // gltfModel.position.fromArray([0, -1, 0]);
+
     gltfModel.name = `model${sceneNumber}`;
-
     //  filter out plane mesh
     gltfModel.children.forEach(objectGroup => {
       const filterOutPlanes = objectGroup.children.filter(
@@ -459,6 +483,34 @@ class ArCube {
     console.log('model loaded parse');
   };
 
+  calcScale(bgCubeBoundingBox: THREE.Box3, modelBoundingBox: THREE.Box3) {
+    // Calculate side lengths of model1
+    const lengthMesh1Bounds = {
+      x: Math.abs(bgCubeBoundingBox.max.x - bgCubeBoundingBox.min.x),
+      y: Math.abs(bgCubeBoundingBox.max.y - bgCubeBoundingBox.min.y),
+      z: Math.abs(bgCubeBoundingBox.max.z - bgCubeBoundingBox.min.z)
+    };
+
+    // Calculate side lengths of model2
+    const lengthMesh2Bounds = {
+      x: Math.abs(modelBoundingBox.max.x - modelBoundingBox.min.x),
+      y: Math.abs(modelBoundingBox.max.y - modelBoundingBox.min.y),
+      z: Math.abs(modelBoundingBox.max.z - modelBoundingBox.min.z)
+    };
+
+    // Calculate length ratios
+    const lengthRatios = [
+      lengthMesh1Bounds.x / lengthMesh2Bounds.x,
+      lengthMesh1Bounds.y / lengthMesh2Bounds.y,
+      lengthMesh1Bounds.z / lengthMesh2Bounds.z
+    ];
+
+    // Select smallest ratio in order to contain the models within the scene
+    const minRatio = Math.min(...lengthRatios);
+
+    return minRatio;
+  }
+
   findModelByName(name: string) {
     const modelRegistry = hmsStore.getState(selectAppData('modelRegistry'));
     return modelRegistry.find(
@@ -482,15 +534,22 @@ class ArCube {
   }
 
   enableSecondScene() {
+    console.log('enabling second');
     this.isSecondScene = true;
     this.setupScene(SECOND_SCENE);
     this.secondSceneSignal.emit(true);
   }
 
   disableSecondScene() {
+    console.log('disabling second');
     this.isSecondScene = false;
+    console.log('sceneGroups', JSON.parse(JSON.stringify(this.sceneGroups)));
     //TODO this won't work with more than two scenes but it's fine for now
     this.sceneGroups.pop();
+    console.log('sceneGroups2', JSON.parse(JSON.stringify(this.sceneGroups)));
+    console.log('isSecondScene', this.isSecondScene);
+
+    console.log('hiroGroupArray', this.hiroGroupArray);
     this.secondSceneSignal.emit(false);
   }
 
@@ -562,6 +621,7 @@ class ArCube {
       for (let i = 0; i < 6; i++) {
         if (this.hiroRootArray[i].visible) {
           //TODO want to iterate through new scene group list
+          //TODO need to remove this on second disable
           this.hiroGroupArray[i].add(this.sceneGroups[1]);
           // console.log('visible: ' + this.patternArraySecondModel[i - 6]);
           break;
