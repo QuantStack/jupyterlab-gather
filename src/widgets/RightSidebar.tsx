@@ -8,11 +8,9 @@ import React, { useEffect, useState } from 'react';
 import ArCube from '../arCube';
 import { hmsStore } from '../hms';
 import { arIcon } from '../icons';
-// https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
-// https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/IridescenceAbalone/glTF/IridescenceAbalone.gltf
 
-const FIRST_MODEL = 0;
-const SECOND_MODEL = 1;
+const FIRST_SCENE = 0;
+const SECOND_SCENE = 1;
 
 interface IScaleSliderProps {
   sceneNumber: number;
@@ -20,18 +18,16 @@ interface IScaleSliderProps {
 }
 
 const ScaleSlider = ({ sceneNumber, arCube }: IScaleSliderProps) => {
-  const handleChange = (value: number, modelNumber: number) => {
+  const handleChange = (value: number, sceneNumber: number) => {
     if (!arCube) {
       return;
     }
 
-    arCube.setScale(value, modelNumber);
-
-    console.log('value', value, modelNumber);
+    arCube.setScale(value, sceneNumber);
   };
 
   return (
-    <div>
+    <div className="scale-slider">
       <p>{sceneNumber === 0 ? 'First Model' : 'Second Model'}</p>
       <Slider
         className="slider"
@@ -61,8 +57,8 @@ const RightSidebarComponent = () => {
     <div className="sidebar-container">
       <div className="sidebar-description">Set Scale</div>
       <div className="sidebar-list sidebar-right">
-        <ScaleSlider sceneNumber={FIRST_MODEL} arCube={arCube} />
-        <ScaleSlider sceneNumber={SECOND_MODEL} arCube={arCube} />
+        <ScaleSlider sceneNumber={FIRST_SCENE} arCube={arCube} />
+        <ScaleSlider sceneNumber={SECOND_SCENE} arCube={arCube} />
       </div>
     </div>
   );

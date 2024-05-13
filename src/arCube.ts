@@ -508,10 +508,6 @@ class ArCube {
   }
 
   setScale(scale: number, sceneNumber: number) {
-    console.log('scale', scale);
-    console.log('sceneNumber', sceneNumber);
-    console.log('sceneGroups[sceneNumber]', this.sceneGroups[sceneNumber]);
-
     this.sceneGroups[sceneNumber]
       .getObjectByName(`model${sceneNumber}`)
       ?.scale.set(scale, scale, scale);

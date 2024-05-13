@@ -360,6 +360,11 @@ form h2,
   gap: 2rem;
 }
 
+.scale-slider {
+  width: 90%;
+  align-items: center;
+}
+
 .rc-slider.slider {
   padding: 1rem 0;
   width: 90%;
