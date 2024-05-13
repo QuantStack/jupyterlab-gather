@@ -19,7 +19,7 @@ interface IModelInfoList {
   modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>;
 }
 
-const SidebarComponent = ({
+const LeftSidebarComponent = ({
   modelList,
   modelRegistryChanged
 }: IModelInfoList) => {
@@ -129,7 +129,7 @@ const SidebarComponent = ({
   );
 };
 
-export class SidebarWidget extends SidePanel {
+export class LeftSidebarWidget extends SidePanel {
   private _signal: ISignal<IModelRegistry, IModelRegistryData>;
   private _modelList: IModelRegistryData[];
 
@@ -164,7 +164,7 @@ export class SidebarWidget extends SidePanel {
     const widget = ReactWidget.create(
       <UseSignal signal={this._signal}>
         {() => (
-          <SidebarComponent
+          <LeftSidebarComponent
             modelList={this._modelList}
             modelRegistryChanged={this._signal}
           />

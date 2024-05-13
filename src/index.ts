@@ -9,7 +9,8 @@ import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { LogoIcon } from './components/Icons';
 import { RootDisplayWidget } from './components/RootDisplay';
 import { IGatherRegistryToken, IModelRegistry, ModelManager } from './registry';
-import { SidebarWidget } from './widgets/Sidebar';
+import { LeftSidebarWidget } from './widgets/LeftSidebar';
+import { RightSidebarWidget } from './widgets/RightSidebar';
 export { IGatherRegistryToken, IModelRegistry };
 
 /**
@@ -57,13 +58,19 @@ const plugin: JupyterFrontEndPlugin<void> = {
           app.shell.add(widget, 'main');
         }
 
-        const sidebarPanel = new SidebarWidget(registry.modelRegistryChanged);
-        sidebarPanel.id = 'gather-sidepanel';
+        const leftSidebarPanel = new LeftSidebarWidget(
+          registry.modelRegistryChanged
+        );
+        leftSidebarPanel.id = 'gather-leftSidePanel';
+
+        const rightSidebarPanel = new RightSidebarWidget();
+        rightSidebarPanel.id = 'gather-rightSidePanel';
 
         // Activate the widget
         app.shell.activateById(widget.id);
         app.shell.add(widget, 'main');
-        app.shell.add(sidebarPanel, 'left', { rank: 2000 });
+        app.shell.add(leftSidebarPanel, 'left', { rank: 2000 });
+        app.shell.add(rightSidebarPanel, 'right', { rank: 2000 });
 
         // Register default models
         registry.registerModel({
