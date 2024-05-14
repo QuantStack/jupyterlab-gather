@@ -435,6 +435,8 @@ class ArCube {
         0xffff00
       );
 
+      this.bgCubeHelper.name = `helperCube${sceneNumber}`;
+
       this.bgCubeCenter = new THREE.Vector3();
       this.bgCubeBoundingBox.getCenter(this.bgCubeCenter);
 
@@ -442,23 +444,37 @@ class ArCube {
     }
 
     console.log('bgCubeCenter', this.bgCubeCenter);
-    console.log('edgeGroup', edgeGroup);
 
     const modelBoundingBox = new THREE.Box3().setFromObject(gltfModel);
     const modelHelper = new THREE.Box3Helper(modelBoundingBox, 0x121212);
+    modelHelper.name = `helperModel${sceneNumber}`;
     this.sceneGroups[sceneNumber].add(modelHelper);
 
-    const mc = new THREE.Vector3();
-    const mcc = modelBoundingBox.getCenter(mc);
-    console.log('mc', mc);
-
-    gltfModel.position.set(-mc.x, -mc.y, -mc.z);
+    const modelCenter = new THREE.Vector3();
+    modelBoundingBox.getCenter(modelCenter);
+    console.log('model center', modelCenter);
 
     // Set scale of new model to fit inside the BG Cube
     const minRatio = this.calcScale(this.bgCubeBoundingBox, modelBoundingBox);
     gltfModel.scale.set(minRatio, minRatio, minRatio);
 
-    // Center the model inside the BG Cube
+    // gltfModel.position.set(-mc.x, -mc.y, -mc.z);
+    // Calculate the translation vector
+    // const translationVector = this.bgCubeCenter.clone().sub(mc);
+
+    // console.log('tranlationVector', translationVector);
+
+    // // Translate the first group
+    // gltfModel.position.add(translationVector);
+
+    const modelBoundingBox2 = new THREE.Box3().setFromObject(gltfModel);
+    const modelHelper2 = new THREE.Box3Helper(modelBoundingBox2, 0xa020f0);
+    modelHelper2.name = `helperModel2${sceneNumber}`;
+    this.sceneGroups[sceneNumber].add(modelHelper2);
+
+    const modelCenter2 = new THREE.Vector3();
+    modelBoundingBox2.getCenter(modelCenter2);
+    console.log('model center2', modelCenter2);
 
     // gltfModel.position.fromArray([0, -1, 0]);
 
@@ -480,6 +496,9 @@ class ArCube {
     }
 
     this.sceneGroups[sceneNumber].add(gltfModel);
+    gltfModel.position.set(-modelCenter2.x, -modelCenter2.y, -modelCenter2.z);
+    console.log('posiiton', gltfModel.position);
+
     this.okToLoadModel = true;
 
     const newArray = [
@@ -559,9 +578,18 @@ class ArCube {
   changeModelInScene(sceneNumber: number, modelName: string) {
     const sceneGroup = this.sceneGroups[sceneNumber];
     const modelToRemove = sceneGroup.getObjectByName(`model${sceneNumber}`);
+    // TODO Remove this helper stuff
+    const helperToRemove = sceneGroup.getObjectByName(
+      `helperModel${sceneNumber}`
+    );
+    const helper2ToRemove = sceneGroup.getObjectByName(
+      `helperModel2${sceneNumber}`
+    );
 
     if (modelToRemove) {
       sceneGroup.remove(modelToRemove);
+      sceneGroup.remove(helperToRemove!);
+      sceneGroup.remove(helper2ToRemove!);
     }
 
     this.loadModel(sceneNumber, modelName);
