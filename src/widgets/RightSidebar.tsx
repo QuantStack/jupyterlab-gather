@@ -11,19 +11,27 @@ import { arIcon } from '../icons';
 
 const FIRST_SCENE = 0;
 const SECOND_SCENE = 1;
+const SCALE_FACTOR = 4.0;
 
 interface IScaleSliderProps {
   sceneNumber: number;
+  initialScale: number;
   arCube: ArCube | undefined;
 }
 
-const ScaleSlider = ({ sceneNumber, arCube }: IScaleSliderProps) => {
+const ScaleSlider = ({
+  sceneNumber,
+  initialScale,
+  arCube
+}: IScaleSliderProps) => {
+  const [sliderValue, setSliderValue] = useState(initialScale);
+
   const handleChange = (value: number, sceneNumber: number) => {
     if (!arCube) {
       return;
     }
-
     arCube.setScale(value, sceneNumber);
+    setSliderValue(value);
   };
 
   return (
@@ -31,9 +39,10 @@ const ScaleSlider = ({ sceneNumber, arCube }: IScaleSliderProps) => {
       <p>{sceneNumber === 0 ? 'First Model' : 'Second Model'}</p>
       <Slider
         className="slider"
-        min={0.001}
-        max={2.0}
-        defaultValue={1.0}
+        min={initialScale / SCALE_FACTOR}
+        max={initialScale * SCALE_FACTOR}
+        defaultValue={initialScale}
+        value={sliderValue}
         step={0.001}
         onChange={value => handleChange(value as number, sceneNumber)}
       />
@@ -44,6 +53,7 @@ const ScaleSlider = ({ sceneNumber, arCube }: IScaleSliderProps) => {
 const RightSidebarComponent = () => {
   const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
   const [isSecondModel, setIsSecondModel] = useState(false);
+  const [scale, setScale] = useState(1);
 
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData('arCube')));
@@ -55,8 +65,14 @@ const RightSidebarComponent = () => {
 
     if (updatedCube) {
       updatedCube.secondSceneSignal.connect(updateIsSecondModel);
+      updatedCube.scaleSignal.connect(updateScaleValue);
       setArCube(updatedCube);
     }
+  };
+
+  const updateScaleValue = (sender: ArCube, value: number) => {
+    console.log('updateing scale');
+    setScale(value);
   };
 
   const updateIsSecondModel = (sender: ArCube, value: boolean) => {
@@ -68,9 +84,17 @@ const RightSidebarComponent = () => {
     <div className="sidebar-container">
       <div className="sidebar-description">Set Scale</div>
       <div className="sidebar-list sidebar-right">
-        <ScaleSlider sceneNumber={FIRST_SCENE} arCube={arCube} />
+        <ScaleSlider
+          sceneNumber={FIRST_SCENE}
+          initialScale={scale}
+          arCube={arCube}
+        />
         {isSecondModel ? (
-          <ScaleSlider sceneNumber={SECOND_SCENE} arCube={arCube} />
+          <ScaleSlider
+            sceneNumber={SECOND_SCENE}
+            initialScale={scale}
+            arCube={arCube}
+          />
         ) : null}
       </div>
     </div>

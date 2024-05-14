@@ -20,6 +20,7 @@ class ArCube {
    */
   constructor(node: HTMLElement) {
     this.secondSceneSignal = new Signal(this);
+    this.scaleSignal = new Signal(this);
     this.bgCubeCenter = new THREE.Vector3();
     this.initialize();
 
@@ -62,6 +63,7 @@ class ArCube {
   readonly existingWebcam: HTMLVideoElement | null;
   readonly newWebcam: HTMLVideoElement | undefined;
   readonly secondSceneSignal: Signal<this, boolean>;
+  readonly scaleSignal: Signal<this, number>;
   bgCubeCenter: THREE.Vector3;
   // sceneGroup: THREE.Group;
   // sceneGroupArray: THREE.Group[];
@@ -467,6 +469,9 @@ class ArCube {
 
     hmsActions.setAppData('loadedModels', updatedModels);
     hmsActions.setAppData('canLoadModel', true);
+
+    // Send scale value to left sidebar
+    this.scaleSignal.emit(minRatio);
 
     console.log('model loaded parse');
   };
