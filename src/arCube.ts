@@ -84,6 +84,10 @@ class ArCube {
   sceneGroups: THREE.Group[];
   isSecondScene: boolean;
   secondSceneSignal: Signal<this, boolean>;
+  bgCubeBoundingBox: THREE.Box3;
+  //TODO remove this
+  bgCubeHelper: THREE.Box3Helper;
+  bgCubeCenter: THREE.Vector3;
 
   initialize() {
     this.sceneGroups = [];
@@ -416,41 +420,48 @@ class ArCube {
     console.log('on successful load', gltf, modelName);
 
     const gltfModel = gltf.scene;
+    gltfModel.name = `model${sceneNumber}`;
 
-    // Set scale of new model to fit inside the BG Cube
     // TODO bgCube should be only thing in scene at this point, but do it better
     console.log('sceneGroups', this.sceneGroups);
 
-    const bgCubeBoundingBox = new THREE.Box3().setFromObject(
-      this.sceneGroups[sceneNumber].getObjectByName('edge-group')!
-    );
-    const bgCubeHelper = new THREE.Box3Helper(bgCubeBoundingBox, 0xffff00);
-    this.sceneGroups[sceneNumber].add(bgCubeHelper);
+    const edgeGroup =
+      this.sceneGroups[sceneNumber].getObjectByName('edge-group')!;
+
+    if (!this.bgCubeBoundingBox) {
+      this.bgCubeBoundingBox = new THREE.Box3().setFromObject(edgeGroup);
+      this.bgCubeHelper = new THREE.Box3Helper(
+        this.bgCubeBoundingBox,
+        0xffff00
+      );
+
+      this.bgCubeCenter = new THREE.Vector3();
+      this.bgCubeBoundingBox.getCenter(this.bgCubeCenter);
+
+      this.sceneGroups[sceneNumber].add(this.bgCubeHelper);
+    }
+
+    console.log('bgCubeCenter', this.bgCubeCenter);
+    console.log('edgeGroup', edgeGroup);
 
     const modelBoundingBox = new THREE.Box3().setFromObject(gltfModel);
-    const modelHelper = new THREE.Box3Helper(bgCubeBoundingBox, 0x121212);
+    const modelHelper = new THREE.Box3Helper(modelBoundingBox, 0x121212);
     this.sceneGroups[sceneNumber].add(modelHelper);
 
-    const minRatio = this.calcScale(bgCubeBoundingBox, modelBoundingBox);
+    const mc = new THREE.Vector3();
+    const mcc = modelBoundingBox.getCenter(mc);
+    console.log('mc', mc);
+
+    gltfModel.position.set(-mc.x, -mc.y, -mc.z);
+
+    // Set scale of new model to fit inside the BG Cube
+    const minRatio = this.calcScale(this.bgCubeBoundingBox, modelBoundingBox);
     gltfModel.scale.set(minRatio, minRatio, minRatio);
 
-    console.log('bgCubeBoundingBox', bgCubeBoundingBox);
-    // const bgCubeCenter = bgCubeBoundingBox
-    //   .getCenter(this.sceneGroups[sceneNumber].position)
-    //   .multiplyScalar(-1);
-
-    // console.log('gltfModel.position', gltfModel.position);
-    // const modelCenter = bgCubeBoundingBox
-    //   .getCenter(gltfModel.position)
-    //   .multiplyScalar(-1);
-
-    // console.log('gltfModel.position2', gltfModel.position);
     // Center the model inside the BG Cube
-    // const center = bgCubeBoundingBox.getCenter(new THREE.Vector3());
-    // gltfModel.position.sub(center);
+
     // gltfModel.position.fromArray([0, -1, 0]);
 
-    gltfModel.name = `model${sceneNumber}`;
     //  filter out plane mesh
     gltfModel.children.forEach(objectGroup => {
       const filterOutPlanes = objectGroup.children.filter(
@@ -509,6 +520,33 @@ class ArCube {
     const minRatio = Math.min(...lengthRatios);
 
     return minRatio;
+  }
+
+  computeGroupCenter(group: THREE.Group) {
+    const childBox = new THREE.Box3();
+    const groupBox = new THREE.Box3();
+    const invMatrixWorld = new THREE.Matrix4();
+
+    group.traverse(child => {
+      if (child instanceof THREE.Mesh) {
+        if (!child.geometry.boundingBox) {
+          child.geometry.computeBoundingBox();
+          childBox.copy(child.geometry.boundingBox);
+          child.updateMatrixWorld(true);
+          childBox.applyMatrix4(child.matrixWorld);
+          groupBox.min.min(childBox.min);
+          groupBox.max.max(childBox.max);
+        }
+      }
+    });
+
+    invMatrixWorld.copy(group.matrixWorld);
+    invMatrixWorld.invert();
+    groupBox.applyMatrix4(invMatrixWorld);
+
+    const gb = new THREE.Vector3();
+    groupBox.getCenter(gb);
+    return gb;
   }
 
   findModelByName(name: string) {
