@@ -19,8 +19,10 @@ class ArCube {
    * Construct a new JupyterLab-Gather widget.
    */
   constructor(node: HTMLElement) {
-    this.initialize();
     this.secondSceneSignal = new Signal(this);
+    this.bgCubeCenter = new THREE.Vector3();
+    this.initialize();
+
     // this.animate();
     // window.addEventListener('markerFound', () => {
     //   console.log('Marker found');
@@ -43,22 +45,29 @@ class ArCube {
   hiroGroupArray: THREE.Group[];
   patternArray: string[];
   patternArraySecondModel: string[];
-  // sceneGroup: THREE.Group;
-  // sceneGroupArray: THREE.Group[];
-  // edgeGroup: THREE.Group;
   gltfLoader: GLTFLoader;
-  // gltfModel: THREE.Group;
   animations: THREE.AnimationClip[] | undefined;
   mixer: THREE.AnimationMixer;
   renderer: THREE.WebGLRenderer;
   mixerUpdateDelta: number;
-  // observer: IntersectionObserver;
-  existingWebcam: HTMLVideoElement | null;
-  newWebcam: HTMLVideoElement | undefined;
   webcam_loaded: Promise<void>;
   resolve: any;
   deltaTime: number;
   totalTime: number;
+  okToLoadModel: boolean;
+  renderTarget: THREE.WebGLRenderTarget;
+  sceneGroups: THREE.Group[];
+  isSecondScene: boolean;
+  bgCubeBoundingBox: THREE.Box3;
+  readonly existingWebcam: HTMLVideoElement | null;
+  readonly newWebcam: HTMLVideoElement | undefined;
+  readonly secondSceneSignal: Signal<this, boolean>;
+  bgCubeCenter: THREE.Vector3;
+  // sceneGroup: THREE.Group;
+  // sceneGroupArray: THREE.Group[];
+  // edgeGroup: THREE.Group;
+  // gltfModel: THREE.Group;
+  // observer: IntersectionObserver;
   // readonly markerControls: any;
   // readonly ambientLight: THREE.AmbientLight;
   // readonly rotationArray: THREE.Vector3[];
@@ -71,7 +80,6 @@ class ArCube {
   // readonly edgeGeometry: THREE.CylinderGeometry;
   // readonly edgeCenters: THREE.Vector3[];
   // readonly edgeRotations: THREE.Vector3[];
-  okToLoadModel: boolean;
   // readonly animationRequestId: number | undefined;
   // readonly now: number;
   // readonly then: number;
@@ -79,15 +87,7 @@ class ArCube {
   // readonly fpsInterval: number;
   //   readonly webcamFromArjs: HTMLElement | null;
   // readonly node: HTMLElement;
-  renderTarget: THREE.WebGLRenderTarget;
   // model: IModelRegistryData;
-  sceneGroups: THREE.Group[];
-  isSecondScene: boolean;
-  secondSceneSignal: Signal<this, boolean>;
-  bgCubeBoundingBox: THREE.Box3;
-  //TODO remove this
-  bgCubeHelper: THREE.Box3Helper;
-  bgCubeCenter: THREE.Vector3;
 
   initialize() {
     this.sceneGroups = [];
@@ -102,11 +102,10 @@ class ArCube {
     this.setupMarkerRoots();
 
     this.setupScene(FIRST_SCENE);
-    // this.setupScene(1);
   }
 
   setupThreeStuff() {
-    console.log('setting up threee stuff');
+    console.log('setting up three stuff');
 
     this.okToLoadModel = true;
     this.scene = new THREE.Scene();
@@ -150,7 +149,7 @@ class ArCube {
     this.renderer.setClearColor(new THREE.Color('lightgrey'), 0);
 
     //Not render target things
-    const isScreenShareOn = hmsStore.getState(selectIsSomeoneScreenSharing); //useHMSStore(selectIsSomeoneScreenSharing);
+    const isScreenShareOn = hmsStore.getState(selectIsSomeoneScreenSharing);
 
     if (isScreenShareOn) {
       console.log('iffing');
@@ -361,6 +360,12 @@ class ArCube {
     sceneGroup.add(edgeGroup);
     this.sceneGroups.push(sceneGroup);
 
+    // Set up BG cubes bounding box and center
+    if (!this.bgCubeBoundingBox) {
+      this.bgCubeBoundingBox = new THREE.Box3().setFromObject(edgeGroup);
+      this.bgCubeBoundingBox.getCenter(this.bgCubeCenter);
+    }
+
     this.loadModel(sceneNumber);
     console.log('fin');
   }
@@ -381,38 +386,35 @@ class ArCube {
     // }
 
     // load model
-    // eslint-disable-next-line no-constant-condition
-    if (true) {
-      this.okToLoadModel = false;
-      hmsActions.setAppData('canLoadModel', false);
+    this.okToLoadModel = false;
+    hmsActions.setAppData('canLoadModel', false);
 
-      if ('url' in model) {
-        this.gltfLoader.load(
-          model.url,
-          gltf => {
-            this.onSuccessfulLoad(gltf, sceneNumber, modelNameOrDuck);
-          },
-          () => {
-            console.log('model loading');
-          },
-          error => {
-            console.log('Error loading model url', error);
-          }
-        );
-      } else if ('gltf' in model) {
-        // const data = JSON.stringify(model.gltf);
-        const data = model.gltf;
-        this.gltfLoader.parse(
-          data,
-          '',
-          gltf => {
-            this.onSuccessfulLoad(gltf, sceneNumber, modelNameOrDuck);
-          },
-          error => {
-            console.log('Error loading model gltf', error);
-          }
-        );
-      }
+    if ('url' in model) {
+      this.gltfLoader.load(
+        model.url,
+        gltf => {
+          this.onSuccessfulLoad(gltf, sceneNumber, modelNameOrDuck);
+        },
+        () => {
+          console.log('model loading');
+        },
+        error => {
+          console.log('Error loading model url', error);
+        }
+      );
+    } else if ('gltf' in model) {
+      // const data = JSON.stringify(model.gltf);
+      const data = model.gltf;
+      this.gltfLoader.parse(
+        data,
+        '',
+        gltf => {
+          this.onSuccessfulLoad(gltf, sceneNumber, modelNameOrDuck);
+        },
+        error => {
+          console.log('Error loading model gltf', error);
+        }
+      );
     }
   }
 
@@ -421,62 +423,6 @@ class ArCube {
 
     const gltfModel = gltf.scene;
     gltfModel.name = `model${sceneNumber}`;
-
-    // TODO bgCube should be only thing in scene at this point, but do it better
-    console.log('sceneGroups', this.sceneGroups);
-
-    const edgeGroup =
-      this.sceneGroups[sceneNumber].getObjectByName('edge-group')!;
-
-    if (!this.bgCubeBoundingBox) {
-      this.bgCubeBoundingBox = new THREE.Box3().setFromObject(edgeGroup);
-      this.bgCubeHelper = new THREE.Box3Helper(
-        this.bgCubeBoundingBox,
-        0xffff00
-      );
-
-      this.bgCubeHelper.name = `helperCube${sceneNumber}`;
-
-      this.bgCubeCenter = new THREE.Vector3();
-      this.bgCubeBoundingBox.getCenter(this.bgCubeCenter);
-
-      this.sceneGroups[sceneNumber].add(this.bgCubeHelper);
-    }
-
-    console.log('bgCubeCenter', this.bgCubeCenter);
-
-    const modelBoundingBox = new THREE.Box3().setFromObject(gltfModel);
-    const modelHelper = new THREE.Box3Helper(modelBoundingBox, 0x121212);
-    modelHelper.name = `helperModel${sceneNumber}`;
-    this.sceneGroups[sceneNumber].add(modelHelper);
-
-    const modelCenter = new THREE.Vector3();
-    modelBoundingBox.getCenter(modelCenter);
-    console.log('model center', modelCenter);
-
-    // Set scale of new model to fit inside the BG Cube
-    const minRatio = this.calcScale(this.bgCubeBoundingBox, modelBoundingBox);
-    gltfModel.scale.set(minRatio, minRatio, minRatio);
-
-    // gltfModel.position.set(-mc.x, -mc.y, -mc.z);
-    // Calculate the translation vector
-    // const translationVector = this.bgCubeCenter.clone().sub(mc);
-
-    // console.log('tranlationVector', translationVector);
-
-    // // Translate the first group
-    // gltfModel.position.add(translationVector);
-
-    const modelBoundingBox2 = new THREE.Box3().setFromObject(gltfModel);
-    const modelHelper2 = new THREE.Box3Helper(modelBoundingBox2, 0xa020f0);
-    modelHelper2.name = `helperModel2${sceneNumber}`;
-    this.sceneGroups[sceneNumber].add(modelHelper2);
-
-    const modelCenter2 = new THREE.Vector3();
-    modelBoundingBox2.getCenter(modelCenter2);
-    console.log('model center2', modelCenter2);
-
-    // gltfModel.position.fromArray([0, -1, 0]);
 
     //  filter out plane mesh
     gltfModel.children.forEach(objectGroup => {
@@ -495,19 +441,31 @@ class ArCube {
       });
     }
 
-    this.sceneGroups[sceneNumber].add(gltfModel);
-    gltfModel.position.set(-modelCenter2.x, -modelCenter2.y, -modelCenter2.z);
-    console.log('posiiton', gltfModel.position);
+    // Set scale of new model to fit inside the BG Cube
+    const initialModelBoundingBox = new THREE.Box3().setFromObject(gltfModel);
+    const minRatio = this.calcScale(
+      this.bgCubeBoundingBox,
+      initialModelBoundingBox
+    );
+    gltfModel.scale.set(minRatio, minRatio, minRatio);
 
+    // Get new bounding box from scaled model and center the model in the BG Cube
+    const scaledModelBoundingBox = new THREE.Box3().setFromObject(gltfModel);
+    const modelCenter = new THREE.Vector3();
+    scaledModelBoundingBox.getCenter(modelCenter);
+    gltfModel.position.set(-modelCenter.x, -modelCenter.y, -modelCenter.z);
+
+    this.sceneGroups[sceneNumber].add(gltfModel);
     this.okToLoadModel = true;
 
-    const newArray = [
+    // Update loaded models list
+    const updatedModels = [
       ...this.loadedModels.slice(0, sceneNumber),
       modelName,
       ...this.loadedModels.slice(sceneNumber)
     ];
 
-    hmsActions.setAppData('loadedModels', newArray);
+    hmsActions.setAppData('loadedModels', updatedModels);
     hmsActions.setAppData('canLoadModel', true);
 
     console.log('model loaded parse');
@@ -515,14 +473,14 @@ class ArCube {
 
   calcScale(bgCubeBoundingBox: THREE.Box3, modelBoundingBox: THREE.Box3) {
     // Calculate side lengths of model1
-    const lengthMesh1Bounds = {
+    const bgCubeBounds = {
       x: Math.abs(bgCubeBoundingBox.max.x - bgCubeBoundingBox.min.x),
       y: Math.abs(bgCubeBoundingBox.max.y - bgCubeBoundingBox.min.y),
       z: Math.abs(bgCubeBoundingBox.max.z - bgCubeBoundingBox.min.z)
     };
 
     // Calculate side lengths of model2
-    const lengthMesh2Bounds = {
+    const modelBounds = {
       x: Math.abs(modelBoundingBox.max.x - modelBoundingBox.min.x),
       y: Math.abs(modelBoundingBox.max.y - modelBoundingBox.min.y),
       z: Math.abs(modelBoundingBox.max.z - modelBoundingBox.min.z)
@@ -530,42 +488,15 @@ class ArCube {
 
     // Calculate length ratios
     const lengthRatios = [
-      lengthMesh1Bounds.x / lengthMesh2Bounds.x,
-      lengthMesh1Bounds.y / lengthMesh2Bounds.y,
-      lengthMesh1Bounds.z / lengthMesh2Bounds.z
+      bgCubeBounds.x / modelBounds.x,
+      bgCubeBounds.y / modelBounds.y,
+      bgCubeBounds.z / modelBounds.z
     ];
 
     // Select smallest ratio in order to contain the models within the scene
     const minRatio = Math.min(...lengthRatios);
 
     return minRatio;
-  }
-
-  computeGroupCenter(group: THREE.Group) {
-    const childBox = new THREE.Box3();
-    const groupBox = new THREE.Box3();
-    const invMatrixWorld = new THREE.Matrix4();
-
-    group.traverse(child => {
-      if (child instanceof THREE.Mesh) {
-        if (!child.geometry.boundingBox) {
-          child.geometry.computeBoundingBox();
-          childBox.copy(child.geometry.boundingBox);
-          child.updateMatrixWorld(true);
-          childBox.applyMatrix4(child.matrixWorld);
-          groupBox.min.min(childBox.min);
-          groupBox.max.max(childBox.max);
-        }
-      }
-    });
-
-    invMatrixWorld.copy(group.matrixWorld);
-    invMatrixWorld.invert();
-    groupBox.applyMatrix4(invMatrixWorld);
-
-    const gb = new THREE.Vector3();
-    groupBox.getCenter(gb);
-    return gb;
   }
 
   findModelByName(name: string) {
@@ -578,18 +509,9 @@ class ArCube {
   changeModelInScene(sceneNumber: number, modelName: string) {
     const sceneGroup = this.sceneGroups[sceneNumber];
     const modelToRemove = sceneGroup.getObjectByName(`model${sceneNumber}`);
-    // TODO Remove this helper stuff
-    const helperToRemove = sceneGroup.getObjectByName(
-      `helperModel${sceneNumber}`
-    );
-    const helper2ToRemove = sceneGroup.getObjectByName(
-      `helperModel2${sceneNumber}`
-    );
 
     if (modelToRemove) {
       sceneGroup.remove(modelToRemove);
-      sceneGroup.remove(helperToRemove!);
-      sceneGroup.remove(helper2ToRemove!);
     }
 
     this.loadModel(sceneNumber, modelName);
