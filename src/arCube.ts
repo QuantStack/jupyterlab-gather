@@ -12,6 +12,11 @@ import { IModelRegistryData } from './registry';
 const FIRST_SCENE = 0;
 const SECOND_SCENE = 1;
 
+export interface ISceneSignal {
+  sceneNumber: number;
+  scale: number;
+}
+
 class ArCube {
   sceneGroup2: THREE.Group<THREE.Object3DEventMap>;
   gltfModel2: THREE.Group<THREE.Object3DEventMap>;
@@ -63,7 +68,7 @@ class ArCube {
   readonly existingWebcam: HTMLVideoElement | null;
   readonly newWebcam: HTMLVideoElement | undefined;
   readonly secondSceneSignal: Signal<this, boolean>;
-  readonly scaleSignal: Signal<this, number>;
+  readonly scaleSignal: Signal<this, ISceneSignal>;
   bgCubeCenter: THREE.Vector3;
   // sceneGroup: THREE.Group;
   // sceneGroupArray: THREE.Group[];
@@ -471,7 +476,7 @@ class ArCube {
     hmsActions.setAppData('canLoadModel', true);
 
     // Send scale value to left sidebar
-    this.scaleSignal.emit(minRatio);
+    this.scaleSignal.emit({ sceneNumber, scale: minRatio });
 
     console.log('model loaded parse');
   };
@@ -530,19 +535,19 @@ class ArCube {
     console.log('enabling second');
     this.isSecondScene = true;
     this.setupScene(SECOND_SCENE);
-    this.secondSceneSignal.emit(true);
+    // this.secondSceneSignal.emit(true);
   }
 
   disableSecondScene() {
-    console.log('disabling second');
+    // console.log('disabling second');
     this.isSecondScene = false;
-    console.log('sceneGroups', JSON.parse(JSON.stringify(this.sceneGroups)));
+    // console.log('sceneGroups', JSON.parse(JSON.stringify(this.sceneGroups)));
     //TODO this won't work with more than two scenes but it's fine for now
     this.sceneGroups.pop();
-    console.log('sceneGroups2', JSON.parse(JSON.stringify(this.sceneGroups)));
-    console.log('isSecondScene', this.isSecondScene);
+    // console.log('sceneGroups2', JSON.parse(JSON.stringify(this.sceneGroups)));
+    // console.log('isSecondScene', this.isSecondScene);
 
-    console.log('hiroGroupArray', this.hiroGroupArray);
+    // console.log('hiroGroupArray', this.hiroGroupArray);
     this.secondSceneSignal.emit(false);
   }
 
