@@ -541,13 +541,8 @@ class ArCube {
   disableSecondScene() {
     console.log('disabling second');
     this.isSecondScene = false;
-    console.log('sceneGroups', JSON.parse(JSON.stringify(this.sceneGroups)));
     //TODO this won't work with more than two scenes but it's fine for now
     this.sceneGroups.pop();
-    console.log('sceneGroups2', JSON.parse(JSON.stringify(this.sceneGroups)));
-    console.log('isSecondScene', this.isSecondScene);
-
-    console.log('hiroGroupArray', this.hiroGroupArray);
     this.secondSceneSignal.emit(false);
   }
 

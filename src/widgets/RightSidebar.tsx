@@ -73,15 +73,12 @@ const RightSidebarComponent = () => {
 
   // This scale is just to adjust the slider position when a new model is loaded
   const updateScaleValue = (sender: ArCube, value: IScaleSignal) => {
-    console.log('updateing scale');
-
     value.sceneNumber === 0
       ? setFirstScale(value.scale)
       : setSecondScale(value.scale);
   };
 
   const updateIsSecondModel = (sender: ArCube, value: boolean) => {
-    console.log('updating is second model');
     setIsSecondModel(value);
   };
 
