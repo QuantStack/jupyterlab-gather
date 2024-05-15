@@ -53,7 +53,7 @@ const PluginButton = () => {
       {/* {isPluginLoaded ? 'Stop AR' : 'Start AR'} */}
       {!isPresenting && !isPluginLoaded
         ? 'Start AR'
-        : localPeer?.id === presenterId.id && isPluginLoaded
+        : localPeer?.id === presenterId?.id && isPluginLoaded
           ? 'Stop AR'
           : 'Dis'}
     </button>
