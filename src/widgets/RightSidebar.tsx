@@ -5,7 +5,7 @@ import { Panel, Widget } from '@lumino/widgets';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import React, { useEffect, useState } from 'react';
-import ArCube from '../arCube';
+import ArCube, { IScaleSignal } from '../arCube';
 import { hmsStore } from '../hms';
 import { arIcon } from '../icons';
 
@@ -53,7 +53,8 @@ const ScaleSlider = ({
 const RightSidebarComponent = () => {
   const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
   const [isSecondModel, setIsSecondModel] = useState(false);
-  const [scale, setScale] = useState(1);
+  const [firstScale, setFirstScale] = useState(1);
+  const [secondScale, setSecondScale] = useState(1);
 
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData('arCube')));
@@ -70,9 +71,13 @@ const RightSidebarComponent = () => {
     }
   };
 
-  const updateScaleValue = (sender: ArCube, value: number) => {
+  // This scale is just to adjust the slider position when a new model is loaded
+  const updateScaleValue = (sender: ArCube, value: IScaleSignal) => {
     console.log('updateing scale');
-    setScale(value);
+
+    value.sceneNumber === 0
+      ? setFirstScale(value.scale)
+      : setSecondScale(value.scale);
   };
 
   const updateIsSecondModel = (sender: ArCube, value: boolean) => {
@@ -86,13 +91,13 @@ const RightSidebarComponent = () => {
       <div className="sidebar-list sidebar-right">
         <ScaleSlider
           sceneNumber={FIRST_SCENE}
-          initialScale={scale}
+          initialScale={firstScale}
           arCube={arCube}
         />
         {isSecondModel ? (
           <ScaleSlider
             sceneNumber={SECOND_SCENE}
-            initialScale={scale}
+            initialScale={secondScale}
             arCube={arCube}
           />
         ) : null}

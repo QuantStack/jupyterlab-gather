@@ -12,6 +12,11 @@ import { IModelRegistryData } from './registry';
 const FIRST_SCENE = 0;
 const SECOND_SCENE = 1;
 
+export interface IScaleSignal {
+  sceneNumber: number;
+  scale: number;
+}
+
 class ArCube {
   sceneGroup2: THREE.Group<THREE.Object3DEventMap>;
   gltfModel2: THREE.Group<THREE.Object3DEventMap>;
@@ -63,7 +68,7 @@ class ArCube {
   readonly existingWebcam: HTMLVideoElement | null;
   readonly newWebcam: HTMLVideoElement | undefined;
   readonly secondSceneSignal: Signal<this, boolean>;
-  readonly scaleSignal: Signal<this, number>;
+  readonly scaleSignal: Signal<this, IScaleSignal>;
   bgCubeCenter: THREE.Vector3;
   // sceneGroup: THREE.Group;
   // sceneGroupArray: THREE.Group[];
@@ -471,7 +476,7 @@ class ArCube {
     hmsActions.setAppData('canLoadModel', true);
 
     // Send scale value to left sidebar
-    this.scaleSignal.emit(minRatio);
+    this.scaleSignal.emit({ sceneNumber, scale: minRatio });
 
     console.log('model loaded parse');
   };
