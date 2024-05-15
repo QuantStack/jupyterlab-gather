@@ -543,6 +543,13 @@ class ArCube {
     this.isSecondScene = false;
     //TODO this won't work with more than two scenes but it's fine for now
     this.sceneGroups.pop();
+
+    this.hiroGroupArray.forEach(group => {
+      if (group.children.length > 0) {
+        group.remove(group.children[0]);
+      }
+    });
+
     this.secondSceneSignal.emit(false);
   }
 
