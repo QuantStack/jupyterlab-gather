@@ -5,14 +5,17 @@ import {
   useHMSActions,
   useHMSStore
 } from '@100mslive/react-sdk';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ArCubePlugin from '../arCubePlugin';
+import { Icons } from './Icons';
 
 const PluginButton = () => {
   const hmsActions = useHMSActions();
   const localPeer = useHMSStore(selectLocalPeer);
   const isPresenting = useHMSStore(selectSessionStore('isPresenting'));
   const presenterId = useHMSStore(selectSessionStore('presenterId'));
+
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const arPlugin = new ArCubePlugin();
 
@@ -29,6 +32,10 @@ const PluginButton = () => {
     console.log('isPresenting', isPresenting);
     console.log('presenterId', presenterId);
     console.log('localPeer.id', localPeer?.id);
+
+    presenterId && localPeer?.id !== presenterId.id
+      ? setIsDisabled(true)
+      : setIsDisabled(false);
   }, [isPresenting, presenterId]);
 
   const togglePlugin = async () => {
@@ -49,13 +56,19 @@ const PluginButton = () => {
   };
 
   return (
-    <button className="btn-control" onClick={togglePlugin}>
+    <button
+      className="btn-control"
+      onClick={togglePlugin}
+      disabled={isDisabled}
+    >
       {/* {isPluginLoaded ? 'Stop AR' : 'Start AR'} */}
-      {!isPresenting && !isPluginLoaded
-        ? 'Start AR'
-        : localPeer?.id === presenterId?.id && isPluginLoaded
-          ? 'Stop AR'
-          : 'Dis'}
+      {isDisabled ? (
+        <Icons.forbidden className="icon" />
+      ) : !isPresenting && !isPluginLoaded ? (
+        'Start AR'
+      ) : (
+        'Stop AR'
+      )}
     </button>
   );
 };
