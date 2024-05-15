@@ -6,8 +6,8 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import React, { useEffect, useState } from 'react';
 import ArCube, { IScaleSignal } from '../arCube';
+import { arIcon } from '../components/Icons';
 import { hmsStore } from '../hms';
-import { arIcon } from '../icons';
 
 const FIRST_SCENE = 0;
 const SECOND_SCENE = 1;

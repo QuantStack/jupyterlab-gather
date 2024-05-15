@@ -5,10 +5,9 @@ import { ISignal } from '@lumino/signaling';
 import { Panel, Widget } from '@lumino/widgets';
 import React, { useEffect, useState } from 'react';
 import ArCube from '../arCube';
-import { Icons } from '../components/Icons';
+import { Icons, arIcon } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
 import { hmsActions, hmsStore } from '../hms';
-import { arIcon } from '../icons';
 import { IModelRegistry, IModelRegistryData } from '../registry';
 
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
