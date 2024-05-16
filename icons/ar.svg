@@ -1,0 +1,14 @@
+<svg height="24px" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
+  <g class="jp-icon3" fill="#616161" id="g2">
+    <path
+       id="path1"
+       style="fill:none;stroke:var(--jp-inverse-layout-color3);stroke-width:1.32718;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+       class="st0"
+       d="m 12.202615,6.6279902 v 4.6175148 m 0,-8.5753842 -4.0053702,1.978935 4.0053702,1.9789349 4.00537,-1.9789349 z m -4.0053702,1.978935 v 4.6175147 l 4.0053702,1.9789345 4.00537,-1.9789345 V 4.6490558" />
+    <path
+       id="path2"
+       style="fill:none;stroke:var(--jp-inverse-layout-color3);stroke-width:1.32718;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1"
+       class="st0"
+       d="M 20.547136,16.786523 17.943645,13.686191 C 17.67662,13.356369 17.342839,13.22444 16.942302,13.22444 H 7.462927 c -0.400537,0 -0.801074,0.197893 -1.0013425,0.461751 L 3.858094,16.786523 c -0.2002684,0.263858 -0.3337808,0.59368 -0.3337808,0.857538 v 1.517184 c 0,0.725609 0.6008055,1.31929 1.3351233,1.31929 H 19.545793 c 0.734318,0 1.335124,-0.593681 1.335124,-1.31929 v -1.517184 c 0,-0.263858 -0.133513,-0.59368 -0.333781,-0.857538 z M 4.191875,17.18231 h 16.021481" />
+  </g>
+</svg>
