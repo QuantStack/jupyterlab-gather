@@ -1,6 +1,9 @@
 import {
+  HMSPeer,
+  HMSRole,
   selectIsLocalVideoPluginPresent,
   selectLocalPeer,
+  selectLocalPeerRole,
   selectSessionStore,
   useHMSActions,
   useHMSStore
@@ -12,27 +15,28 @@ import { Icons } from './Icons';
 const PluginButton = () => {
   const hmsActions = useHMSActions();
   const localPeer = useHMSStore(selectLocalPeer);
-  const isPresenting = useHMSStore(selectSessionStore('isPresenting'));
-  const presenterId = useHMSStore(selectSessionStore('presenterId'));
-
-  const [isDisabled, setIsDisabled] = useState(false);
+  const isPresenting = useHMSStore<boolean>(selectSessionStore('isPresenting'));
+  const presenterId = useHMSStore<HMSPeer>(selectSessionStore('presenterId'));
+  const role = useHMSStore(selectLocalPeerRole);
 
   const arPlugin = new ArCubePlugin();
-
   const isPluginLoaded = useHMSStore(
     selectIsLocalVideoPluginPresent(arPlugin.getName())
   );
 
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [prevRole, setPrevRole] = useState<HMSRole>();
+
   useEffect(() => {
     hmsActions.sessionStore.observe('isPresenting');
     hmsActions.sessionStore.observe('presenterId');
+
+    if (role) {
+      setPrevRole(role);
+    }
   }, [hmsActions]);
 
   useEffect(() => {
-    console.log('isPresenting', isPresenting);
-    console.log('presenterId', presenterId);
-    console.log('localPeer.id', localPeer?.id);
-
     presenterId && localPeer?.id !== presenterId.id
       ? setIsDisabled(true)
       : setIsDisabled(false);
@@ -42,16 +46,26 @@ const PluginButton = () => {
     // don't load plugin locally if someone else is presenting
     if (!isPluginLoaded && !isPresenting) {
       console.log('adding');
+      togglePresenterRole('presenter');
       hmsActions.sessionStore.set('isPresenting', true);
       hmsActions.sessionStore.set('presenterId', localPeer);
 
       await hmsActions.addPluginToVideoTrack(arPlugin);
     } else {
       console.log('removing');
+      togglePresenterRole(prevRole?.name);
       hmsActions.sessionStore.set('isPresenting', false);
       hmsActions.sessionStore.set('presenterId', '');
 
       await hmsActions.removePluginFromVideoTrack(arPlugin);
+    }
+  };
+
+  const togglePresenterRole = (roleName?: string) => {
+    if (localPeer && roleName) {
+      hmsActions.changeRoleOfPeer(localPeer.id, roleName, true);
+    } else {
+      console.log('Problem setting role');
     }
   };
 
@@ -61,7 +75,6 @@ const PluginButton = () => {
       onClick={togglePlugin}
       disabled={isDisabled}
     >
-      {/* {isPluginLoaded ? 'Stop AR' : 'Start AR'} */}
       {isDisabled ? (
         <Icons.forbidden className="icon" />
       ) : !isPresenting && !isPluginLoaded ? (
