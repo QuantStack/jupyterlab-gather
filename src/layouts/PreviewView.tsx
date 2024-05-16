@@ -1,8 +1,8 @@
 import {
+  selectAppData,
   selectLocalPeer,
   useHMSActions,
-  useHMSStore,
-  usePreviewJoin
+  useHMSStore
 } from '@100mslive/react-sdk';
 import React, { useState } from 'react';
 import { Icons } from '../components/Icons';
@@ -14,21 +14,11 @@ const PreviewView = () => {
   const [isJoining, setIsJoining] = useState(false);
 
   const localPeer = useHMSStore(selectLocalPeer);
-
-  const { join, enableJoin, isConnected } = usePreviewJoin({
-    name: 'Guest',
-    token:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZXJzaW9uIjoyLCJ0eXBlIjoiYXBwIiwiYXBwX2RhdGEiOm51bGwsImFjY2Vzc19rZXkiOiI2NWYxOGI0MDRlZDY5YTRhZjc3ZmUzNzciLCJyb2xlIjoiaG9zdCIsInJvb21faWQiOiI2NWYxOGI1NGJkYzU2OWYwNGQ5ZGE4OGIiLCJ1c2VyX2lkIjoiMmYyOTVmOGQtM2I5Ni00MDczLTk5ZDktYTA5ODJkNDZjZTJhIiwiZXhwIjoxNzEyMzk4NDUxLCJqdGkiOiIzMzA0MmFmNC0wOWQyLTQxNWItYWI0OC00N2RjYTlhZjY2YTAiLCJpYXQiOjE3MTIzMTIwNTEsImlzcyI6IjY1ZjE4YjQwNGVkNjlhNGFmNzdmZTM3NSIsIm5iZiI6MTcxMjMxMjA1MSwic3ViIjoiYXBpIn0.I-RFQljxrmAUP1DndoDvyow5N8duLqkx8K9pdIcPFfc',
-    initialSettings: {
-      isAudioMuted: true,
-      isVideoMuted: false
-    }
-  });
+  const config = useHMSStore(selectAppData('config'));
 
   const handleClick = () => {
     setIsJoining(true);
-    console.log('isConnnected', isConnected);
-    join();
+    hmsActions.join({ ...config });
     setIsJoining(false);
   };
 
@@ -53,7 +43,7 @@ const PreviewView = () => {
           <button
             className="btn-primary"
             onClick={handleClick}
-            disabled={!enableJoin}
+            // disabled={!enableJoin}
           >
             {isJoining ? <Icons.spinner className="spinner large" /> : 'Join'}
           </button>

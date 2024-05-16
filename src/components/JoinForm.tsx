@@ -1,4 +1,4 @@
-import { useHMSActions } from '@100mslive/react-sdk';
+import { HMSConfig, useHMSActions } from '@100mslive/react-sdk';
 import React, { useState } from 'react';
 
 const JoinForm = () => {
@@ -26,15 +26,20 @@ const JoinForm = () => {
     // use room code to fetch auth token
     const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode });
 
+    const config: HMSConfig = {
+      userName,
+      authToken,
+      settings: {
+        isAudioMuted: true,
+        isVideoMuted: false
+      },
+      metaData: ''
+    };
+    hmsActions.setAppData('config', config);
+
     try {
-      await hmsActions.preview({
-        userName,
-        authToken,
-        settings: {
-          isAudioMuted: true,
-          isVideoMuted: false
-        }
-      });
+      console.log('disconfig', JSON.parse(JSON.stringify(config)));
+      await hmsActions.preview({ ...config });
     } catch (e) {
       console.error(e);
     }
