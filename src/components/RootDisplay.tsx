@@ -24,7 +24,7 @@ const RootDisplay = ({ node, modelRegistryChanged }: IRootDisplayProps) => {
   }, [childRef]);
 
   return (
-    <div ref={childRef} className="Root">
+    <div ref={childRef} id="root">
       <MainDisplay />
     </div>
   );

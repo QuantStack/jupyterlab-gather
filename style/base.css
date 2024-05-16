@@ -1,10 +1,3 @@
-header {
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 form {
   max-width: 450px;
   margin: 30px auto;
@@ -124,11 +117,11 @@ form h2,
 }
 
 .peer-video {
-  height: 250px;
-  width: 250px;
   border-radius: 8px;
   object-fit: cover;
   z-index: 0;
+  max-width: 250px;
+  max-height: 250px;
 }
 
 .local {
@@ -217,6 +210,10 @@ form h2,
   cursor: pointer;
 }
 
+.btn-control:disabled {
+  cursor: not-allowed;
+}
+
 .hide {
   display: none;
 }
@@ -296,7 +293,7 @@ form h2,
   padding: 4rem;
   display: flex;
   justify-content: center;
-  /* gap: 6rem; */
+  gap: 1rem;
   /* background-origin: padding-box; */
 }
 
@@ -311,12 +308,12 @@ form h2,
 }
 
 .presenter-video {
-  /* width: 100%;
-  height: 100%; */
   max-width: inherit;
   border-radius: 8px;
   position: sticky;
   top: 0;
+  width: 1280px;
+  height: 720px;
 }
 
 .peer-sidepane-list {

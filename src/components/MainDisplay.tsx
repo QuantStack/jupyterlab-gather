@@ -58,9 +58,9 @@ export const MainDisplay = () => {
   }
 
   return (
-    <div className="App">
+    <>
       <ViewComponent />
       {isConnected ? <ControlBar /> : null}
-    </div>
+    </>
   );
 };

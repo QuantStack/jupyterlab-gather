@@ -17,14 +17,12 @@ const PresenterView = () => {
         {presenter ? (
           <>
             <Presenter peer={presenter} className="presenter-video" />
-            <PeerSidePane
-              peers={peers.filter(peer => peer.id !== presenter.id)}
-            />
           </>
         ) : (
           <div>Waiting...</div>
         )}
       </div>
+      <PeerSidePane peers={peers.filter(peer => peer.id !== presenter?.id)} />
     </div>
   );
 };
