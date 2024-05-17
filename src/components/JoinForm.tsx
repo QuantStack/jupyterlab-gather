@@ -1,10 +1,22 @@
 import { HMSConfig, useHMSActions } from '@100mslive/react-sdk';
 import React, { useState } from 'react';
+import {
+  adjectives,
+  animals,
+  colors,
+  uniqueNamesGenerator
+} from 'unique-names-generator';
 
 const JoinForm = () => {
   const hmsActions = useHMSActions();
+
+  const randomUserName = uniqueNamesGenerator({
+    dictionaries: [adjectives, colors, animals],
+    style: 'capital'
+  });
+
   const [inputValues, setInputValues] = useState({
-    userName: 'Host',
+    userName: randomUserName,
     roomCode: 'ibj-yxje-nda'
   });
 
@@ -38,7 +50,6 @@ const JoinForm = () => {
     hmsActions.setAppData('config', config);
 
     try {
-      console.log('disconfig', JSON.parse(JSON.stringify(config)));
       await hmsActions.preview({ ...config });
     } catch (e) {
       console.error(e);

@@ -7966,6 +7966,7 @@ __metadata:
     stylelint-prettier: ^4.0.0
     three: ^0.162.0
     typescript: ~5.0.2
+    unique-names-generator: ^4.7.1
     yjs: ^13.5.0
   languageName: unknown
   linkType: soft
@@ -10974,6 +10975,13 @@ __metadata:
   dependencies:
     unique-slug: ^4.0.0
   checksum: 8e2f59b356cb2e54aab14ff98a51ac6c45781d15ceaab6d4f1c2228b780193dc70fae4463ce9e1df4479cb9d3304d7c2043a3fb905bdeca71cc7e8ce27e063df
+  languageName: node
+  linkType: hard
+
+"unique-names-generator@npm:^4.7.1":
+  version: 4.7.1
+  resolution: "unique-names-generator@npm:4.7.1"
+  checksum: 81b58efee72458fd0c84f54a89d731b2570305d331ce62c4156273e54ece77b6488fc6c607169f4b8f6644fa48b42aef8689dbe7e310ae2c4bafbd5c0a625354
   languageName: node
   linkType: hard
 
