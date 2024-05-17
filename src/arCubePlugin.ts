@@ -97,8 +97,6 @@ class ArCubePlugin implements HMSVideoPlugin {
     output.width = width;
     output.height = height;
 
-    const threeJsContext = this.arCube.renderer.getContext();
-
     const inputCtx = input.getContext('2d');
     const inputImgData = inputCtx?.getImageData(0, 0, width, height);
 

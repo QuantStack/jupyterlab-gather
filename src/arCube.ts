@@ -251,18 +251,14 @@ class ArCube {
       const markerRoot = new THREE.Group();
       this.markerRootArray.push(markerRoot);
       this.scene.add(markerRoot);
-      const markerControls = new THREEx.ArMarkerControls(
-        this.arToolkitContext,
-        markerRoot,
-        {
-          type: 'pattern',
-          patternUrl:
-            THREEx.ArToolkitContext.baseURL +
-            'examples/marker-training/examples/pattern-files/pattern-' +
-            this.patternArray[i] +
-            '.patt'
-        }
-      );
+      new THREEx.ArMarkerControls(this.arToolkitContext, markerRoot, {
+        type: 'pattern',
+        patternUrl:
+          THREEx.ArToolkitContext.baseURL +
+          'examples/marker-training/examples/pattern-files/pattern-' +
+          this.patternArray[i] +
+          '.patt'
+      });
 
       const markerGroup = new THREE.Group();
       this.markerGroupArray.push(markerGroup);
@@ -276,17 +272,13 @@ class ArCube {
       const hiroRoot = new THREE.Group();
       this.hiroRootArray.push(hiroRoot);
       this.scene.add(hiroRoot);
-      const hiroControls = new THREEx.ArMarkerControls(
-        this.arToolkitContext,
-        hiroRoot,
-        {
-          type: 'pattern',
-          patternUrl:
-            'https://raw.githubusercontent.com/gjmooney/jupyterlab-gather/main/pattern-files/pattern-' +
-            this.patternArraySecondModel[i] +
-            '.patt'
-        }
-      );
+      new THREEx.ArMarkerControls(this.arToolkitContext, hiroRoot, {
+        type: 'pattern',
+        patternUrl:
+          'https://raw.githubusercontent.com/gjmooney/jupyterlab-gather/main/pattern-files/pattern-' +
+          this.patternArraySecondModel[i] +
+          '.patt'
+      });
 
       const hiroGroup = new THREE.Group();
       this.hiroGroupArray.push(hiroGroup);

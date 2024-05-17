@@ -1,7 +1,6 @@
 form {
   max-width: 450px;
   margin: 30px auto;
-  /* box-shadow: 0 20px 40px rgba(0, 0, 0, 40%); */
   box-shadow: var(--jp-input-box-shadow);
   border-radius: 8px;
   padding: 20px;
@@ -294,17 +293,12 @@ form h2,
   display: flex;
   justify-content: center;
   gap: 1rem;
-  /* background-origin: padding-box; */
 }
 
 .presenter-container {
-  /* flex: 1 1 0; */
   display: flex;
   align-items: flex-start;
-  /* flex-direction: column; */
-  /* align-items: center; */
   gap: 1rem;
-  /* max-width: 100%; */
 }
 
 .presenter-video {
@@ -398,6 +392,7 @@ form h2,
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
