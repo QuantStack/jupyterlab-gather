@@ -161,7 +161,11 @@ class ArCubePlugin implements HMSVideoPlugin {
     return HMSVideoPluginCanvasContextType['2D'];
   }
 
-  stop() {} // placeholder, nothing to stop
+  stop() {
+    // Remove video element added by AR.js
+    const el = document.getElementById('arjs-video');
+    el?.remove();
+  }
 }
 
 export default ArCubePlugin;
