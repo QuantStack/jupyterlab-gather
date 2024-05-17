@@ -1,7 +1,6 @@
 import {
   selectAppData,
   selectIsConnectedToRoom,
-  // selectIsInPreview,
   selectSessionStore,
   useHMSActions,
   useHMSStore
@@ -15,15 +14,12 @@ import ControlBar from './ControlBar';
 import JoinForm from './JoinForm';
 
 export const MainDisplay = () => {
-  const isConnected = useHMSStore(selectIsConnectedToRoom);
-  // const isInPreview = useHMSStore(selectIsInPreview);
-
   const hmsActions = useHMSActions();
-  const isPresenting = useHMSStore(selectSessionStore('isPresenting'));
+  const isConnected = useHMSStore(selectIsConnectedToRoom);
   const isConnecting = useHMSStore(selectAppData('isConnecting'));
+  const isPresenting = useHMSStore(selectSessionStore('isPresenting'));
 
   useEffect(() => {
-    console.log('isConnecting', isConnecting);
     if (isConnected) {
       hmsActions.setAppData('isConnecting', false);
     }
@@ -37,10 +33,6 @@ export const MainDisplay = () => {
 
     window.onunload = () => {
       if (isConnected) {
-        //TODO: These shouldn't be here but want to leave it for dev for now
-        hmsActions.sessionStore.set('isPresenting');
-        hmsActions.sessionStore.set('presenterId');
-
         hmsActions.leave();
       }
     };

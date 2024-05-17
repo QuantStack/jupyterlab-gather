@@ -1,12 +1,35 @@
-import { useAVToggle, useHMSActions } from '@100mslive/react-sdk';
-import React from 'react';
+import {
+  HMSPeer,
+  selectLocalPeer,
+  selectSessionStore,
+  useAVToggle,
+  useHMSActions,
+  useHMSStore
+} from '@100mslive/react-sdk';
+import React, { useEffect } from 'react';
 import PluginButton from './PluginButton';
 import RaiseHand from './RaiseHand';
 
 const ControlBar = () => {
   const hmsActions = useHMSActions();
+  const localPeer = useHMSStore(selectLocalPeer);
+  const presenterId = useHMSStore<HMSPeer>(selectSessionStore('presenterId'));
   const { isLocalAudioEnabled, isLocalVideoEnabled, toggleAudio, toggleVideo } =
     useAVToggle();
+
+  useEffect(() => {
+    hmsActions.sessionStore.observe('presenterId');
+  }, [hmsActions]);
+
+  const handleLeave = async () => {
+    // Stop presentation if presenter leaves
+    if (localPeer?.id === presenterId?.id) {
+      await hmsActions.sessionStore.set('isPresenting', false);
+      await hmsActions.sessionStore.set('presenterId', '');
+    }
+
+    hmsActions.leave();
+  };
 
   return (
     <div className="control-bar">
@@ -20,11 +43,7 @@ const ControlBar = () => {
       {/* <ScreenShareButton /> */}
       <PluginButton />
       <RaiseHand />
-      <button
-        id="leave-btn"
-        className="btn-danger"
-        onClick={() => hmsActions.leave()}
-      >
+      <button id="leave-btn" className="btn-danger" onClick={handleLeave}>
         Leave Room
       </button>
     </div>
