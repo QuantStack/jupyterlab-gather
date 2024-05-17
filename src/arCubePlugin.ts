@@ -12,14 +12,11 @@ import { hmsActions, hmsStore } from './hms';
 class ArCubePlugin implements HMSVideoPlugin {
   input: HTMLCanvasElement | null;
   output: HTMLCanvasElement | null;
-  // arCube: ArCube;
   node: HTMLElement;
   renderer: THREE.WebGLRenderer;
   arCube: ArCube;
-  //   outputCtx: CanvasRenderingContext2D | null;
 
   constructor() {
-    // this.outputCtx = null;
     this.input = null;
     this.output = null;
   }
@@ -116,16 +113,6 @@ class ArCubePlugin implements HMSVideoPlugin {
       pixels
     );
 
-    // threeJsContext?.readPixels(
-    //   0,
-    //   0,
-    //   width,
-    //   height,
-    //   threeJsContext.RGBA,
-    //   threeJsContext.UNSIGNED_BYTE,
-    //   pixels
-    // );
-
     const threeImageData = new ImageData(
       new Uint8ClampedArray(pixels),
       width,
@@ -154,7 +141,7 @@ class ArCubePlugin implements HMSVideoPlugin {
   }
 
   checkSupport() {
-    // we're not doing anything complicated, it's supported on all browsers
+    // placeholder
     const browserResult = {} as HMSPluginSupportResult;
     browserResult.isSupported = true;
     return browserResult;

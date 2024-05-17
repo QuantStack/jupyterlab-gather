@@ -25,7 +25,6 @@ const RaiseHand = () => {
       <div className={`icon ${isHandRaised ? 'icon-breathe' : ''}`}>
         <Icons.raisedHand />
       </div>{' '}
-      {/* {isHandRaised ? 'Lower Hand' : 'Raise Hand'} */}
     </button>
   );
 };

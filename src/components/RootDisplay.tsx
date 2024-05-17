@@ -12,7 +12,6 @@ interface IRootDisplayProps {
 
 const RootDisplay = ({ node, modelRegistryChanged }: IRootDisplayProps) => {
   const childRef = useRef(null);
-  // const hmsActions = useHMSActions();
 
   // TODO: There's probably a better way to do this
   // add overflow: auto to parent container

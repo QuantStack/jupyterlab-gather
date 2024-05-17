@@ -6,8 +6,6 @@ const GridView = () => {
   const peers = useHMSStore(selectPeers);
   // const isScreenShareOn = useHMSStore(selectIsSomeoneScreenSharing);
 
-  // const limitMaxTiles = 20;
-
   return (
     <div className="main-grid-container">
       <div className="main-grid-view">

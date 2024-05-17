@@ -6,7 +6,7 @@ import {
   useVideo
 } from '@100mslive/react-sdk';
 import React, { useEffect } from 'react';
-import Peer from './Peer';
+import Peer from '../components/Peer';
 
 const ScreenShare = () => {
   const peers = useHMSStore(selectPeers);

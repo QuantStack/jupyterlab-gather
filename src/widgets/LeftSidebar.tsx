@@ -13,35 +13,24 @@ import { IModelRegistry, IModelRegistryData } from '../registry';
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/IridescenceAbalone/glTF/IridescenceAbalone.gltf
 
+const SCENE_NOT_FOUND = -1;
+
 interface IModelInfoList {
   modelList: IModelRegistryData[];
-  modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>;
 }
 
-const LeftSidebarComponent = ({
-  modelList,
-  modelRegistryChanged
-}: IModelInfoList) => {
+const LeftSidebarComponent = ({ modelList }: IModelInfoList) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [isSecondScene, setIsSecondScene] = useState(false);
   const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
   const [selected, setSelected] = useState<IModelRegistryData>();
-  // const [modelList, setModelList] = useState<Map<string, IModelRegistryData>>();
 
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData('arCube')));
 
-    // hmsActions.setAppData('modelRegistry', modelList);
     hmsStore.subscribe(updateModelLoadingState, selectAppData('canLoadModel'));
     hmsStore.subscribe(updateArCube, selectAppData('arCube'));
-    console.log('sidebar use effect');
   }, []);
-
-  useEffect(() => {
-    if (!arCube) {
-      return;
-    }
-  }, [modelList]);
 
   const updateArCube = () => {
     setArCube(hmsStore.getState(selectAppData('arCube')));
@@ -135,7 +124,6 @@ export class LeftSidebarWidget extends SidePanel {
   private _modelList: IModelRegistryData[];
 
   private initialAppData = {
-    // node: node,
     canLoadModel: true,
     modelRegistry: [],
     isPresenting: false,
@@ -164,12 +152,7 @@ export class LeftSidebarWidget extends SidePanel {
 
     const widget = ReactWidget.create(
       <UseSignal signal={this._signal}>
-        {() => (
-          <LeftSidebarComponent
-            modelList={this._modelList}
-            modelRegistryChanged={this._signal}
-          />
-        )}
+        {() => <LeftSidebarComponent modelList={this._modelList} />}
       </UseSignal>
     );
 
@@ -219,7 +202,7 @@ export class LeftSidebarWidget extends SidePanel {
       return;
     }
 
-    if (sceneToReload !== -1) {
+    if (sceneToReload !== SCENE_NOT_FOUND) {
       arCube.changeModelInScene(sceneToReload, loadedModels[sceneToReload]);
     }
   }
