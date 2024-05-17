@@ -23,7 +23,7 @@ class ArCube {
   /**
    * Construct a new JupyterLab-Gather widget.
    */
-  constructor(node: HTMLElement) {
+  constructor() {
     this.secondSceneSignal = new Signal(this);
     this.scaleSignal = new Signal(this);
     this.bgCubeCenter = new THREE.Vector3();
@@ -92,8 +92,7 @@ class ArCube {
   // readonly then: number;
   // readonly elapsed: number;
   // readonly fpsInterval: number;
-  //   readonly webcamFromArjs: HTMLElement | null;
-  // readonly node: HTMLElement;
+  // readonly webcamFromArjs: HTMLElement | null;
   // model: IModelRegistryData;
 
   initialize() {
