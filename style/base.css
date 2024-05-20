@@ -73,6 +73,8 @@ input::placeholder {
 .peer-tile {
   display: flex;
   justify-content: center;
+  min-height: 8rem;
+  min-width: 8rem;
   max-height: 16rem;
   max-width: 16rem;
   position: relative;
@@ -309,7 +311,7 @@ input::placeholder {
 
 .avatar {
   display: flex;
-  height: 100%;
+  height: auto;
   width: 100%;
   font-size: 3rem;
   align-items: center;

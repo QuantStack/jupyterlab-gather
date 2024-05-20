@@ -22,11 +22,10 @@ const Peer = ({ peer, className, dimension }: IPeer) => {
   const isLocalVideoEnabled = useHMSStore(selectIsLocalVideoEnabled);
 
   const getInitials = (name: string) => {
-    const words = name.split(/[_-]/); // Splitting by underscore or hyphen
-    const firstLetters = words.map(word => word.charAt(0));
+    const nameSegments = name.split(/[_-\s]+/);
+    const initials = nameSegments.map(word => word.charAt(0));
 
-    console.log('firstLetters', firstLetters);
-    return firstLetters ? firstLetters?.join('') : 'Woops';
+    return initials ? initials?.join('') : 'Woops';
   };
 
   return (
