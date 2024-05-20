@@ -32,7 +32,7 @@ const ControlBar = () => {
   };
 
   return (
-    <div className="control-bar">
+    <div id="control-bar" className="control-bar">
       <button className="btn-control" onClick={toggleAudio}>
         {isLocalAudioEnabled ? 'Mute' : 'Unmute'}
       </button>

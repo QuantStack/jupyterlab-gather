@@ -1,9 +1,13 @@
+:root {
+  --gather-border-radius: 8px;
+}
+
 form {
   box-shadow: var(--jp-input-box-shadow);
   max-width: 450px;
   margin: 30px auto;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: var(--gather-border-radius);
 }
 
 input {
@@ -14,7 +18,7 @@ input {
   padding: 5px;
   background: var(--jp-input-background);
   border: 2px solid transparent;
-  border-radius: 8px;
+  border-radius: var(--gather-border-radius);
   font-family: inherit;
   color: var(--jp-ui-font-color0);
 }
@@ -40,7 +44,7 @@ input::placeholder {
   border-radius: 4px;
   font-size: 14px;
   font-family: inherit;
-  color: var(--jp-ui-inverse-font-color1);
+  color: whitesmoke;
 }
 
 .btn-danger {
@@ -51,7 +55,7 @@ input::placeholder {
   border-radius: 4px;
   font-size: 14px;
   font-family: inherit;
-  color: var(--jp-ui-inverse-font-color1);
+  color: black;
 }
 
 .main-grid-container {
@@ -95,7 +99,7 @@ input::placeholder {
   z-index: 0;
   max-width: 256px;
   max-height: 256px;
-  border-radius: 8px;
+  border-radius: var(--gather-border-radius);
 }
 
 .local {
@@ -110,7 +114,7 @@ input::placeholder {
   box-sizing: border-box;
   max-width: calc(100% - 6px);
   padding: 0.2rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--gather-border-radius);
   font-size: var(--jp-ui-font-size1);
   font-weight: bold;
   color: whitesmoke;
@@ -127,6 +131,14 @@ input::placeholder {
   bottom: 0;
   width: 100%;
   padding: 15px;
+  width: fit-content;
+  margin: auto;
+  background-color: rgba(187, 222, 251, 0.5);
+  border-radius: var(--gather-border-radius);
+}
+
+.control-bar.transparent {
+  background-color: transparent;
 }
 
 .control-bar > *:not(:first-child) {
@@ -137,9 +149,9 @@ input::placeholder {
   box-shadow: 0 0 10px rgb(0 0 0 / 40%);
   width: 64px;
   height: 64px;
-  background-color: #607d8b;
+  background-color: var(--jp-accept-color-normal);
   cursor: pointer;
-  border: 2px solid #37474f;
+  border: 2px solid var(--jp-inverse-border-color);
   border-radius: 50%;
   font-size: 12px;
   color: whitesmoke;
@@ -236,7 +248,7 @@ input::placeholder {
   position: sticky;
   top: 0;
   max-width: inherit;
-  border-radius: 8px;
+  border-radius: var(--gather-border-radius);
 }
 
 .peer-sidepane-list {
@@ -248,7 +260,7 @@ input::placeholder {
   margin: 0.3rem;
   padding: 0.7rem;
   background-color: #607d8b;
-  border-radius: 8px;
+  border-radius: var(--gather-border-radius);
 }
 
 .peer-hand-raised {
@@ -278,7 +290,7 @@ input::placeholder {
 
 .preview-video {
   max-width: inherit;
-  border-radius: 8px;
+  border-radius: var(--gather-border-radius);
 }
 
 .preview-control-bar {
