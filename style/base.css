@@ -124,8 +124,8 @@ form h2,
   width: 2rem;
   height: 2rem;
   position: absolute;
-  top: 0.2rem;
-  right: 0.2rem;
+  top: 0.3rem;
+  right: 0.3rem;
   fill: #f37726;
   z-index: 40;
 }
@@ -337,8 +337,8 @@ form h2,
 }
 
 .peer-hand-raised {
-  border: 3px solid #f37726;
-  margin: -3px;
+  outline: 3px solid #f37726;
+  outline-offset: -3px;
 }
 
 .icon {

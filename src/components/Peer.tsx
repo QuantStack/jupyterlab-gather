@@ -38,7 +38,7 @@ const Peer = ({ peer, className }: IPeer) => {
       {isLocalVideoEnabled ? (
         <video
           ref={videoRef}
-          className={`${className} `}
+          className={`${className} ${peer.isHandRaised ? 'peer-hand-raised' : ''}`}
           autoPlay
           muted
           playsInline
