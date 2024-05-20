@@ -23,6 +23,11 @@ input::placeholder {
   color: var(--jp-ui-font-color1);
 }
 
+.root {
+  height: 100%;
+  width: 100%;
+}
+
 .join-form-input {
   margin-bottom: 20px;
 }
@@ -70,18 +75,18 @@ form h2,
 
 .main-grid-container {
   width: auto;
-  padding: 2rem 6rem;
+  padding: 2rem 0;
 }
 
 .main-grid-view {
   display: flex;
-  flex: 1 1 0;
+  /* flex: 1 1 0; */
   justify-content: center;
-  height: 100%;
+  /* height: 100%;
   width: 100%;
-  margin: auto 1rem;
+  margin: auto 1rem; */
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.2rem;
 }
 
 .overflow {
@@ -103,6 +108,15 @@ form h2,
 }
 
 .peer-tile {
+  /* min-height: 100px;
+  min-width: 100px;
+  max-width: 250px;
+  max-height: 250px;
+   */
+  display: flex;
+  justify-content: center;
+  height: 16rem;
+  width: 16rem;
   position: relative;
 }
 
@@ -113,14 +127,15 @@ form h2,
   top: 0.2rem;
   right: 0.2rem;
   fill: #f37726;
+  z-index: 40;
 }
 
 .peer-video {
   border-radius: 8px;
   object-fit: cover;
   z-index: 0;
-  max-width: 250px;
-  max-height: 250px;
+  max-width: 256px;
+  max-height: 256px;
 }
 
 .local {
@@ -128,9 +143,15 @@ form h2,
 }
 
 .peer-name {
+  position: absolute;
+  bottom: 0;
   font-size: var(--jp-ui-font-size1);
+  color: var(--jp-ui-inverse-font-color1);
   text-align: center;
-  padding-bottom: 0.2rem;
+  padding: 0.2rem 1rem;
+  font-weight: bold;
+  backdrop-filter: blur(15px);
+  border-radius: 8px;
 }
 
 .peer-container {
@@ -369,6 +390,21 @@ form h2,
 .spinner.large {
   height: 4rem;
   width: 4rem;
+}
+
+.avatar {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  font-size: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: var(--jp-brand-color1);
+  color: var(--jp-ui-inverse-font-color1);
+  /* color: whitesmoke; */
+  box-shadow: 0 0 10px rgb(0 0 0 / 40%);
+  /* // h-full w-full items-center justify-center rounded-full bg-muted */
 }
 
 @keyframes breathe {
