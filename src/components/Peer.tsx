@@ -36,21 +36,23 @@ const Peer = ({ peer, className }: IPeer) => {
         ''
       )}
       {isLocalVideoEnabled ? (
-        <video
-          ref={videoRef}
-          className={`${className} ${peer.isHandRaised ? 'peer-hand-raised' : ''}`}
-          autoPlay
-          muted
-          playsInline
-          height={256}
-          width={256}
-        />
+        <>
+          <video
+            ref={videoRef}
+            className={`${className} ${peer.isHandRaised ? 'peer-hand-raised' : ''}`}
+            autoPlay
+            muted
+            playsInline
+            height={256}
+            width={256}
+          />
+          <div className="peer-name">
+            {peer.name} {peer.isLocal ? '(You)' : ''}
+          </div>
+        </>
       ) : (
         <Avatar>{getInitials(peer.name)}</Avatar>
       )}
-      <div className="peer-name">
-        {peer.name} {peer.isLocal ? '(You)' : ''}
-      </div>
     </div>
   );
 };
