@@ -12,7 +12,8 @@ const JoinForm = () => {
 
   const randomUserName = uniqueNamesGenerator({
     dictionaries: [adjectives, colors, animals],
-    style: 'capital'
+    style: 'capital',
+    separator: ' '
   });
 
   const [inputValues, setInputValues] = useState({

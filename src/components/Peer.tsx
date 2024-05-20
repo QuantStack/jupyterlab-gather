@@ -11,9 +11,10 @@ import { Icons } from './Icons';
 interface IPeer {
   peer: HMSPeer;
   className: string;
+  dimension: number;
 }
 
-const Peer = ({ peer, className }: IPeer) => {
+const Peer = ({ peer, className, dimension }: IPeer) => {
   // TODO: Use peer id instead of Peer
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
@@ -43,12 +44,10 @@ const Peer = ({ peer, className }: IPeer) => {
             autoPlay
             muted
             playsInline
-            height={256}
-            width={256}
+            height={dimension}
+            width={dimension}
           />
-          <div className="peer-name">
-            {peer.name} {peer.isLocal ? '(You)' : ''}
-          </div>
+          <div className="peer-name">{peer.name}</div>
         </>
       ) : (
         <Avatar>{getInitials(peer.name)}</Avatar>

@@ -10,9 +10,12 @@ const PeerSidePane = ({ peers }: IPeerSidePane) => {
   return (
     <div className="peer-sidepane-list">
       {peers.map(peer => (
-        <>
-          <Peer key={peer.id} peer={peer} className="peer-video" />
-        </>
+        <Peer
+          key={peer.id}
+          peer={peer}
+          className="peer-video"
+          dimension={128}
+        />
       ))}
     </div>
   );

@@ -104,7 +104,7 @@ input::placeholder {
   position: absolute;
   bottom: 0;
   font-size: var(--jp-ui-font-size1);
-  color: var(--jp-ui-inverse-font-color1);
+  color: whitesmoke;
   text-align: center;
   padding: 0.2rem 1rem;
   font-weight: bold;
@@ -115,6 +115,7 @@ input::placeholder {
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;
+  text-wrap: nowrap;
 }
 
 .control-bar {
@@ -218,17 +219,13 @@ input::placeholder {
 }
 
 .presenter-container-main {
-  /* padding: 4rem; */
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 0.5rem;
 }
 
 .presenter-container {
   display: flex;
-  /* align-items: flex-start; */
-  /* gap: 1rem; */
   padding: 2rem;
   width: 100%;
   justify-content: center;
@@ -250,6 +247,7 @@ input::placeholder {
   padding: 0.7rem;
   margin: 0.3rem;
   border-radius: 8px;
+  height: fit-content;
 }
 
 .peer-hand-raised {
@@ -259,7 +257,8 @@ input::placeholder {
 
 .icon {
   scale: 0.8;
-  fill: var(--jp-inverse-layout-color3);
+  /* fill: var(--jp-inverse-layout-color3); */
+  fill: whitesmoke;
 }
 
 .icon-breathe {
