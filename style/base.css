@@ -32,13 +32,6 @@ input::placeholder {
   margin-bottom: 20px;
 }
 
-.input-container {
-  margin-bottom: 20px;
-  display: flex;
-  align-items: baseline;
-  gap: 5px;
-}
-
 .btn-primary {
   border: 1px solid transparent;
   border-radius: 4px;
@@ -48,11 +41,6 @@ input::placeholder {
   font-family: inherit;
   font-size: 14px;
   cursor: pointer;
-}
-
-form h2,
-.conference-section h2 {
-  margin-bottom: 20px;
 }
 
 .btn-danger {
@@ -66,13 +54,6 @@ form h2,
   cursor: pointer;
 }
 
-/* TODO: don't need this */
-.conference-section {
-  padding: 20px 30px;
-  max-width: 960px;
-  margin: 0 auto;
-}
-
 .main-grid-container {
   width: auto;
   padding: 2rem 0;
@@ -80,11 +61,7 @@ form h2,
 
 .main-grid-view {
   display: flex;
-  /* flex: 1 1 0; */
   justify-content: center;
-  /* height: 100%;
-  width: 100%;
-  margin: auto 1rem; */
   flex-wrap: wrap;
   gap: 0.2rem;
 }
@@ -93,26 +70,7 @@ form h2,
   overflow-y: auto;
 }
 
-.main-grid-container h2 {
-  text-align: center;
-  font-size: 32px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #546e7a;
-}
-
-.peers-container {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(min-content, 1fr));
-  place-items: center;
-  grid-gap: 10px;
-}
-
 .peer-tile {
-  /* min-height: 100px;
-  min-width: 100px;
-  max-width: 250px;
-  max-height: 250px;
-   */
   display: flex;
   justify-content: center;
   height: 16rem;
@@ -152,53 +110,10 @@ form h2,
   font-weight: bold;
   backdrop-filter: blur(15px);
   border-radius: 8px;
-}
-
-.peer-container {
-  padding: 10px;
-}
-
-.ar-video {
-  width: 1280px;
-  height: 720px;
-  border-radius: 8px;
-  object-fit: cover;
-  margin-bottom: 10px;
-  position: absolute;
-  z-index: 0;
-}
-
-.ar-canvas {
-  width: 250px;
-  height: 250px;
-  border-radius: 8px;
-  object-fit: cover;
-  position: absolute;
-  z-index: 2;
-}
-
-.presentation-container {
-  display: flex;
-}
-
-.presentation-video-container {
-  flex: 0 0 80%;
-}
-
-.presentation-video {
-  width: 100%;
-  border-radius: 10%;
-  object-fit: cover;
-}
-
-.peers-container-sidebar {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 10px;
-  height: 80%;
-  justify-content: space-around;
-  align-items: center;
+  max-width: calc(100% - 6px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
 }
 
 .control-bar {
@@ -232,14 +147,6 @@ form h2,
 
 .btn-control:disabled {
   cursor: not-allowed;
-}
-
-.hide {
-  display: none;
-}
-
-.separator {
-  font-size: 12px;
 }
 
 .sidebar-widget .sidebar-container {
@@ -402,9 +309,7 @@ form h2,
   border-radius: 9999px;
   background-color: var(--jp-brand-color1);
   color: var(--jp-ui-inverse-font-color1);
-  /* color: whitesmoke; */
   box-shadow: 0 0 10px rgb(0 0 0 / 40%);
-  /* // h-full w-full items-center justify-center rounded-full bg-muted */
 }
 
 @keyframes breathe {
