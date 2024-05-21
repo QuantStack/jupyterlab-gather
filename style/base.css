@@ -158,6 +158,20 @@ input::placeholder {
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 1px;
+  position: relative;
+}
+
+.btn-device-option {
+  width: 1rem;
+  height: 1rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: aqua;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn-control:disabled {
