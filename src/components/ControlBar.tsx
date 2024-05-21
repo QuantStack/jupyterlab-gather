@@ -44,32 +44,33 @@ const ControlBar = () => {
   };
 
   return (
-    <div id="control-bar" className="control-bar">
-      <button className="btn-control" onClick={toggleAudio}>
-        {isLocalAudioEnabled ? 'Mute' : 'Unmute'}
-        <button
-          className="btn-device-option"
-          onClick={handleOpenDeviceSettingsModal}
-        >
-          ^
+    <>
+      <div id="control-bar" className="control-bar">
+        <button className="btn-control" onClick={toggleAudio}>
+          {isLocalAudioEnabled ? 'Mute' : 'Unmute'}
+          <button
+            className="btn-device-option"
+            onClick={handleOpenDeviceSettingsModal}
+          >
+            ^
+          </button>
         </button>
-      </button>
-      <button className="btn-control" onClick={toggleVideo}>
-        {isLocalVideoEnabled ? 'Hide' : 'Unhide'}
-      </button>
+        <button className="btn-control" onClick={toggleVideo}>
+          {isLocalVideoEnabled ? 'Hide' : 'Unhide'}
+        </button>
 
+        {/* <ScreenShareButton /> */}
+        <PluginButton />
+        <RaiseHand />
+        <button id="leave-btn" className="btn-danger" onClick={handleLeave}>
+          Leave Room
+        </button>
+      </div>
       <DeviceSettingModal
         isOpen={isDeviceSettingsModalOpen}
         onClose={handleCloseDeviceSettingsModal}
       />
-
-      {/* <ScreenShareButton /> */}
-      <PluginButton />
-      <RaiseHand />
-      <button id="leave-btn" className="btn-danger" onClick={handleLeave}>
-        Leave Room
-      </button>
-    </div>
+    </>
   );
 };
 

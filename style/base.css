@@ -368,6 +368,23 @@ input::placeholder {
   right: 0.25em;
 }
 
+.device-speakers {
+  border-top: var(--jp-border-width) solid var(--jp-border-color2);
+  border-bottom: var(--jp-border-width) solid var(--jp-border-color2);
+}
+
+.device-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.display-list-item:hover {
+  background-color: var(--jp-layout-color2) !important;
+  font-weight: bold;
+}
+
 @keyframes breathe {
   0% {
     transform: scale(0.7);
