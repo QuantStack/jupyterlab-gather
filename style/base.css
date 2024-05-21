@@ -32,7 +32,7 @@ input::placeholder {
   height: 100%;
 }
 
-.join-form-input {
+.form-input {
   margin-bottom: 20px;
 }
 
@@ -331,6 +331,27 @@ input::placeholder {
   border-radius: 9999px;
   font-size: 3rem;
   color: var(--jp-ui-inverse-font-color1);
+}
+
+.modal {
+  width: 60%;
+  max-width: 40rem;
+  padding: 2rem;
+  border: 0;
+  border-radius: var(--gather-border-radius);
+  position: relative;
+  box-shadow: var(--jp-input-box-shadow);
+}
+
+.modal::backdrop {
+  background: hsl(0 0% 0% / 50%);
+}
+
+.modal-close-btn {
+  font-size: var(--jp-ui-font-size0);
+  position: absolute;
+  top: 0.25em;
+  right: 0.25em;
 }
 
 @keyframes breathe {

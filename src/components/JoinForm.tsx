@@ -60,7 +60,7 @@ const JoinForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <h2>Join Room</h2>
-      <div className="join-form-input">
+      <div className="form-input">
         <label htmlFor="userName">Username</label>
         <input
           required
@@ -72,7 +72,7 @@ const JoinForm = () => {
           placeholder="Your name"
         />
       </div>
-      <div className="join-form-input">
+      <div className="form-input">
         <label htmlFor="room-code">Room ID</label>
         <input
           id="room-code"

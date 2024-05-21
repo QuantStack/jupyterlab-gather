@@ -58,9 +58,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           app.shell.add(widget, 'main');
         }
 
-        const leftSidebarPanel = new LeftSidebarWidget(
-          registry.modelRegistryChanged
-        );
+        const leftSidebarPanel = new LeftSidebarWidget(registry);
         leftSidebarPanel.id = 'gather-leftSidePanel';
 
         const rightSidebarPanel = new RightSidebarWidget();

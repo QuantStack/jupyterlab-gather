@@ -5,6 +5,7 @@ import { ISignal } from '@lumino/signaling';
 import { Panel, Widget } from '@lumino/widgets';
 import React, { useEffect, useState } from 'react';
 import ArCube from '../arCube';
+import AddNewModelModal from '../components/AddNewModelModal';
 import { Icons, arIcon } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
 import { hmsActions, hmsStore } from '../hms';
@@ -12,18 +13,22 @@ import { IModelRegistry, IModelRegistryData } from '../registry';
 
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/IridescenceAbalone/glTF/IridescenceAbalone.gltf
+// https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Fox/glTF/Fox.gltf
 
 const SCENE_NOT_FOUND = -1;
 
 interface IModelInfoList {
   modelList: IModelRegistryData[];
+  modelRegistry: IModelRegistry;
 }
 
-const LeftSidebarComponent = ({ modelList }: IModelInfoList) => {
+const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [isSecondScene, setIsSecondScene] = useState(false);
   const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
   const [selected, setSelected] = useState<IModelRegistryData>();
+
+  const [isAddModelModalOpen, setAddModelModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData('arCube')));
@@ -68,6 +73,19 @@ const LeftSidebarComponent = ({ modelList }: IModelInfoList) => {
     setIsSecondScene(!isSecondScene);
   };
 
+  const handleOpenAddModelModal = () => {
+    setAddModelModalOpen(true);
+  };
+
+  const handleCloseAddModelModal = () => {
+    setAddModelModalOpen(false);
+  };
+
+  const handleAddModelSubmit = (data: IModelRegistryData): void => {
+    modelRegistry.registerModel(data);
+    handleCloseAddModelModal();
+  };
+
   return (
     <div className="sidebar-container">
       <div className="sidebar-description">
@@ -103,6 +121,18 @@ const LeftSidebarComponent = ({ modelList }: IModelInfoList) => {
         </div>
         <Button
           className="sidebar-load-button"
+          onClick={handleOpenAddModelModal}
+          disabled={isDisabled}
+        >
+          Add New Model
+        </Button>
+        <AddNewModelModal
+          isOpen={isAddModelModalOpen}
+          onSubmit={handleAddModelSubmit}
+          onClose={handleCloseAddModelModal}
+        />
+        <Button
+          className="sidebar-load-button"
           onClick={handleLoadSecondScene}
           disabled={isDisabled}
         >
@@ -133,11 +163,9 @@ export class LeftSidebarWidget extends SidePanel {
     isConnecting: false
   };
 
-  constructor(
-    modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>
-  ) {
+  constructor(modelRegistry: IModelRegistry) {
     super({ content: new Panel() });
-    this._signal = modelRegistryChanged;
+    this._signal = modelRegistry.modelRegistryChanged;
 
     this.addClass('sidebar-widget');
     this.title.icon = arIcon;
@@ -152,7 +180,12 @@ export class LeftSidebarWidget extends SidePanel {
 
     const widget = ReactWidget.create(
       <UseSignal signal={this._signal}>
-        {() => <LeftSidebarComponent modelList={this._modelList} />}
+        {() => (
+          <LeftSidebarComponent
+            modelList={this._modelList}
+            modelRegistry={modelRegistry}
+          />
+        )}
       </UseSignal>
     );
 
