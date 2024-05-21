@@ -28,7 +28,12 @@ export class ModelManager implements IModelRegistry {
   modelRegistryChanged = new Signal<this, IModelRegistryData>(this);
 
   registerModel(data: IModelRegistryData): void {
-    this.modelRegistry.set(data.name, data);
-    this.modelRegistryChanged.emit(data);
+    const normalizedNameData = {
+      ...data,
+      ['name']: data.name.toLocaleLowerCase()
+    };
+
+    this.modelRegistry.set(normalizedNameData.name, data);
+    this.modelRegistryChanged.emit(normalizedNameData);
   }
 }
