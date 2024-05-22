@@ -15,7 +15,7 @@ const TypedHMSRoomProvider = HMSRoomProvider<{
   sessionStore: ISessionStore;
 }>;
 
-hmsManager.triggerOnSubscribe();
+// hmsManager.triggerOnSubscribe();
 
 const hmsStore = hmsManager.getStore();
 const hmsActions = hmsManager.getActions();

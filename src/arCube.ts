@@ -70,6 +70,7 @@ class ArCube {
   readonly secondSceneSignal: Signal<this, boolean>;
   readonly scaleSignal: Signal<this, IScaleSignal>;
   bgCubeCenter: THREE.Vector3;
+  arjsVid: HTMLElement | null;
   // sceneGroup: THREE.Group;
   // sceneGroupArray: THREE.Group[];
   // edgeGroup: THREE.Group;
@@ -98,6 +99,10 @@ class ArCube {
   initialize() {
     this.sceneGroups = [];
     this.loadedModels = [];
+    hmsStore.subscribe(
+      this.setupSource.bind(this),
+      selectAppData('videoDeviceId')
+    );
 
     this.setupThreeStuff();
 
@@ -184,13 +189,37 @@ class ArCube {
 
   setupSource() {
     console.log('setting up source');
+    const deviceId = hmsStore.getState(selectAppData('videoDeviceId'));
 
     this.arToolkitSource = new THREEx.ArToolkitSource({
-      sourceType: 'webcam'
+      sourceType: 'webcam',
+      deviceId
     });
+
+    this.arjsVid = document.getElementById('arjs-video');
+
+    if (this.arjsVid) {
+      this.arjsVid.remove();
+    }
 
     this.arToolkitSource.init();
   }
+
+  // updateSource() {
+  //   const deviceId = hmsStore.getState(selectAppData('videoDeviceId'));
+
+  //   this.arToolkitSource = new THREEx.ArToolkitSource({
+  //     sourceType: 'webcam',
+  //     deviceId
+  //   });
+
+  //   this.arjsVid = document.getElementById('arjs-video');
+
+  //   if (this.arjsVid) {
+  //     this.arjsVid.remove();
+  //   }
+  //   this.arToolkitSource.init();
+  // }
 
   setupContext() {
     console.log('setting up context');
