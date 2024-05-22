@@ -7,6 +7,7 @@ import {
 import React, { useState } from 'react';
 import { Icons } from '../components/Icons';
 import Video from '../components/Video';
+import SettingsButton from '../components/buttons/SettingsButton';
 
 const PreviewView = () => {
   console.log('preview');
@@ -39,17 +40,18 @@ const PreviewView = () => {
         ) : (
           <Icons.spinner className="spinner large" />
         )}
-        <div className="preview-control-bar">
+        <div className="control-bar">
           <button
-            className="btn-primary"
+            className="btn-common btn-primary"
             onClick={handleClick}
             // disabled={!enableJoin}
           >
             {isJoining ? <Icons.spinner className="spinner large" /> : 'Join'}
           </button>
-          <button className="btn-danger" onClick={handleBack}>
+          <button className="btn-common btn-danger" onClick={handleBack}>
             Back
           </button>
+          <SettingsButton />
         </div>
       </div>
     </div>

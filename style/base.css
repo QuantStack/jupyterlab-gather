@@ -36,25 +36,25 @@ input::placeholder {
   margin-bottom: 20px;
 }
 
-.btn-primary {
+/* Common styles for.btn-primary and.btn-danger */
+.btn-common {
   padding: 6px 14px;
-  background-color: var(--jp-brand-color1);
   cursor: pointer;
   border: 1px solid transparent;
   border-radius: 4px;
   font-size: 14px;
   font-family: inherit;
+}
+
+/* Specific styles for.btn-primary */
+.btn-primary {
+  background-color: var(--jp-brand-color1);
   color: whitesmoke;
 }
 
+/* Specific styles for.btn-danger */
 .btn-danger {
-  padding: 6px 14px;
   background-color: var(--jp-warn-color1);
-  cursor: pointer;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: inherit;
   color: black;
 }
 
@@ -129,24 +129,21 @@ input::placeholder {
   position: sticky;
   z-index: 10;
   bottom: 0;
-  width: 100%;
-  padding: 15px;
   width: fit-content;
   margin: auto;
+  padding: 15px;
   background-color: rgba(187, 222, 251, 0.5);
   border-radius: var(--gather-border-radius);
+  gap: 0.25rem;
 }
 
 .control-bar.transparent {
   background-color: transparent;
 }
 
-.control-bar > *:not(:first-child) {
-  margin-left: 8px;
-}
-
 .btn-control {
   box-shadow: 0 0 10px rgb(0 0 0 / 40%);
+  position: relative;
   width: 64px;
   height: 64px;
   background-color: var(--jp-accept-color-normal);
@@ -158,20 +155,19 @@ input::placeholder {
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 1px;
-  position: relative;
 }
 
 .btn-device-option {
-  width: 1rem;
-  height: 1rem;
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: aqua;
-  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1rem;
+  height: 1rem;
+  background-color: aqua;
+  border-radius: 50%;
 }
 
 .btn-control:disabled {
@@ -307,11 +303,6 @@ input::placeholder {
   border-radius: var(--gather-border-radius);
 }
 
-.preview-control-bar {
-  display: flex;
-  gap: 2rem;
-}
-
 .scale-slider {
   align-items: center;
   width: 90%;
@@ -348,13 +339,13 @@ input::placeholder {
 }
 
 .modal {
+  box-shadow: var(--jp-input-box-shadow);
+  position: relative;
   width: 60%;
   max-width: 40rem;
   padding: 2rem;
   border: 0;
   border-radius: var(--gather-border-radius);
-  position: relative;
-  box-shadow: var(--jp-input-box-shadow);
 }
 
 .modal-header {
@@ -372,10 +363,10 @@ input::placeholder {
 }
 
 .modal-close-btn {
-  font-size: var(--jp-ui-font-size0);
   position: absolute;
   top: 0.25rem;
   right: 0.25rem;
+  font-size: var(--jp-ui-font-size0);
 }
 
 .device-speakers {
@@ -385,13 +376,13 @@ input::placeholder {
 
 select {
   display: block;
-  font-family: inherit;
-  font-size: 100%;
-  margin: 0;
   box-sizing: border-box;
   width: 100%;
-  padding: 5px;
   height: 30px;
+  margin: 0;
+  padding: 5px;
+  font-size: 100%;
+  font-family: inherit;
 }
 
 .device-list {
@@ -417,11 +408,11 @@ select {
 }
 
 .device-title {
-  font-weight: bold;
-  font-size: var(--jp-ui-font-size2);
   width: 10rem;
-  text-align: right;
   padding-right: 1rem;
+  font-size: var(--jp-ui-font-size2);
+  font-weight: bold;
+  text-align: right;
 }
 
 .device-select {
@@ -430,6 +421,11 @@ select {
 
 .device-option {
   /* max-width: 100px; */
+}
+
+.control-bar > .btn-common {
+  height: 64px;
+  aspect-ratio: 16/11;
 }
 
 @keyframes breathe {

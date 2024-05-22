@@ -52,7 +52,7 @@ const Modal = ({
         <div className="modal-title">{title}</div>
         {hasCloseBtn && (
           <button
-            className="btn-danger modal-close-btn"
+            className="btn-common btn-danger modal-close-btn"
             onClick={handleCloseModal}
           >
             Close

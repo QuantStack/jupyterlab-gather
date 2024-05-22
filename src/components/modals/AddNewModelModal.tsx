@@ -87,7 +87,7 @@ const AddNewModelModal = ({
             onChange={handleInputChange}
           />
         </div>
-        <button className="btn-primary">Add Model</button>
+        <button className="btn-common btn-primary">Add Model</button>
       </form>
     </Modal>
   );

@@ -83,7 +83,7 @@ const JoinFormView = () => {
           value={inputValues.roomCode}
         />
       </div>
-      <button className="btn-primary">Join</button>
+      <button className="btn-common btn-primary">Join</button>
     </form>
   );
 };

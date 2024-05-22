@@ -6,10 +6,10 @@ import {
   useHMSActions,
   useHMSStore
 } from '@100mslive/react-sdk';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PluginButton from './buttons/PluginButton';
 import RaiseHandButton from './buttons/RaiseHandButton';
-import DeviceSettingModal from './modals/DeviceSettingModal';
+import SettingsButton from './buttons/SettingsButton';
 
 const ControlBar = () => {
   const hmsActions = useHMSActions();
@@ -17,9 +17,6 @@ const ControlBar = () => {
   const presenterId = useHMSStore<HMSPeer>(selectSessionStore('presenterId'));
   const { isLocalAudioEnabled, isLocalVideoEnabled, toggleAudio, toggleVideo } =
     useAVToggle();
-
-  const [isDeviceSettingsModalOpen, setDeviceSettingsModalOpen] =
-    useState<boolean>(false);
 
   useEffect(() => {
     hmsActions.sessionStore.observe('presenterId');
@@ -35,43 +32,31 @@ const ControlBar = () => {
     hmsActions.leave();
   };
 
-  const handleOpenDeviceSettingsModal = () => {
-    setDeviceSettingsModalOpen(true);
-  };
-
-  const handleCloseDeviceSettingsModal = () => {
-    setDeviceSettingsModalOpen(false);
-  };
-
   return (
-    <>
-      <div id="control-bar" className="control-bar">
-        <button className="btn-control" onClick={toggleAudio}>
-          {isLocalAudioEnabled ? 'Mute' : 'Unmute'}
-        </button>
+    <div id="control-bar" className="control-bar">
+      <button className="btn-control" onClick={toggleAudio}>
+        {isLocalAudioEnabled ? 'Mute' : 'Unmute'}
+      </button>
 
-        <button className="btn-control" onClick={toggleVideo}>
-          {isLocalVideoEnabled ? 'Hide' : 'Unhide'}
-        </button>
+      <button className="btn-control" onClick={toggleVideo}>
+        {isLocalVideoEnabled ? 'Hide' : 'Unhide'}
+      </button>
 
-        {/* <ScreenShareButton /> */}
-        <PluginButton />
+      {/* <ScreenShareButton /> */}
+      <PluginButton />
 
-        <RaiseHandButton />
+      <RaiseHandButton />
 
-        <button className="btn-control" onClick={handleOpenDeviceSettingsModal}>
-          Settings
-        </button>
+      <SettingsButton />
 
-        <button id="leave-btn" className="btn-danger" onClick={handleLeave}>
-          Leave Room
-        </button>
-      </div>
-      <DeviceSettingModal
-        isOpen={isDeviceSettingsModalOpen}
-        onClose={handleCloseDeviceSettingsModal}
-      />
-    </>
+      <button
+        id="leave-btn"
+        className="btn-common btn-danger"
+        onClick={handleLeave}
+      >
+        Leave Room
+      </button>
+    </div>
   );
 };
 
