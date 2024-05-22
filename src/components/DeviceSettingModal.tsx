@@ -1,5 +1,5 @@
 import { DeviceType, useDevices } from '@100mslive/react-sdk';
-import React, { useEffect, useRef } from 'react';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 
 import Modal from './Modal';
 
@@ -27,31 +27,36 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
   };
 
   return (
-    <Modal hasCloseBtn={true} isOpen={isOpen} onClose={onClose}>
-      <div className="device-setting-modal-container">
+    <Modal
+      title="Device Settings"
+      hasCloseBtn={true}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
+      <div className="device-settings-container">
         <DeviceList
-          title={'Microphones'}
-          list={audioInput}
-          onChange={(deviceId: string) =>
-            updateDeviceOnChange(deviceId, DeviceType.audioInput)
-          }
-        />
-
-        <DeviceList
-          title={'Speakers'}
-          list={audioOutput}
-          onChange={(deviceId: string) =>
-            updateDeviceOnChange(deviceId, DeviceType.audioOutput)
-          }
-        />
-
-        <DeviceList
-          title={'Cameras'}
+          title="Camera"
+          value={selectedDeviceIDs.videoInput}
           list={videoInput}
-          onChange={(deviceId: string) => {
-            console.log('deviceId', deviceId);
-            updateDeviceOnChange(deviceId, DeviceType.videoInput);
-          }}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+            updateDeviceOnChange(e.target.value, DeviceType.videoInput)
+          }
+        />
+        <DeviceList
+          title="Microphone"
+          value={selectedDeviceIDs.audioInput}
+          list={audioInput}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+            updateDeviceOnChange(e.target.value, DeviceType.audioInput)
+          }
+        />
+        <DeviceList
+          title="Speaker"
+          value={selectedDeviceIDs.audioOutput}
+          list={audioOutput}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+            updateDeviceOnChange(e.target.value, DeviceType.audioOutput)
+          }
         />
       </div>
     </Modal>
@@ -60,30 +65,35 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
 
 const DeviceList = ({
   list,
+  value,
   onChange,
   title
 }: {
   list: any;
-  onChange: (deviceId: any) => void;
+  value: any;
+  onChange: any;
   title: any;
 }) => {
-  console.log('list', list);
   return (
-    <div className="device-list">
+    <div className="device-settings-row">
       <span className="device-title">{title}:</span>
       {list?.length ? (
-        <>
+        <select className="device-select" onChange={onChange} value={value}>
           {list.map((device: MediaDeviceInfo) => (
-            <div
-              className="display-list-item"
+            <option
+              className="device-option"
+              value={device.deviceId}
               key={device.deviceId}
-              onClick={() => onChange(device.deviceId)}
             >
               {device.label}
-            </div>
+            </option>
           ))}
-        </>
-      ) : null}
+        </select>
+      ) : (
+        <select className="device-select">
+          <option className="device-option">Options Unavailable</option>
+        </select>
+      )}
     </div>
   );
 };

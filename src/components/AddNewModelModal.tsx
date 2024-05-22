@@ -56,9 +56,13 @@ const AddNewModelModal = ({
   };
 
   return (
-    <Modal hasCloseBtn={true} isOpen={isOpen} onClose={onClose}>
+    <Modal
+      title="Add a New Model"
+      hasCloseBtn={true}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       <form onSubmit={handleSubmit}>
-        <h2>Add a New Model</h2>
         <div className="form-input">
           <label htmlFor="userName">Model Name</label>
           <input

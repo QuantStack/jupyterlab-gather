@@ -1,13 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 interface IModalProps {
+  title: string;
   isOpen: boolean;
   hasCloseBtn?: boolean;
   onClose?: () => void;
   children: React.ReactNode;
 }
 
-const Modal = ({ children, isOpen, hasCloseBtn, onClose }: IModalProps) => {
+const Modal = ({
+  children,
+  title,
+  isOpen,
+  hasCloseBtn,
+  onClose
+}: IModalProps) => {
   const [isModalOpen, setModalOpen] = useState(isOpen);
   const modalRef = useRef<HTMLDialogElement | null>(null);
 
@@ -41,14 +48,17 @@ const Modal = ({ children, isOpen, hasCloseBtn, onClose }: IModalProps) => {
 
   return (
     <dialog ref={modalRef} onKeyDown={handleKeyDown} className="modal">
-      {hasCloseBtn && (
-        <button
-          className="btn-danger modal-close-btn"
-          onClick={handleCloseModal}
-        >
-          Close
-        </button>
-      )}
+      <div className="modal-header">
+        <div className="modal-title">{title}</div>
+        {hasCloseBtn && (
+          <button
+            className="btn-danger modal-close-btn"
+            onClick={handleCloseModal}
+          >
+            Close
+          </button>
+        )}
+      </div>
       {children}
     </dialog>
   );
