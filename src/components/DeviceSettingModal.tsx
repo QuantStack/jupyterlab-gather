@@ -21,40 +21,36 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
     }
   }, [isOpen]);
 
+  const updateDeviceOnChange = (deviceId: string, deviceType: DeviceType) => {
+    updateDevice({ deviceId, deviceType });
+    onClose();
+  };
+
   return (
     <Modal hasCloseBtn={true} isOpen={isOpen} onClose={onClose}>
       <div className="device-setting-modal-container">
         <DeviceList
           title={'Microphones'}
           list={audioInput}
-          onChange={(deviceId: any) =>
-            updateDevice({
-              deviceId: deviceId,
-              deviceType: DeviceType.audioInput
-            })
+          onChange={(deviceId: string) =>
+            updateDeviceOnChange(deviceId, DeviceType.audioInput)
           }
         />
 
         <DeviceList
           title={'Speakers'}
           list={audioOutput}
-          onChange={(deviceId: any) =>
-            updateDevice({
-              deviceId: deviceId,
-              deviceType: DeviceType.audioOutput
-            })
+          onChange={(deviceId: string) =>
+            updateDeviceOnChange(deviceId, DeviceType.audioOutput)
           }
         />
 
         <DeviceList
           title={'Cameras'}
           list={videoInput}
-          onChange={(deviceId: any) => {
+          onChange={(deviceId: string) => {
             console.log('deviceId', deviceId);
-            updateDevice({
-              deviceId: deviceId,
-              deviceType: DeviceType.videoInput
-            });
+            updateDeviceOnChange(deviceId, DeviceType.videoInput);
           }}
         />
       </div>
@@ -74,10 +70,10 @@ const DeviceList = ({
   console.log('list', list);
   return (
     <div className="device-list">
-      <span>{title}:</span>
+      <span className="device-title">{title}:</span>
       {list?.length ? (
         <>
-          {list.map((device: any) => (
+          {list.map((device: MediaDeviceInfo) => (
             <div
               className="display-list-item"
               key={device.deviceId}

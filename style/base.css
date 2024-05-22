@@ -385,6 +385,11 @@ input::placeholder {
   font-weight: bold;
 }
 
+.device-title {
+  font-weight: bold;
+  font-size: var(--jp-ui-font-size2);
+}
+
 @keyframes breathe {
   0% {
     transform: scale(0.7);
