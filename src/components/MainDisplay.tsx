@@ -8,10 +8,10 @@ import {
 import React, { useEffect } from 'react';
 
 import GridView from '../layouts/GridView';
+import JoinFormView from '../layouts/JoinFormView';
 import PresenterView from '../layouts/PresenterView';
 import PreviewView from '../layouts/PreviewView';
 import ControlBar from './ControlBar';
-import JoinForm from './JoinForm';
 
 export const MainDisplay = () => {
   const hmsActions = useHMSActions();
@@ -44,7 +44,7 @@ export const MainDisplay = () => {
   } else if (isConnected) {
     ViewComponent = GridView;
   } else if (!isConnecting) {
-    ViewComponent = JoinForm;
+    ViewComponent = JoinFormView;
   } else {
     ViewComponent = PreviewView;
   }

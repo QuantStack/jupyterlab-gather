@@ -5,9 +5,9 @@ import { ISignal } from '@lumino/signaling';
 import { Panel, Widget } from '@lumino/widgets';
 import React, { useEffect, useState } from 'react';
 import ArCube from '../arCube';
-import AddNewModelModal from '../components/AddNewModelModal';
 import { Icons, arIcon } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
+import AddNewModelModal from '../components/modals/AddNewModelModal';
 import { hmsActions, hmsStore } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
 

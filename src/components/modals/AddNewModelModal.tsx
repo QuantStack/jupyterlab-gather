@@ -4,7 +4,7 @@ import {
   animals,
   uniqueNamesGenerator
 } from 'unique-names-generator';
-import { IModelRegistryData } from '../registry';
+import { IModelRegistryData } from '../../registry';
 import Modal from './Modal';
 
 interface IAddNewModelModalProps {

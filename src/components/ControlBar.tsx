@@ -7,9 +7,9 @@ import {
   useHMSStore
 } from '@100mslive/react-sdk';
 import React, { useEffect, useState } from 'react';
-import DeviceSettingModal from './DeviceSettingModal';
-import PluginButton from './PluginButton';
-import RaiseHand from './RaiseHand';
+import PluginButton from './buttons/PluginButton';
+import RaiseHandButton from './buttons/RaiseHandButton';
+import DeviceSettingModal from './modals/DeviceSettingModal';
 
 const ControlBar = () => {
   const hmsActions = useHMSActions();
@@ -48,20 +48,21 @@ const ControlBar = () => {
       <div id="control-bar" className="control-bar">
         <button className="btn-control" onClick={toggleAudio}>
           {isLocalAudioEnabled ? 'Mute' : 'Unmute'}
-          <button
-            className="btn-device-option"
-            onClick={handleOpenDeviceSettingsModal}
-          >
-            ^
-          </button>
         </button>
+
         <button className="btn-control" onClick={toggleVideo}>
           {isLocalVideoEnabled ? 'Hide' : 'Unhide'}
         </button>
 
         {/* <ScreenShareButton /> */}
         <PluginButton />
-        <RaiseHand />
+
+        <RaiseHandButton />
+
+        <button className="btn-control" onClick={handleOpenDeviceSettingsModal}>
+          Settings
+        </button>
+
         <button id="leave-btn" className="btn-danger" onClick={handleLeave}>
           Leave Room
         </button>

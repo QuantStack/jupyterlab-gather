@@ -7,10 +7,10 @@ import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
 import { ILauncher } from '@jupyterlab/launcher';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { LogoIcon } from './components/Icons';
-import { RootDisplayWidget } from './components/RootDisplay';
 import { IGatherRegistryToken, IModelRegistry, ModelManager } from './registry';
 import { LeftSidebarWidget } from './widgets/LeftSidebar';
 import { RightSidebarWidget } from './widgets/RightSidebar';
+import { RootDisplayWidget } from './widgets/RootDisplay';
 export { IGatherRegistryToken, IModelRegistry };
 
 /**

@@ -9,8 +9,8 @@ import {
   useHMSStore
 } from '@100mslive/react-sdk';
 import React, { useEffect, useState } from 'react';
-import ArCubePlugin from '../arCubePlugin';
-import { Icons } from './Icons';
+import ArCubePlugin from '../../arCubePlugin';
+import { Icons } from '../Icons';
 
 const PluginButton = () => {
   const hmsActions = useHMSActions();

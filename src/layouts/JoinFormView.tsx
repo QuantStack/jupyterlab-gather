@@ -7,7 +7,7 @@ import {
   uniqueNamesGenerator
 } from 'unique-names-generator';
 
-const JoinForm = () => {
+const JoinFormView = () => {
   const hmsActions = useHMSActions();
 
   const randomUserName = uniqueNamesGenerator({
@@ -88,4 +88,4 @@ const JoinForm = () => {
   );
 };
 
-export default JoinForm;
+export default JoinFormView;

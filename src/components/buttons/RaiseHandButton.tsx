@@ -5,9 +5,9 @@ import {
   useHMSStore
 } from '@100mslive/react-sdk';
 import React, { useCallback } from 'react';
-import { Icons } from './Icons';
+import { Icons } from '../Icons';
 
-const RaiseHand = () => {
+const RaiseHandButton = () => {
   const localPeerId = useHMSStore(selectLocalPeerID);
   const isHandRaised = useHMSStore(selectHasPeerHandRaised(localPeerId));
   const hmsActions = useHMSActions();
@@ -29,4 +29,4 @@ const RaiseHand = () => {
   );
 };
 
-export default RaiseHand;
+export default RaiseHandButton;
