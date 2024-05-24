@@ -27,7 +27,6 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
     if (deviceType === DeviceType.videoInput) {
       hmsActions.setAppData('videoDeviceId', deviceId);
     }
-    onClose();
   };
 
   return (

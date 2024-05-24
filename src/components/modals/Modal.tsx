@@ -27,11 +27,19 @@ const Modal = ({
     if (modalElement) {
       if (isModalOpen) {
         modalElement.showModal();
+        modalElement.addEventListener('mousedown', onClickOutside);
       } else {
+        modalElement.removeEventListener('mousedown', onClickOutside);
         modalElement.close();
       }
     }
   }, [isModalOpen]);
+
+  const onClickOutside = (e: any) => {
+    if (e.target === e.currentTarget) {
+      handleCloseModal();
+    }
+  };
 
   const handleCloseModal = () => {
     if (onClose) {
@@ -48,18 +56,20 @@ const Modal = ({
 
   return (
     <dialog ref={modalRef} onKeyDown={handleKeyDown} className="modal">
-      <div className="modal-header">
-        <div className="modal-title">{title}</div>
-        {hasCloseBtn && (
-          <button
-            className="btn-common btn-danger modal-close-btn"
-            onClick={handleCloseModal}
-          >
-            Close
-          </button>
-        )}
+      <div className="modal-content">
+        <div className="modal-header">
+          <div className="modal-title">{title}</div>
+          {hasCloseBtn && (
+            <button
+              className="btn-common btn-danger modal-close-btn"
+              onClick={handleCloseModal}
+            >
+              Close
+            </button>
+          )}
+        </div>
+        {children}
       </div>
-      {children}
     </dialog>
   );
 };

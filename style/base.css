@@ -2,6 +2,11 @@
   --gather-border-radius: 8px;
 }
 
+dialog {
+  padding: 0;
+  border: 0;
+}
+
 form {
   box-shadow: var(--jp-input-box-shadow);
   max-width: 450px;
@@ -126,6 +131,7 @@ input::placeholder {
 .control-bar {
   display: flex;
   justify-content: center;
+  gap: 0.25rem;
   position: sticky;
   z-index: 10;
   bottom: 0;
@@ -134,7 +140,6 @@ input::placeholder {
   padding: 15px;
   background-color: rgba(187, 222, 251, 0.5);
   border-radius: var(--gather-border-radius);
-  gap: 0.25rem;
 }
 
 .control-bar.transparent {
@@ -343,9 +348,11 @@ input::placeholder {
   position: relative;
   width: 60%;
   max-width: 40rem;
-  padding: 2rem;
-  border: 0;
   border-radius: var(--gather-border-radius);
+}
+
+.modal-content {
+  padding: 2rem;
 }
 
 .modal-header {
@@ -419,13 +426,9 @@ select {
   width: 60%;
 }
 
-.device-option {
-  /* max-width: 100px; */
-}
-
 .control-bar > .btn-common {
-  height: 64px;
   aspect-ratio: 16/11;
+  height: 64px;
 }
 
 @keyframes breathe {
