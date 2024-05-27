@@ -1,5 +1,6 @@
 :root {
   --gather-border-radius: 8px;
+  --gather-speaking-border: 2px;
 }
 
 .jlab-gather-form {
@@ -93,6 +94,7 @@
   position: relative;
   min-width: 8rem;
   border-radius: var(--gather-border-radius);
+  border: var(--gather-speaking-border) solid transparent;
 }
 
 .jlab-gather-peer-tile-sidepane {
@@ -421,9 +423,14 @@
   border-radius: 10px;
 }
 
-.speaking {
-  border: 6px solid;
-  border-image: radial-gradient(#e66465, #9198e5);
+.active-speaker {
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(var(--jp-brand-color1), var(--jp-brand-color3)) border-box;
+  border: var(--gather-speaking-border) solid transparent;
+  border-radius: var(--gather-border-radius);
+
+  /* padding: 10px 20px; */
 }
 
 @keyframes breathe {

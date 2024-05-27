@@ -1,5 +1,6 @@
 import {
   HMSPeer,
+  selectDominantSpeaker,
   selectIsLocalVideoEnabled,
   useHMSStore,
   useVideo
@@ -20,6 +21,8 @@ const Peer = ({ peer, className }: IPeer) => {
     trackId: peer.videoTrack
   });
   const isLocalVideoEnabled = useHMSStore(selectIsLocalVideoEnabled);
+
+  const dominantSpeaker = useHMSStore(selectDominantSpeaker);
 
   const getInitials = (name: string) => {
     const nameSegments = name.split(/[_-\s]+/);
@@ -42,9 +45,13 @@ const Peer = ({ peer, className }: IPeer) => {
         <>
           <video
             ref={videoRef}
-            className={`jlab-gather-peer-video jlab-gather-peer-video-${className} 
+            className={`jlab-gather-peer-video jlab-gather-peer-video-
+            ${className} 
+            
             ${peer.isHandRaised ? 'jlab-gather-peer-hand-raised' : ''}
-            ${peer.isLocal ? 'jlab-gather-local' : ''}`}
+            ${peer.isLocal ? 'jlab-gather-local' : ''}
+            ${peer.id === dominantSpeaker?.id ? 'active-speaker' : ''}
+            `}
             autoPlay
             muted
             playsInline
