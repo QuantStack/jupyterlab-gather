@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Icons } from '../Icons';
 import DeviceSettingModal from '../modals/DeviceSettingModal';
 
 const SettingsButton = () => {
@@ -15,7 +16,7 @@ const SettingsButton = () => {
   return (
     <>
       <button className="btn-control" onClick={handleOpenDeviceSettingsModal}>
-        Settings
+        <Icons.settings className="icon" />
       </button>
       <DeviceSettingModal
         isOpen={isDeviceSettingsModalOpen}

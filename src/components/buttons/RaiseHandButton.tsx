@@ -22,9 +22,9 @@ const RaiseHandButton = () => {
 
   return (
     <button className="btn-control" onClick={toggleRaiseHand}>
-      <div className={`icon ${isHandRaised ? 'icon-breathe' : ''}`}>
-        <Icons.raisedHand />
-      </div>{' '}
+      <Icons.raisedHand
+        className={`icon ${isHandRaised ? 'icon-breathe' : ''}`}
+      />
     </button>
   );
 };
