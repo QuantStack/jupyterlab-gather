@@ -19,6 +19,20 @@ const TypedHMSRoomProvider = HMSRoomProvider<{
 
 const hmsStore = hmsManager.getStore();
 const hmsActions = hmsManager.getActions();
+
+const initialAppData = {
+  canLoadModel: true,
+  modelRegistry: [],
+  isPresenting: false,
+  presenterId: '',
+  selectedModel: null,
+  loadedModels: [],
+  isConnecting: false,
+  videoDeviceId: ''
+};
+
+hmsActions.initAppData(initialAppData);
+
 hmsActions.setLogLevel(HMSLogLevel.WARN);
 
 export { TypedHMSRoomProvider, hmsActions, hmsStore };

@@ -153,16 +153,6 @@ export class LeftSidebarWidget extends SidePanel {
   private _signal: ISignal<IModelRegistry, IModelRegistryData>;
   private _modelList: IModelRegistryData[];
 
-  private initialAppData = {
-    canLoadModel: true,
-    modelRegistry: [],
-    isPresenting: false,
-    presenterId: '',
-    selectedModel: null,
-    loadedModels: [],
-    isConnecting: false
-  };
-
   constructor(modelRegistry: IModelRegistry) {
     super({ content: new Panel() });
     this._signal = modelRegistry.modelRegistryChanged;
@@ -175,8 +165,6 @@ export class LeftSidebarWidget extends SidePanel {
     const headerNode = document.createElement('h2');
     headerNode.textContent = 'augmented reality';
     this.header.addWidget(new Widget({ node: headerNode }));
-
-    hmsActions.initAppData(this.initialAppData);
 
     const widget = ReactWidget.create(
       <UseSignal signal={this._signal}>
