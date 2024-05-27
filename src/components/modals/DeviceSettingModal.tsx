@@ -12,6 +12,7 @@ interface IAddNewModelModalProps {
 const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
   const focusInputRef = useRef<HTMLInputElement | null>(null);
   const { allDevices, selectedDeviceIDs, updateDevice } = useDevices();
+  //TODO: Using for optimistic updates in the label. Other devices update quick enough
   const { videoInput, audioInput, audioOutput } = allDevices;
 
   useEffect(() => {
@@ -39,7 +40,6 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
       <div className="device-settings-container">
         <DeviceList
           title="Camera"
-          value={selectedDeviceIDs.videoInput}
           list={videoInput}
           onChange={(e: ChangeEvent<HTMLSelectElement>) =>
             updateDeviceOnChange(e.target.value, DeviceType.videoInput)
@@ -47,7 +47,6 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
         />
         <DeviceList
           title="Microphone"
-          value={selectedDeviceIDs.audioInput}
           list={audioInput}
           onChange={(e: ChangeEvent<HTMLSelectElement>) =>
             updateDeviceOnChange(e.target.value, DeviceType.audioInput)
@@ -55,7 +54,6 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
         />
         <DeviceList
           title="Speaker"
-          value={selectedDeviceIDs.audioOutput}
           list={audioOutput}
           onChange={(e: ChangeEvent<HTMLSelectElement>) =>
             updateDeviceOnChange(e.target.value, DeviceType.audioOutput)
@@ -68,12 +66,10 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
 
 const DeviceList = ({
   list,
-  value,
   onChange,
   title
 }: {
   list: any;
-  value: any;
   onChange: any;
   title: any;
 }) => {
@@ -81,7 +77,7 @@ const DeviceList = ({
     <div className="device-settings-row">
       <span className="device-title">{title}:</span>
       {list?.length ? (
-        <select className="device-select" onChange={onChange} value={value}>
+        <select className="device-select" onChange={onChange}>
           {list.map((device: MediaDeviceInfo) => (
             <option
               className="device-option"
