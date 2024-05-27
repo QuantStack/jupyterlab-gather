@@ -27,8 +27,7 @@ const initialAppData = {
   presenterId: '',
   selectedModel: null,
   loadedModels: [],
-  isConnecting: false,
-  videoDeviceId: ''
+  isConnecting: false
 };
 
 hmsActions.initAppData(initialAppData);
