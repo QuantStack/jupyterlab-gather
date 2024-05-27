@@ -11,7 +11,7 @@ interface IAddNewModelModalProps {
 
 const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
   const focusInputRef = useRef<HTMLInputElement | null>(null);
-  const { allDevices, selectedDeviceIDs, updateDevice } = useDevices();
+  const { allDevices, updateDevice } = useDevices();
   //TODO: Using for optimistic updates in the label. Other devices update quick enough
   const { videoInput, audioInput, audioOutput } = allDevices;
 
