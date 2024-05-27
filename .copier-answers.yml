@@ -13,6 +13,6 @@ mimetype: ''
 mimetype_name: ''
 project_short_description: Video presentation over WebRTC with AR capabilities.
 python_name: jupyterlab_gather
-repository: https://github.com/gjmooney/jupyterlab-gather
+repository: https://github.com/QuantStack/jupyterlab-gather
 test: true
 viewer_name: ''

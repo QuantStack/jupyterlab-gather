@@ -7,9 +7,9 @@
         "jupyterlab",
         "jupyterlab-extension"
     ],
-    "homepage": "https://github.com/gjmooney/jupyterlab-gather",
+    "homepage": "https://github.com/QuantStack/jupyterlab-gather",
     "bugs": {
-        "url": "https://github.com/gjmooney/jupyterlab-gather/issues"
+        "url": "https://github.com/QuantStack/jupyterlab-gather/issues"
     },
     "license": "BSD-3-Clause",
     "author": {
@@ -27,7 +27,7 @@
     "style": "style/index.css",
     "repository": {
         "type": "git",
-        "url": "https://github.com/gjmooney/jupyterlab-gather.git"
+        "url": "https://github.com/QuantStack/jupyterlab-gather.git"
     },
     "scripts": {
         "build": "jlpm build:lib && jlpm build:labextension:dev",
