@@ -63,7 +63,7 @@ const AddNewModelModal = ({
       onClose={onClose}
     >
       <form onSubmit={handleSubmit}>
-        <div className="form-input">
+        <div className="jlab-gather-form-input">
           <label htmlFor="userName">Model Name</label>
           <input
             required
@@ -75,7 +75,7 @@ const AddNewModelModal = ({
             onChange={handleInputChange}
           />
         </div>
-        <div className="form-input">
+        <div className="jlab-gather-form-input">
           <label htmlFor="room-code">Model Url</label>
           <input
             required
@@ -87,7 +87,7 @@ const AddNewModelModal = ({
             onChange={handleInputChange}
           />
         </div>
-        <button className="btn-common btn-primary">Add Model</button>
+        <button className="jlab-gather-btn-common jlab-gather-btn-primary">Add Model</button>
       </form>
     </Modal>
   );

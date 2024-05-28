@@ -29,9 +29,9 @@ const Peer = ({ peer, className, dimension }: IPeer) => {
   };
 
   return (
-    <div className={'peer-tile'}>
+    <div className={'jlab-gather-peer-tile'}>
       {peer.isHandRaised ? (
-        <Icons.raisedHand className="peer-hand-raised-icon" />
+        <Icons.raisedHand className="jlab-gather-peer-hand-raised-icon" />
       ) : (
         ''
       )}
@@ -39,14 +39,14 @@ const Peer = ({ peer, className, dimension }: IPeer) => {
         <>
           <video
             ref={videoRef}
-            className={`${className} ${peer.isHandRaised ? 'peer-hand-raised' : ''}`}
+            className={`${className} ${peer.isHandRaised ? 'jlab-gather-peer-hand-raised' : ''}`}
             autoPlay
             muted
             playsInline
             height={dimension}
             width={dimension}
           />
-          <div className="peer-name">{peer.name}</div>
+          <div className="jlab-gather-peer-name">{peer.name}</div>
         </>
       ) : (
         <Avatar>{getInitials(peer.name)}</Avatar>

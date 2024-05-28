@@ -8,12 +8,12 @@ interface IPeerSidePane {
 
 const PeerSidePane = ({ peers }: IPeerSidePane) => {
   return (
-    <div className="peer-sidepane-list">
+    <div className="jlab-gather-peer-sidepane-list">
       {peers.map(peer => (
         <Peer
           key={peer.id}
           peer={peer}
-          className="peer-video"
+          className="jlab-gather-peer-video"
           dimension={128}
         />
       ))}

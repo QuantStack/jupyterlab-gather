@@ -23,7 +23,7 @@ const RootDisplay = ({ node, modelRegistryChanged }: IRootDisplayProps) => {
   }, [childRef]);
 
   return (
-    <div ref={childRef} id="root" className="root">
+    <div ref={childRef} className="jlab-gather-root">
       <MainDisplay />
     </div>
   );

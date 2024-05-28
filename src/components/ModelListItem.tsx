@@ -12,7 +12,7 @@ const ModelListItem = ({ model, handleClick, className }: IModelListItem) => {
   return (
     <Button
       minimal
-      className={`${className} model-list-item`}
+      className={`${className} jlab-gather-model-list-item`}
       onClick={() => handleClick(model)}
     >
       {model.name}

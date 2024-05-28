@@ -26,7 +26,7 @@ const ScreenShareButton = () => {
   };
 
   return (
-    <button className="btn-control" onClick={toggleScreenShare}>
+    <button className="jlab-gather-btn-control" onClick={toggleScreenShare}>
       {isScreenShared ? 'Stop Sharing' : 'Share Screen'}
     </button>
   );

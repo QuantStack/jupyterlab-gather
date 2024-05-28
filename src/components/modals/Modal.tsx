@@ -55,13 +55,13 @@ const Modal = ({
   };
 
   return (
-    <dialog ref={modalRef} onKeyDown={handleKeyDown} className="modal">
-      <div className="modal-content">
-        <div className="modal-header">
-          <div className="modal-title">{title}</div>
+    <dialog ref={modalRef} onKeyDown={handleKeyDown} className="jlab-gather-modal">
+      <div className="jlab-gather-modal-content">
+        <div className="jlab-gather-modal-header">
+          <div className="jlab-gather-modal-title">{title}</div>
           {hasCloseBtn && (
             <button
-              className="btn-common btn-danger modal-close-btn"
+              className="jlab-gather-btn-common jlab-gather-btn-danger jlab-gather-modal-close-btn"
               onClick={handleCloseModal}
             >
               Close

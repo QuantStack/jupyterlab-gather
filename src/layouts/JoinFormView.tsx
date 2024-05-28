@@ -60,7 +60,7 @@ const JoinFormView = () => {
   return (
     <form onSubmit={handleSubmit}>
       <h2>Join Room</h2>
-      <div className="form-input">
+      <div className="jlab-gather-">
         <label htmlFor="userName">Username</label>
         <input
           required
@@ -72,7 +72,7 @@ const JoinFormView = () => {
           placeholder="Your name"
         />
       </div>
-      <div className="form-input">
+      <div className="jlab-gather-form-input">
         <label htmlFor="room-code">Room ID</label>
         <input
           id="room-code"
@@ -83,7 +83,7 @@ const JoinFormView = () => {
           value={inputValues.roomCode}
         />
       </div>
-      <button className="btn-common btn-primary">Join</button>
+      <button className="jlab-gather-btn-common jlab-gather-btn-primary">Join</button>
     </form>
   );
 };

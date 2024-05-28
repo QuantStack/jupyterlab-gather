@@ -21,9 +21,9 @@ const RaiseHandButton = () => {
   }, [hmsActions, isHandRaised]);
 
   return (
-    <button className="btn-control" onClick={toggleRaiseHand}>
+    <button className="jlab-gather-btn-control" onClick={toggleRaiseHand}>
       <Icons.raisedHand
-        className={`icon ${isHandRaised ? 'icon-breathe' : ''}`}
+        className={`jlab-gather-icon ${isHandRaised ? 'jlab-gather-icon-breathe' : ''}`}
       />
     </button>
   );

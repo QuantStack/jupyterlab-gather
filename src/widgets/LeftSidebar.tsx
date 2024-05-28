@@ -87,40 +87,40 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
   };
 
   return (
-    <div className="sidebar-container">
-      <div className="sidebar-description">
+    <div className="jlab-gather-sidebar-container">
+      <div className="jlab-gather-sidebar-description">
         Select a model from the list below
       </div>
-      <div className="sidebar-list">
+      <div className="jlab-gather-sidebar-list">
         {modelList.map(model => {
           return (
             <ModelListItem
               model={model}
               handleClick={handleModelNameClick}
               className={
-                selected?.name === model.name ? 'model-list-item-selected' : ''
+                selected?.name === model.name ? 'jlab-gather-model-list-item-selected' : ''
               }
             />
           );
         })}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <div className="sidebar-buttons">
+        <div className="jlab-gather-jlab-gather-sidebar-buttons">
           <Button
-            className="sidebar-button"
+            className="jlab-gather-sidebar-button"
             onClick={() => handleModelSelectClick(0)}
           >
             Set as first model
           </Button>
           <Button
-            className="sidebar-button"
+            className="jlab-gather-sidebar-button"
             onClick={() => handleModelSelectClick(1)}
           >
             Set as second model
           </Button>
         </div>
         <Button
-          className="sidebar-load-button"
+          className="jlab-gather-sidebar-load-button"
           onClick={handleOpenAddModelModal}
           disabled={isDisabled}
         >
@@ -132,12 +132,12 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
           onClose={handleCloseAddModelModal}
         />
         <Button
-          className="sidebar-load-button"
+          className="jlab-gather-sidebar-load-button"
           onClick={handleLoadSecondScene}
           disabled={isDisabled}
         >
           {isDisabled ? (
-            <Icons.spinner className="spinner" />
+            <Icons.spinner className="jlab-gather-spinner" />
           ) : isSecondScene ? (
             'Disable Second Model'
           ) : (
@@ -157,7 +157,7 @@ export class LeftSidebarWidget extends SidePanel {
     super({ content: new Panel() });
     this._signal = modelRegistry.modelRegistryChanged;
 
-    this.addClass('sidebar-widget');
+    this.addClass('jlab-gather-sidebar-widget');
     this.title.icon = arIcon;
     this.title.className;
     this.title.caption = 'Augmented reality';
