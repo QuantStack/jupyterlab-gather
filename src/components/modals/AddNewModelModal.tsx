@@ -85,7 +85,9 @@ const AddNewModelModal = ({
             onChange={handleInputChange}
           />
         </div>
-        <button className="jlab-gather-btn-common jlab-gather-btn-primary">Add Model</button>
+        <button className="jlab-gather-btn-common jlab-gather-btn-primary">
+          Add Model
+        </button>
       </form>
     </Modal>
   );

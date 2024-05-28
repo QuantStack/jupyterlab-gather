@@ -46,9 +46,16 @@ const PreviewView = () => {
             onClick={handleClick}
             // disabled={!enableJoin}
           >
-            {isJoining ? <Icons.spinner className="jlab-gather-spinner large" /> : 'Join'}
+            {isJoining ? (
+              <Icons.spinner className="jlab-gather-spinner large" />
+            ) : (
+              'Join'
+            )}
           </button>
-          <button className="jlab-gather-btn-common jlab-gather-btn-danger" onClick={handleBack}>
+          <button
+            className="jlab-gather-btn-common jlab-gather-btn-danger"
+            onClick={handleBack}
+          >
             Back
           </button>
           <SettingsButton />

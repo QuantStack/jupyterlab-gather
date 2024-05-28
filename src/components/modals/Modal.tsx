@@ -55,7 +55,11 @@ const Modal = ({
   };
 
   return (
-    <dialog ref={modalRef} onKeyDown={handleKeyDown} className="jlab-gather-modal">
+    <dialog
+      ref={modalRef}
+      onKeyDown={handleKeyDown}
+      className="jlab-gather-modal"
+    >
       <div className="jlab-gather-modal-content">
         <div className="jlab-gather-modal-header">
           <div className="jlab-gather-modal-title">{title}</div>

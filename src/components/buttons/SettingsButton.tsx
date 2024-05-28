@@ -15,7 +15,10 @@ const SettingsButton = () => {
 
   return (
     <>
-      <button className="jlab-gather-btn-control" onClick={handleOpenDeviceSettingsModal}>
+      <button
+        className="jlab-gather-btn-control"
+        onClick={handleOpenDeviceSettingsModal}
+      >
         <Icons.settings className="jlab-gather-icon" />
       </button>
       <DeviceSettingModal

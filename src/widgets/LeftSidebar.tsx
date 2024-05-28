@@ -98,7 +98,9 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
               model={model}
               handleClick={handleModelNameClick}
               className={
-                selected?.name === model.name ? 'jlab-gather-model-list-item-selected' : ''
+                selected?.name === model.name
+                  ? 'jlab-gather-model-list-item-selected'
+                  : ''
               }
             />
           );

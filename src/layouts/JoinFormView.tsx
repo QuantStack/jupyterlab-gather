@@ -81,7 +81,9 @@ const JoinFormView = () => {
           value={inputValues.roomCode}
         />
       </div>
-      <button className="jlab-gather-btn-common jlab-gather-btn-primary">Join</button>
+      <button className="jlab-gather-btn-common jlab-gather-btn-primary">
+        Join
+      </button>
     </form>
   );
 };

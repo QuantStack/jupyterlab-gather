@@ -25,7 +25,10 @@ const PresenterView = () => {
       <div className="jlab-gather-presenter-container">
         {presenter ? (
           <>
-            <Presenter peer={presenter} className="jlab-gather-presenter-video" />
+            <Presenter
+              peer={presenter}
+              className="jlab-gather-presenter-video"
+            />
           </>
         ) : (
           <div>Waiting...</div>
