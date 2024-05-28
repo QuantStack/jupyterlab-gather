@@ -5,7 +5,7 @@ type AvatarProps = {
 };
 
 const Avatar = ({ children }: AvatarProps) => {
-  return <div className="jlab-gather-spinner">{children}</div>;
+  return <div className="jlab-gather-avatar">{children}</div>;
 };
 
 export default Avatar;
