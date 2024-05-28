@@ -4,7 +4,7 @@
 
 .jlab-gather-form {
   box-shadow: var(--jp-input-box-shadow);
-  max-width: 450px;
+  width: 400px;
   margin: 30px auto;
   padding: 20px;
   border-radius: var(--gather-border-radius);
@@ -30,6 +30,10 @@
 .jlab-gather-root {
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
 }
 
 .jlab-gather-form-input {
@@ -128,10 +132,10 @@
   justify-content: center;
   gap: 0.25rem;
   position: sticky;
+  height: 64px;
   z-index: 10;
   bottom: 0;
   width: fit-content;
-  margin: auto;
   padding: 15px;
   background-color: rgb(187 222 251 / 50%);
   border-radius: var(--gather-border-radius);
