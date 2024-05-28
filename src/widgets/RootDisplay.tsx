@@ -18,7 +18,7 @@ const RootDisplay = ({ node, modelRegistryChanged }: IRootDisplayProps) => {
   useEffect(() => {
     if (childRef.current) {
       const parent = (childRef.current as HTMLElement).parentElement;
-      parent?.classList.add('overflow');
+      parent?.classList.add('jlab-gather-overflow');
     }
   }, [childRef]);
 
