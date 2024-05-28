@@ -10,12 +10,7 @@ const GridView = () => {
     <div className="jlab-gather-main-grid-container">
       <div className="jlab-gather-main-grid-view">
         {peers.map(peer => (
-          <Peer
-            key={peer.id}
-            peer={peer}
-            className={`jlab-gather-peer-video ${peer.isLocal ? 'jlab-gather-local' : ''}`}
-            dimension={256}
-          />
+          <Peer key={peer.id} peer={peer} className={'grid'} />
         ))}
       </div>
     </div>

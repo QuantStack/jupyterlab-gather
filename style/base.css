@@ -40,7 +40,6 @@
   margin-bottom: 20px;
 }
 
-/* Common styles for.jlab-gather-btn-primary and.jlab-gather-btn-danger */
 .jlab-gather-btn-common {
   padding: 6px 14px;
   cursor: pointer;
@@ -50,21 +49,20 @@
   font-family: inherit;
 }
 
-/* Specific styles for.jlab-gather-btn-primary */
 .jlab-gather-btn-primary {
   background-color: var(--jp-brand-color1);
   color: whitesmoke;
 }
 
-/* Specific styles for.jlab-gather-btn-danger */
 .jlab-gather-btn-danger {
   background-color: var(--jp-warn-color1);
   color: black;
 }
 
 .jlab-gather-main-grid-container {
-  width: auto;
   padding: 2rem 0;
+  display: flex;
+  justify-content: center;
 }
 
 .jlab-gather-main-grid-view {
@@ -72,20 +70,11 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.2rem;
+  padding: 0 0.5rem;
 }
 
 .jlab-gather-overflow {
   overflow-y: auto;
-}
-
-.jlab-gather-peer-tile {
-  display: flex;
-  justify-content: center;
-  position: relative;
-  min-width: 8rem;
-  max-width: 16rem;
-  min-height: 8rem;
-  max-height: 16rem;
 }
 
 .jlab-gather-peer-hand-raised-icon {
@@ -98,12 +87,41 @@
   height: 2rem;
 }
 
+.jlab-gather-peer-tile {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  min-width: 8rem;
+  border-radius: var(--gather-border-radius);
+}
+
+.jlab-gather-peer-tile-sidepane {
+  max-width: 16rem;
+  min-height: 8rem;
+  max-height: 16rem;
+}
+
+.jlab-gather-peer-tile-grid {
+  flex: 1 1 20%;
+  overflow: hidden;
+  max-height: 32rem;
+  aspect-ratio: 4/3;
+}
+
 .jlab-gather-peer-video {
   object-fit: cover;
   z-index: 0;
-  max-width: 256px;
-  max-height: 256px;
   border-radius: var(--gather-border-radius);
+}
+
+.jlab-gather-peer-video-sidepane {
+  max-width: 128px;
+  max-height: 128px;
+}
+
+.jlab-gather-peer-video-grid {
+  min-width: 256px;
+  min-height: 256px;
 }
 
 .jlab-gather-local {
@@ -123,8 +141,8 @@
   font-weight: bold;
   color: whitesmoke;
   text-align: center;
-  white-space: nowrap;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .jlab-gather-control-bar {
@@ -272,8 +290,6 @@
 
 .jlab-gather-icon {
   scale: 0.8;
-
-  /* fill: var(--jp-inverse-layout-color3); */
   fill: whitesmoke;
 }
 

@@ -11,10 +11,9 @@ import { Icons } from './Icons';
 interface IPeer {
   peer: HMSPeer;
   className: string;
-  dimension: number;
 }
 
-const Peer = ({ peer, className, dimension }: IPeer) => {
+const Peer = ({ peer, className }: IPeer) => {
   // TODO: Use peer id instead of Peer
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
@@ -29,7 +28,7 @@ const Peer = ({ peer, className, dimension }: IPeer) => {
   };
 
   return (
-    <div className={'jlab-gather-peer-tile'}>
+    <div className={`jlab-gather-peer-tile jlab-gather-peer-tile-${className}`}>
       {peer.isHandRaised ? (
         <Icons.raisedHand className="jlab-gather-peer-hand-raised-icon" />
       ) : (
@@ -39,12 +38,12 @@ const Peer = ({ peer, className, dimension }: IPeer) => {
         <>
           <video
             ref={videoRef}
-            className={`${className} ${peer.isHandRaised ? 'jlab-gather-peer-hand-raised' : ''}`}
+            className={`jlab-gather-peer-video jlab-gather-peer-video-${className} 
+            ${peer.isHandRaised ? 'jlab-gather-peer-hand-raised' : ''}
+            ${peer.isLocal ? 'jlab-gather-local' : ''}`}
             autoPlay
             muted
             playsInline
-            height={dimension}
-            width={dimension}
           />
           <div className="jlab-gather-peer-name">{peer.name}</div>
         </>
