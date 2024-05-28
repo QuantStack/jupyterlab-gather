@@ -137,7 +137,7 @@
   border-radius: var(--gather-border-radius);
 }
 
-.jlab-gather-control-bar .jlab-gather-transparent {
+.jlab-gather-control-bar.jlab-gather-transparent {
   background-color: transparent;
 }
 
@@ -185,8 +185,7 @@
 }
 
 .jlab-gather-sidebar-widget
-  .jlab-gather-sidebar-list
-  .jlab-gather-sidebar-right {
+  .jlab-gather-sidebar-list.jlab-gather-sidebar-right {
   align-items: center;
 }
 
@@ -209,7 +208,7 @@
   font-weight: bold;
 }
 
-.jlab-gather-sidebar-widget .jlab-gather-jlab-gather-sidebar-buttons {
+.jlab-gather-sidebar-widget .jlab-gather-sidebar-buttons {
   display: flex;
   gap: 1rem;
   flex-grow: 0;

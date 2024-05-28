@@ -107,7 +107,7 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
         })}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <div className="jlab-gather-jlab-gather-sidebar-buttons">
+        <div className="jlab-gather-sidebar-buttons">
           <Button
             className="jlab-gather-sidebar-button"
             onClick={() => handleModelSelectClick(0)}
