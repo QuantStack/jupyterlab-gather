@@ -6,6 +6,7 @@ import {
 import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
 import { ILauncher } from '@jupyterlab/launcher';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
+import { IStateDB } from '@jupyterlab/statedb';
 import { LogoIcon } from './components/Icons';
 import { IGatherRegistryToken, IModelRegistry, ModelManager } from './registry';
 import { LeftSidebarWidget } from './widgets/LeftSidebar';
@@ -13,20 +14,22 @@ import { RightSidebarWidget } from './widgets/RightSidebar';
 import { RootDisplayWidget } from './widgets/RootDisplay';
 export { IGatherRegistryToken, IModelRegistry };
 
+const PLUGIN_ID = 'jupyterlab_gather';
 /**
  * Initialization data for the jupyterlab_gather extension.
  */
 const plugin: JupyterFrontEndPlugin<void> = {
-  id: 'jupyterlab_gather',
+  id: PLUGIN_ID,
   description: 'Video presentation over WebRTC with AR capabilities.',
   autoStart: true,
-  requires: [ICommandPalette, ILauncher, IGatherRegistryToken],
+  requires: [ICommandPalette, ILauncher, IGatherRegistryToken, IStateDB],
   optional: [ILayoutRestorer, ISettingRegistry],
   activate: (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
     launcher: ILauncher | null,
     registry: IModelRegistry,
+    state: IStateDB,
     settingRegistry: ISettingRegistry | null,
     restorer: ILayoutRestorer | null
   ) => {
@@ -42,7 +45,10 @@ const plugin: JupyterFrontEndPlugin<void> = {
       execute: () => {
         // Regenerate the widget if disposed
         if (!widget || widget.isDisposed) {
-          const content = new RootDisplayWidget(registry.modelRegistryChanged);
+          const content = new RootDisplayWidget(
+            registry.modelRegistryChanged,
+            state
+          );
           widget = new MainAreaWidget({ content });
           widget.id = 'gather-jupyterlab';
           widget.title.label = 'AR Presentation';
