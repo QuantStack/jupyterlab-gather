@@ -67,7 +67,6 @@ const AddNewModelModal = ({
           <label htmlFor="userName">Model Name</label>
           <input
             required
-            id="model-name"
             name="name"
             type="text"
             placeholder="Model Name"
@@ -79,7 +78,6 @@ const AddNewModelModal = ({
           <label htmlFor="room-code">Model Url</label>
           <input
             required
-            id="model-url"
             name="url"
             type="text"
             placeholder="Model Url"

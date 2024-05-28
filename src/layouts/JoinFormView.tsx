@@ -66,7 +66,6 @@ const JoinFormView = () => {
           required
           value={inputValues.userName}
           onChange={handleInputChange}
-          id="userName"
           type="text"
           name="userName"
           placeholder="Your name"
@@ -75,7 +74,6 @@ const JoinFormView = () => {
       <div className="jlab-gather-form-input">
         <label htmlFor="room-code">Room ID</label>
         <input
-          id="room-code"
           type="text"
           name="roomCode"
           placeholder="Room code"

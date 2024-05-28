@@ -33,7 +33,7 @@ const ControlBar = () => {
   };
 
   return (
-    <div id="jlab-gather-control-bar" className="jlab-gather-control-bar">
+    <div className="jlab-gather-control-bar">
       <button className="jlab-gather-btn-control" onClick={toggleAudio}>
         {isLocalAudioEnabled ? 'Mute' : 'Unmute'}
       </button>
@@ -50,7 +50,6 @@ const ControlBar = () => {
       <SettingsButton />
 
       <button
-        id="leave-btn"
         className="jlab-gather-btn-common jlab-gather-btn-danger"
         onClick={handleLeave}
       >
