@@ -13,7 +13,7 @@ const GridView = () => {
           <Peer
             key={peer.id}
             peer={peer}
-            className={`jlab-gather-peer-video ${peer.isLocal ? 'local' : ''}`}
+            className={`jlab-gather-peer-video ${peer.isLocal ? 'jlab-gather-local' : ''}`}
             dimension={256}
           />
         ))}
