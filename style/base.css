@@ -63,6 +63,8 @@
 }
 
 .main-grid-container {
+  display: flex;
+  justify-content: center;
   width: 100%;
   height: 100%;
   padding: 2rem 0;
@@ -104,10 +106,11 @@
   max-height: 16rem;
 }
 
-.jlab-gather-peer-tile-grid {
-  flex: 1 1 16%;
+.peer-tile-grid {
+  aspect-ratio: 4/3;
+  flex: 1 1 20%;
   overflow: hidden;
-  max-width: 32rem;
+  max-height: 32rem;
 }
 
 .jlab-gather-peer-video {
