@@ -28,27 +28,34 @@ const PreviewView = () => {
   };
 
   return (
-    <div className="preview-container-main">
-      <div className="preview-container">
+    <div className="jlab-gather-preview-container-main">
+      <div className="jlab-gather-preview-container">
         <h2>Get Started</h2>
         <div>Setup audio and video</div>
         {localPeer ? (
           <Video
-            className="preview-video local"
+            className="jlab-gather-preview-video jlab-gather-local"
             trackId={localPeer.videoTrack}
           />
         ) : (
-          <Icons.spinner className="spinner large" />
+          <Icons.spinner className="jlab-gather-spinner large" />
         )}
-        <div className="control-bar">
+        <div className="jlab-gather-control-bar">
           <button
-            className="btn-common btn-primary"
+            className="jlab-gather-btn-common jlab-gather-btn-primary"
             onClick={handleClick}
             // disabled={!enableJoin}
           >
-            {isJoining ? <Icons.spinner className="spinner large" /> : 'Join'}
+            {isJoining ? (
+              <Icons.spinner className="jlab-gather-spinner large" />
+            ) : (
+              'Join'
+            )}
           </button>
-          <button className="btn-common btn-danger" onClick={handleBack}>
+          <button
+            className="jlab-gather-btn-common jlab-gather-btn-danger"
+            onClick={handleBack}
+          >
             Back
           </button>
           <SettingsButton />

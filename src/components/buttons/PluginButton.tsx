@@ -71,7 +71,7 @@ const PluginButton = () => {
 
   return (
     <button
-      className="btn-control"
+      className="jlab-gather-btn-control"
       onClick={togglePlugin}
       disabled={isDisabled}
     >

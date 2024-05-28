@@ -7,13 +7,13 @@ const GridView = () => {
   // const isScreenShareOn = useHMSStore(selectIsSomeoneScreenSharing);
 
   return (
-    <div className="main-grid-container">
-      <div className="main-grid-view">
+    <div className="jlab-gather-main-grid-container">
+      <div className="jlab-gather-main-grid-view">
         {peers.map(peer => (
           <Peer
             key={peer.id}
             peer={peer}
-            className={`peer-video ${peer.isLocal ? 'local' : ''}`}
+            className={`jlab-gather-peer-video ${peer.isLocal ? 'jlab-gather-local' : ''}`}
             dimension={256}
           />
         ))}

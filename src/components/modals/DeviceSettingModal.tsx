@@ -37,7 +37,7 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
       isOpen={isOpen}
       onClose={onClose}
     >
-      <div className="device-settings-container">
+      <div className="jlab-gather-device-settings-container">
         <DeviceList
           title="Camera"
           list={videoInput}
@@ -74,10 +74,13 @@ const DeviceList = ({
   title: any;
 }) => {
   return (
-    <div className="device-settings-row">
-      <span className="device-title">{title}:</span>
+    <div className="jlab-gather-device-settings-row">
+      <span className="jlab-gather-device-title">{title}:</span>
       {list?.length ? (
-        <select className="device-select" onChange={onChange}>
+        <select
+          className="jlab-gather-select jlab-gather-device-select"
+          onChange={onChange}
+        >
           {list.map((device: MediaDeviceInfo) => (
             <option
               className="device-option"
@@ -89,7 +92,7 @@ const DeviceList = ({
           ))}
         </select>
       ) : (
-        <select className="device-select">
+        <select className="jlab-gather-select jlab-gather-device-select">
           <option className="device-option">Options Unavailable</option>
         </select>
       )}

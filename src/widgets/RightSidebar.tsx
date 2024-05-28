@@ -35,7 +35,7 @@ const ScaleSlider = ({
   };
 
   return (
-    <div className="scale-slider">
+    <div className="jlab-gather-scale-slider">
       <p>{sceneNumber === 0 ? 'First Model' : 'Second Model'}</p>
       <Slider
         className="slider"
@@ -83,9 +83,9 @@ const RightSidebarComponent = () => {
   };
 
   return (
-    <div className="sidebar-container">
-      <div className="sidebar-description">Set Scale</div>
-      <div className="sidebar-list sidebar-right">
+    <div className="jlab-gather-sidebar-container">
+      <div className="jlab-gather-sidebar-description">Set Scale</div>
+      <div className="jlab-gather-sidebar-list jlab-gather-sidebar-right">
         <ScaleSlider
           sceneNumber={FIRST_SCENE}
           initialScale={firstScale}
@@ -107,7 +107,7 @@ export class RightSidebarWidget extends SidePanel {
   constructor() {
     super({ content: new Panel() });
 
-    this.addClass('sidebar-widget');
+    this.addClass('jlab-gather-sidebar-widget');
     this.title.icon = arIcon;
     this.title.className;
     this.title.caption = 'Augmented reality';
