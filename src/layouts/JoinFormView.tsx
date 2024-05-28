@@ -60,7 +60,7 @@ const JoinFormView = () => {
   return (
     <form onSubmit={handleSubmit}>
       <h2>Join Room</h2>
-      <div className="jlab-gather-">
+      <div className="jlab-gather-form-input">
         <label htmlFor="userName">Username</label>
         <input
           required
