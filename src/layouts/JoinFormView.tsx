@@ -58,12 +58,13 @@ const JoinFormView = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="jlab-gather-form" onSubmit={handleSubmit}>
       <h2>Join Room</h2>
       <div className="jlab-gather-form-input">
         <label htmlFor="userName">Username</label>
         <input
           required
+          className="jlab-gather-input"
           value={inputValues.userName}
           onChange={handleInputChange}
           type="text"
@@ -75,6 +76,7 @@ const JoinFormView = () => {
         <label htmlFor="room-code">Room ID</label>
         <input
           type="text"
+          className="jlab-gather-input"
           name="roomCode"
           placeholder="Room code"
           onChange={handleInputChange}

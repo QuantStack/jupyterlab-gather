@@ -2,12 +2,7 @@
   --gather-border-radius: 8px;
 }
 
-dialog {
-  padding: 0;
-  border: 0;
-}
-
-form {
+.jlab-gather-form {
   box-shadow: var(--jp-input-box-shadow);
   max-width: 450px;
   margin: 30px auto;
@@ -15,7 +10,7 @@ form {
   border-radius: var(--gather-border-radius);
 }
 
-input {
+.jlab-gather-input {
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -28,7 +23,7 @@ input {
   color: var(--jp-ui-font-color0);
 }
 
-input::placeholder {
+.jlab-gather-input::placeholder {
   color: var(--jp-ui-font-color1);
 }
 
@@ -329,6 +324,8 @@ input::placeholder {
 }
 
 .jlab-gather-modal {
+  padding: 0;
+  border: 0;
   box-shadow: var(--jp-input-box-shadow);
   position: relative;
   width: 60%;
@@ -361,7 +358,7 @@ input::placeholder {
   font-size: var(--jp-ui-font-size0);
 }
 
-select {
+.jlab-gather-select {
   display: block;
   box-sizing: border-box;
   width: 100%;

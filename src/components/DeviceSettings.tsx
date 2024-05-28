@@ -60,7 +60,11 @@ const Select = ({
     <div>
       <span>{title}:</span>
       {list?.length ? (
-        <select onChange={onChange} value={value}>
+        <select
+          className="jlab-gather-select"
+          onChange={onChange}
+          value={value}
+        >
           {list.map((device: any) => (
             <option value={device.deviceId} key={device.deviceId}>
               {device.label}

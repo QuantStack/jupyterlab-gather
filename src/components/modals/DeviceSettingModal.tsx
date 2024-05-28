@@ -77,7 +77,10 @@ const DeviceList = ({
     <div className="jlab-gather-device-settings-row">
       <span className="jlab-gather-device-title">{title}:</span>
       {list?.length ? (
-        <select className="jlab-gather-device-select" onChange={onChange}>
+        <select
+          className="jlab-gather-select jlab-gather-device-select"
+          onChange={onChange}
+        >
           {list.map((device: MediaDeviceInfo) => (
             <option
               className="device-option"
@@ -89,7 +92,7 @@ const DeviceList = ({
           ))}
         </select>
       ) : (
-        <select className="jlab-gather-device-select">
+        <select className="jlab-gather-select jlab-gather-device-select">
           <option className="device-option">Options Unavailable</option>
         </select>
       )}
