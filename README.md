@@ -32,35 +32,35 @@ pip install jupyterlab_gather
 
 1. Go to https://www.100ms.live/ and click `Try for Free` to get started.
 
-   ![landing page](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/1_landing.png 'Landing')
+   ![landing page](./docs/images/1_landing.png 'Landing')
 
 2. Login however you like.
 
-   ![login page](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/2_login.png 'Login')
+   ![login page](./docs/images/2_login.png 'Login')
 
 3. Select `Video Conferencing`.
 
-   ![use case page](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/3_usecase.png 'Use Case')
+   ![use case page](./docs/images/3_usecase.png 'Use Case')
 
 4. Go to the dashboard.
 
-   ![role page](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/4_role.png 'Role')
+   ![role page](./docs/images/4_role.png 'Role')
 
 5. Click on `Join` to see your room details.
 
-   ![dashboard](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/5_dashboard.png 'Dashboard')
+   ![dashboard](./docs/images/5_dashboard.png 'Dashboard')
 
 6. Copy the room code for whichever role you like. This code will be entered on the join form to gain access to the video conference room. Anyone with the code will be able to join the room.
 
-   ![room code](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/6_roomcode.png 'Room Code')
+   ![room code](./docs/images/6_roomcode.png 'Room Code')
 
 7. Start Gather from the JupyterLab start page.
 
-   ![jupyter](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/7_jupyter.png 'Jupyter')
+   ![jupyter](./docs/images/7_jupyter.png 'Jupyter')
 
 8. Enter the room code on the join form and click `Join`.
 
-   ![gather join](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/8_gather.png 'Join Room')
+   ![gather join](./docs/images/8_gather.png 'Join Room')
 
 9. And that's all! You're all set up!
 
