@@ -54,6 +54,16 @@ pip install jupyterlab_gather
 
    ![room code](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/6_roomcode.png 'Room Code')
 
+7. Start Gather from the JupyterLab start page.
+
+   ![jupyter](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/7_jupyter.png 'Jupyter')
+
+8. Enter the room code on the join form and click `Join`.
+
+   ![gather join](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/8_gather.png 'Join Room')
+
+9. And that's all! You're all set up!
+
 ## Uninstall
 
 To remove the extension, execute:
