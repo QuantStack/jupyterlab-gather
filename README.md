@@ -28,6 +28,32 @@ To install the extension, execute:
 pip install jupyterlab_gather
 ```
 
+## Setup
+
+1. Go to https://www.100ms.live/ and click `Try for Free` to get started.
+
+   ![landing page](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/1_landing.png 'Landing')
+
+2. Login however you like.
+
+   ![login page](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/2_login.png 'Login')
+
+3. Select `Video Conferencing`.
+
+   ![use case page](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/3_usecase.png 'Use Case')
+
+4. Go to the dashboard.
+
+   ![role page](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/4_role.png 'Role')
+
+5. Click on `Join` to see your room details.
+
+   ![dashboard](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/5_dashboard.png 'Dashboard')
+
+6. Copy the room code for whichever role you like. This code will be entered on the join form to gain access to the video conference room. Anyone with the code will be able to join the room.
+
+   ![room code](https://github.com/gjmooney/jupyterlab-gather/blob/add_state_db/docs/images/6_roomcode.png 'Room Code')
+
 ## Uninstall
 
 To remove the extension, execute:

@@ -36,7 +36,7 @@ const JoinFormView = ({ state }: IJoinFormViewProps) => {
           const dbRoomCode = (gatherState as ReadonlyJSONObject)
             .roomCode as string;
 
-          setInputValues({ userName: 'test', roomCode: dbRoomCode });
+          setInputValues({ userName: randomUserName, roomCode: dbRoomCode });
           setSavedRoomCode(dbRoomCode);
         }
       } catch (error) {
