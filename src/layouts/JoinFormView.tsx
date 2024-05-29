@@ -1,5 +1,7 @@
 import { HMSConfig, useHMSActions } from '@100mslive/react-sdk';
-import React, { useState } from 'react';
+import { IStateDB } from '@jupyterlab/statedb';
+import { ReadonlyJSONObject } from '@lumino/coreutils';
+import React, { useEffect, useState } from 'react';
 import {
   adjectives,
   animals,
@@ -7,8 +9,13 @@ import {
   uniqueNamesGenerator
 } from 'unique-names-generator';
 
-const JoinFormView = () => {
+interface IJoinFormViewProps {
+  state: IStateDB;
+}
+
+const JoinFormView = ({ state }: IJoinFormViewProps) => {
   const hmsActions = useHMSActions();
+  const [savedRoomCode, setSavedRoomCode] = useState('');
 
   const randomUserName = uniqueNamesGenerator({
     dictionaries: [adjectives, colors, animals],
@@ -18,8 +25,27 @@ const JoinFormView = () => {
 
   const [inputValues, setInputValues] = useState({
     userName: randomUserName,
-    roomCode: 'ibj-yxje-nda'
+    roomCode: savedRoomCode
   });
+
+  useEffect(() => {
+    const fetchRoomCode = async () => {
+      try {
+        const gatherState = await state.fetch('jupyterlab_gather');
+        if (gatherState) {
+          const dbRoomCode = (gatherState as ReadonlyJSONObject)
+            .roomCode as string;
+
+          setInputValues({ userName: randomUserName, roomCode: dbRoomCode });
+          setSavedRoomCode(dbRoomCode);
+        }
+      } catch (error) {
+        console.log('Error fetching room code', error);
+      }
+    };
+
+    fetchRoomCode();
+  }, []);
 
   const handleInputChange = (e: any) => {
     setInputValues(prevValues => ({
@@ -37,6 +63,7 @@ const JoinFormView = () => {
     const { userName = '', roomCode = '' } = inputValues;
 
     // use room code to fetch auth token
+    await state.save('jupyterlab_gather', { roomCode });
     const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode });
 
     const config: HMSConfig = {

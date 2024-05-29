@@ -5,6 +5,7 @@ import {
   useHMSActions,
   useHMSStore
 } from '@100mslive/react-sdk';
+import { IStateDB } from '@jupyterlab/statedb';
 import React, { useEffect } from 'react';
 
 import GridView from '../layouts/GridView';
@@ -13,7 +14,11 @@ import PresenterView from '../layouts/PresenterView';
 import PreviewView from '../layouts/PreviewView';
 import ControlBar from './ControlBar';
 
-export const MainDisplay = () => {
+interface IMainDisplayProps {
+  state: IStateDB;
+}
+
+export const MainDisplay = ({ state }: IMainDisplayProps) => {
   const hmsActions = useHMSActions();
   const isConnected = useHMSStore(selectIsConnectedToRoom);
   const isConnecting = useHMSStore(selectAppData('isConnecting'));
@@ -38,21 +43,21 @@ export const MainDisplay = () => {
     };
   }, [hmsActions, isConnected]);
 
-  let ViewComponent;
-  if (isPresenting) {
-    ViewComponent = PresenterView;
-  } else if (isConnected) {
-    ViewComponent = GridView;
-  } else if (!isConnecting) {
-    ViewComponent = JoinFormView;
-  } else {
-    ViewComponent = PreviewView;
-  }
-
   return (
     <>
-      <ViewComponent />
-      {isConnected ? <ControlBar /> : null}
+      {(() => {
+        if (isPresenting) {
+          return <PresenterView />;
+        }
+        if (isConnected) {
+          return <GridView />;
+        }
+        if (!isConnecting) {
+          return <JoinFormView state={state} />;
+        }
+        return <PreviewView />;
+      })()}
+      {isConnected && <ControlBar />}
     </>
   );
 };

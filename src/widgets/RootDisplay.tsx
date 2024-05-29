@@ -1,3 +1,4 @@
+import { IStateDB } from '@jupyterlab/statedb';
 import { ReactWidget } from '@jupyterlab/ui-components';
 import { ISignal } from '@lumino/signaling';
 import React, { useEffect, useRef } from 'react';
@@ -8,9 +9,14 @@ import { IModelRegistry, IModelRegistryData } from '../registry';
 interface IRootDisplayProps {
   node: HTMLElement;
   modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>;
+  state: IStateDB;
 }
 
-const RootDisplay = ({ node, modelRegistryChanged }: IRootDisplayProps) => {
+const RootDisplay = ({
+  node,
+  modelRegistryChanged,
+  state
+}: IRootDisplayProps) => {
   const childRef = useRef(null);
 
   // TODO: There's probably a better way to do this
@@ -24,19 +30,22 @@ const RootDisplay = ({ node, modelRegistryChanged }: IRootDisplayProps) => {
 
   return (
     <div ref={childRef} className="jlab-gather-root">
-      <MainDisplay />
+      <MainDisplay state={state} />
     </div>
   );
 };
 
 export class RootDisplayWidget extends ReactWidget {
   private _modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>;
+  private _state: IStateDB;
 
   constructor(
-    modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>
+    modelRegistryChanged: ISignal<IModelRegistry, IModelRegistryData>,
+    state: IStateDB
   ) {
     super();
     this._modelRegistryChanged = modelRegistryChanged;
+    this._state = state;
   }
 
   render() {
@@ -45,6 +54,7 @@ export class RootDisplayWidget extends ReactWidget {
         <RootDisplay
           node={this.node}
           modelRegistryChanged={this._modelRegistryChanged}
+          state={this._state}
         />
       </TypedHMSRoomProvider>
     );
