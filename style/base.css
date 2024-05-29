@@ -55,8 +55,8 @@
 }
 
 .jlab-gather-btn-danger {
-  background-color: var(--jp-warn-color1);
-  color: black;
+  background-color: var(--jp-warn-color1) !important;
+  color: black !important;
 }
 
 .jlab-gather-main-grid-container {
@@ -78,7 +78,7 @@
 }
 
 .jlab-gather-peer-hand-raised-icon {
-  fill: #f37726;
+  color: #f37726;
   position: absolute;
   z-index: 40;
   top: 0.3rem;
@@ -289,12 +289,11 @@
 }
 
 .jlab-gather-icon {
-  scale: 0.8;
-  fill: whitesmoke;
+  font-size: 2rem;
 }
 
 .jlab-gather-icon-breathe {
-  fill: #f37726;
+  color: #f37726;
   animation: breathe 3s infinite alternate;
 }
 
@@ -417,13 +416,13 @@
 
 @keyframes breathe {
   0% {
-    transform: scale(0.7);
     opacity: 0.8;
+    transform: scale(0.7);
   }
 
   50% {
     opacity: 1;
-    transform: scale(1.1);
+    transform: scale(1.3);
   }
 
   100% {

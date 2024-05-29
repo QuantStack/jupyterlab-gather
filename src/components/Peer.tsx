@@ -4,9 +4,10 @@ import {
   useHMSStore,
   useVideo
 } from '@100mslive/react-sdk';
+import { faHand } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import Avatar from './Avatar';
-import { Icons } from './Icons';
 
 interface IPeer {
   peer: HMSPeer;
@@ -30,7 +31,10 @@ const Peer = ({ peer, className }: IPeer) => {
   return (
     <div className={`jlab-gather-peer-tile jlab-gather-peer-tile-${className}`}>
       {peer.isHandRaised ? (
-        <Icons.raisedHand className="jlab-gather-peer-hand-raised-icon" />
+        <FontAwesomeIcon
+          icon={faHand}
+          className="jlab-gather-peer-hand-raised-icon"
+        />
       ) : (
         ''
       )}
