@@ -66,7 +66,7 @@ pip install jupyterlab_gather
 
 ## Usage
 
-[Check here for usage instructions](./docs/useage.md)
+[Check here for usage instructions](./docs/usage.md)
 
 ## Uninstall
 
