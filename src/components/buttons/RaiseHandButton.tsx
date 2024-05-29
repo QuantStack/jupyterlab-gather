@@ -4,8 +4,9 @@ import {
   useHMSActions,
   useHMSStore
 } from '@100mslive/react-sdk';
+import { faHand } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useCallback } from 'react';
-import { Icons } from '../Icons';
 
 const RaiseHandButton = () => {
   const localPeerId = useHMSStore(selectLocalPeerID);
@@ -22,7 +23,8 @@ const RaiseHandButton = () => {
 
   return (
     <button className="jlab-gather-btn-control" onClick={toggleRaiseHand}>
-      <Icons.raisedHand
+      <FontAwesomeIcon
+        icon={faHand}
         className={`jlab-gather-icon ${isHandRaised ? 'jlab-gather-icon-breathe' : ''}`}
       />
     </button>

@@ -6,6 +6,15 @@ import {
   useHMSActions,
   useHMSStore
 } from '@100mslive/react-sdk';
+import {} from '@fortawesome/free-regular-svg-icons';
+import {
+  faMicrophone,
+  faMicrophoneSlash,
+  faPersonThroughWindow,
+  faVideo,
+  faVideoSlash
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
 import PluginButton from './buttons/PluginButton';
 import RaiseHandButton from './buttons/RaiseHandButton';
@@ -35,11 +44,22 @@ const ControlBar = () => {
   return (
     <div id="jlab-gather-control-bar" className="jlab-gather-control-bar">
       <button className="jlab-gather-btn-control" onClick={toggleAudio}>
-        {isLocalAudioEnabled ? 'Mute' : 'Unmute'}
+        {isLocalAudioEnabled ? (
+          <FontAwesomeIcon icon={faMicrophone} className="jlab-gather-icon" />
+        ) : (
+          <FontAwesomeIcon
+            icon={faMicrophoneSlash}
+            className="jlab-gather-icon"
+          />
+        )}
       </button>
 
       <button className="jlab-gather-btn-control" onClick={toggleVideo}>
-        {isLocalVideoEnabled ? 'Hide' : 'Unhide'}
+        {isLocalVideoEnabled ? (
+          <FontAwesomeIcon icon={faVideo} className="jlab-gather-icon" />
+        ) : (
+          <FontAwesomeIcon icon={faVideoSlash} className="jlab-gather-icon" />
+        )}
       </button>
 
       {/* <ScreenShareButton /> */}
@@ -50,10 +70,13 @@ const ControlBar = () => {
       <SettingsButton />
 
       <button
-        className="jlab-gather-btn-common jlab-gather-btn-danger"
+        className="jlab-gather-btn-control jlab-gather-btn-danger"
         onClick={handleLeave}
       >
-        Leave Room
+        <FontAwesomeIcon
+          icon={faPersonThroughWindow}
+          className="jlab-gather-icon"
+        />
       </button>
     </div>
   );

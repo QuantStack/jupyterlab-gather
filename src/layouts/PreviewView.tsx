@@ -4,11 +4,11 @@ import {
   useHMSActions,
   useHMSStore
 } from '@100mslive/react-sdk';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
-import { Icons } from '../components/Icons';
 import Video from '../components/Video';
 import SettingsButton from '../components/buttons/SettingsButton';
-
 const PreviewView = () => {
   console.log('preview');
   const hmsActions = useHMSActions();
@@ -38,7 +38,10 @@ const PreviewView = () => {
             trackId={localPeer.videoTrack}
           />
         ) : (
-          <Icons.spinner className="jlab-gather-spinner large" />
+          <FontAwesomeIcon
+            icon={faSpinner}
+            className="jlab-gather-spinner large"
+          />
         )}
         <div className="jlab-gather-control-bar">
           <button
@@ -47,7 +50,10 @@ const PreviewView = () => {
             // disabled={!enableJoin}
           >
             {isJoining ? (
-              <Icons.spinner className="jlab-gather-spinner large" />
+              <FontAwesomeIcon
+                icon={faSpinner}
+                className="jlab-gather-spinner large"
+              />
             ) : (
               'Join'
             )}

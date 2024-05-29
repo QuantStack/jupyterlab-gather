@@ -8,9 +8,10 @@ import {
   useHMSActions,
   useHMSStore
 } from '@100mslive/react-sdk';
+import { faBan, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import ArCubePlugin from '../../arCubePlugin';
-import { Icons } from '../Icons';
 
 const PluginButton = () => {
   const hmsActions = useHMSActions();
@@ -76,11 +77,11 @@ const PluginButton = () => {
       disabled={isDisabled}
     >
       {isDisabled ? (
-        <Icons.forbidden className="icon" />
+        <FontAwesomeIcon icon={faBan} className="jlab-gather-icon" />
       ) : !isPresenting && !isPluginLoaded ? (
-        'Start AR'
+        <FontAwesomeIcon icon={faEye} className="jlab-gather-icon" />
       ) : (
-        'Stop AR'
+        <FontAwesomeIcon icon={faEyeSlash} className="jlab-gather-icon" />
       )}
     </button>
   );

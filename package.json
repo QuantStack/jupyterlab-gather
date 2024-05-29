@@ -59,6 +59,10 @@
     "dependencies": {
         "@100mslive/react-sdk": "^0.10.3",
         "@ar-js-org/ar.js": "^3.4.5",
+        "@fortawesome/fontawesome-svg-core": "^6.5.2",
+        "@fortawesome/free-regular-svg-icons": "^6.5.2",
+        "@fortawesome/free-solid-svg-icons": "^6.5.2",
+        "@fortawesome/react-fontawesome": "latest",
         "@jupyterlab/application": "^4.1.4",
         "@jupyterlab/apputils": "^4.2.4",
         "@jupyterlab/coreutils": "^6.0.0",

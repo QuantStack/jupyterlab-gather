@@ -1,5 +1,6 @@
+import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
-import { Icons } from '../Icons';
 import DeviceSettingModal from '../modals/DeviceSettingModal';
 
 const SettingsButton = () => {
@@ -19,7 +20,7 @@ const SettingsButton = () => {
         className="jlab-gather-btn-control"
         onClick={handleOpenDeviceSettingsModal}
       >
-        <Icons.settings className="jlab-gather-icon" />
+        <FontAwesomeIcon icon={faGear} className="jlab-gather-icon" />
       </button>
       <DeviceSettingModal
         isOpen={isDeviceSettingsModalOpen}

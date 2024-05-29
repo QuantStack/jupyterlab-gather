@@ -1,16 +1,17 @@
 import { selectAppData } from '@100mslive/react-sdk';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactWidget } from '@jupyterlab/apputils';
 import { Button, SidePanel, UseSignal } from '@jupyterlab/ui-components';
 import { ISignal } from '@lumino/signaling';
 import { Panel, Widget } from '@lumino/widgets';
 import React, { useEffect, useState } from 'react';
 import ArCube from '../arCube';
-import { Icons, arIcon } from '../components/Icons';
+import { arIcon } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
 import AddNewModelModal from '../components/modals/AddNewModelModal';
 import { hmsActions, hmsStore } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
-
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/IridescenceAbalone/glTF/IridescenceAbalone.gltf
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Fox/glTF/Fox.gltf
@@ -139,7 +140,7 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
           disabled={isDisabled}
         >
           {isDisabled ? (
-            <Icons.spinner className="jlab-gather-spinner" />
+            <FontAwesomeIcon icon={faSpinner} className="jlab-gather-spinner" />
           ) : isSecondScene ? (
             'Disable Second Model'
           ) : (
