@@ -64,6 +64,10 @@ pip install jupyterlab_gather
 
 9. And that's all! You're all set up!
 
+## Usage
+
+[Check here for usage instructions](./docs/useage.md)
+
 ## Uninstall
 
 To remove the extension, execute:
