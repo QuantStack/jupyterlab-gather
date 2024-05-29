@@ -83,8 +83,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
         });
 
         registry.registerModel({
-          name: 'brain stem',
-          url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/BrainStem/glTF/BrainStem.gltf'
+          name: 'fox',
+          url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Fox/glTF/Fox.gltf'
         });
       }
     });
