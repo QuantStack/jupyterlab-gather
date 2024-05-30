@@ -205,6 +205,13 @@ class ArCube {
     this.arToolkitSource.init();
   }
 
+  getThemeColor() {
+    const layoutColor = getComputedStyle(document.body);
+    const cubeColorValue = layoutColor.getPropertyValue('--jp-layout-color0');
+    const edgeColorValue = layoutColor.getPropertyValue('--jp-layout-color3');
+    return [cubeColorValue, edgeColorValue];
+  }
+
   // updateSource() {
   //   const deviceId = hmsStore.getState(selectAppData('videoDeviceId'));
 
@@ -324,13 +331,15 @@ class ArCube {
     sceneGroup.scale.set(1.75 / 2, 1.75 / 2, 1.75 / 2);
     sceneGroup.name = `scene${sceneNumber}`;
 
+    const [cubeColor, edgeColor] = this.getThemeColor();
+
     // reversed cube
     //TODO: Can probably just have one cube and add it to scenes as needed
     sceneGroup.add(
       new THREE.Mesh(
         new THREE.BoxGeometry(2, 2, 2),
         new THREE.MeshBasicMaterial({
-          color: '#2EEEFF',
+          color: cubeColor,
           side: THREE.BackSide
         })
       )
@@ -374,7 +383,7 @@ class ArCube {
       const edge = new THREE.Mesh(
         edgeGeometry,
         new THREE.MeshLambertMaterial({
-          color: '#262626'
+          color: edgeColor
         })
       );
       edge.position.copy(edgeCenters[i]);
