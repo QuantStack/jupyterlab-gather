@@ -6,9 +6,11 @@ import {
 import * as THREEx from '@ar-js-org/ar.js/three.js/build/ar-threex.js';
 import { Signal } from '@lumino/signaling';
 import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { hmsActions, hmsStore } from './hms';
 import { IModelRegistryData } from './registry';
+
 const FIRST_SCENE = 0;
 const SECOND_SCENE = 1;
 
@@ -205,6 +207,13 @@ class ArCube {
     this.arToolkitSource.init();
   }
 
+  getThemeColor() {
+    const layoutColor = getComputedStyle(document.body);
+    const cubeColorValue = layoutColor.getPropertyValue('--jp-layout-color0');
+
+    return cubeColorValue;
+  }
+
   // updateSource() {
   //   const deviceId = hmsStore.getState(selectAppData('videoDeviceId'));
 
@@ -324,72 +333,26 @@ class ArCube {
     sceneGroup.scale.set(1.75 / 2, 1.75 / 2, 1.75 / 2);
     sceneGroup.name = `scene${sceneNumber}`;
 
+    const cubeColor = this.getThemeColor();
+
     // reversed cube
     //TODO: Can probably just have one cube and add it to scenes as needed
-    sceneGroup.add(
-      new THREE.Mesh(
-        new THREE.BoxGeometry(2, 2, 2),
-        new THREE.MeshBasicMaterial({
-          color: '#2EEEFF',
-          side: THREE.BackSide
-        })
-      )
+
+    const bgCube = new THREE.Mesh(
+      new RoundedBoxGeometry(2, 2, 2, 7, 0.1),
+      new THREE.MeshBasicMaterial({
+        color: cubeColor,
+        side: THREE.BackSide
+      })
     );
 
-    // cube edges
-    const edgeGroup = new THREE.Group();
-    const edgeGeometry = new THREE.CylinderGeometry(0.03, 0.03, 2, 32);
+    sceneGroup.add(bgCube);
 
-    const edgeCenters = [
-      new THREE.Vector3(0, -1, -1),
-      new THREE.Vector3(0, 1, -1),
-      new THREE.Vector3(0, -1, 1),
-      new THREE.Vector3(0, 1, 1),
-      new THREE.Vector3(-1, 0, -1),
-      new THREE.Vector3(1, 0, -1),
-      new THREE.Vector3(-1, 0, 1),
-      new THREE.Vector3(1, 0, 1),
-      new THREE.Vector3(-1, -1, 0),
-      new THREE.Vector3(1, -1, 0),
-      new THREE.Vector3(-1, 1, 0),
-      new THREE.Vector3(1, 1, 0)
-    ];
-
-    const edgeRotations = [
-      new THREE.Vector3(0, 0, Math.PI / 2),
-      new THREE.Vector3(0, 0, Math.PI / 2),
-      new THREE.Vector3(0, 0, Math.PI / 2),
-      new THREE.Vector3(0, 0, Math.PI / 2),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(Math.PI / 2, 0, 0),
-      new THREE.Vector3(Math.PI / 2, 0, 0),
-      new THREE.Vector3(Math.PI / 2, 0, 0),
-      new THREE.Vector3(Math.PI / 2, 0, 0)
-    ];
-
-    for (let i = 0; i < 12; i++) {
-      const edge = new THREE.Mesh(
-        edgeGeometry,
-        new THREE.MeshLambertMaterial({
-          color: '#262626'
-        })
-      );
-      edge.position.copy(edgeCenters[i]);
-      edge.rotation.setFromVector3(edgeRotations[i]);
-
-      edgeGroup.add(edge);
-    }
-
-    edgeGroup.name = 'edge-group';
-    sceneGroup.add(edgeGroup);
     this.sceneGroups.push(sceneGroup);
 
     // Set up BG cubes bounding box and center
     if (!this.bgCubeBoundingBox) {
-      this.bgCubeBoundingBox = new THREE.Box3().setFromObject(edgeGroup);
+      this.bgCubeBoundingBox = new THREE.Box3().setFromObject(bgCube);
       this.bgCubeBoundingBox.getCenter(this.bgCubeCenter);
     }
 
