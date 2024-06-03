@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import ArCube from '../arCube';
 import { arIcon } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
+import AddNewFileModal from '../components/modals/AddNewFileModal';
 import AddNewModelModal from '../components/modals/AddNewModelModal';
 import { hmsActions, hmsStore } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
@@ -127,9 +128,21 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
           onClick={handleOpenAddModelModal}
           disabled={isDisabled}
         >
-          Add New Model
+          Add New Model (URL)
         </Button>
         <AddNewModelModal
+          isOpen={isAddModelModalOpen}
+          onSubmit={handleAddModelSubmit}
+          onClose={handleCloseAddModelModal}
+        />
+        <Button
+          className="jlab-gather-sidebar-load-button"
+          onClick={handleOpenAddModelModal}
+          disabled={isDisabled}
+        >
+          Add New Model (File)
+        </Button>
+        <AddNewFileModal
           isOpen={isAddModelModalOpen}
           onSubmit={handleAddModelSubmit}
           onClose={handleCloseAddModelModal}
