@@ -10,7 +10,7 @@ import ArCube from '../arCube';
 import { arIcon } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
 import AddNewFileModal from '../components/modals/AddNewFileModal';
-import AddNewModelModal from '../components/modals/AddNewModelModal';
+import AddNewUrlModal from '../components/modals/AddNewUrlModal';
 import { hmsActions, hmsStore } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
@@ -29,8 +29,8 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
   const [isSecondScene, setIsSecondScene] = useState(false);
   const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
   const [selected, setSelected] = useState<IModelRegistryData>();
-
-  const [isAddModelModalOpen, setAddModelModalOpen] = useState<boolean>(false);
+  const [isAddModelUrlOpen, setAddModelUrlOpen] = useState(false);
+  const [isAddModelFileOpen, setAddModelFileOpen] = useState(false);
 
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData('arCube')));
@@ -75,12 +75,17 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
     setIsSecondScene(!isSecondScene);
   };
 
-  const handleOpenAddModelModal = () => {
-    setAddModelModalOpen(true);
+  const handleOpenAddUrlModal = () => {
+    setAddModelUrlOpen(true);
+  };
+
+  const handleOpenAddFileModal = () => {
+    setAddModelFileOpen(true);
   };
 
   const handleCloseAddModelModal = () => {
-    setAddModelModalOpen(false);
+    setAddModelUrlOpen(false);
+    setAddModelFileOpen(false);
   };
 
   const handleAddModelSubmit = (data: IModelRegistryData): void => {
@@ -125,25 +130,25 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
         </div>
         <Button
           className="jlab-gather-sidebar-load-button"
-          onClick={handleOpenAddModelModal}
+          onClick={handleOpenAddUrlModal}
           disabled={isDisabled}
         >
           Add New Model (URL)
         </Button>
-        <AddNewModelModal
-          isOpen={isAddModelModalOpen}
+        <AddNewUrlModal
+          isOpen={isAddModelUrlOpen}
           onSubmit={handleAddModelSubmit}
           onClose={handleCloseAddModelModal}
         />
         <Button
           className="jlab-gather-sidebar-load-button"
-          onClick={handleOpenAddModelModal}
+          onClick={handleOpenAddFileModal}
           disabled={isDisabled}
         >
           Add New Model (File)
         </Button>
         <AddNewFileModal
-          isOpen={isAddModelModalOpen}
+          isOpen={isAddModelFileOpen}
           onSubmit={handleAddModelSubmit}
           onClose={handleCloseAddModelModal}
         />

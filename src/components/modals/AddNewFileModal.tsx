@@ -30,18 +30,15 @@ const AddNewFileModal = ({
 
   const [formName, setFormName] = useState(randomModelName);
 
-  const { openFilePicker, filesContent, loading, errors } = useFilePicker({
-    accept: ['.glb'],
-    readAs: 'ArrayBuffer',
-    validators: [new FileTypeValidator(['glb'])],
-    onFilesRejected: ({ errors }) => {
-      console.log('files rejected', errors);
-    },
-    onFilesSuccessfullySelected: ({ plainFiles, filesContent }) => {
-      console.log('onFilesSuccessfullySelected', plainFiles);
-      onSubmit({ name: formName, gltf: filesContent[0].content });
-    }
-  });
+  const { openFilePicker, filesContent, loading, errors, clear } =
+    useFilePicker({
+      accept: ['.glb'],
+      readAs: 'ArrayBuffer',
+      validators: [new FileTypeValidator(['glb'])],
+      onFilesRejected: ({ errors }) => {
+        console.log('files rejected', errors);
+      }
+    });
 
   useEffect(() => {
     if (isOpen && focusInputRef.current) {
@@ -58,9 +55,11 @@ const AddNewFileModal = ({
     setFormName(value);
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const handleUpload = () => {
+    onSubmit({ name: formName, gltf: filesContent[0].content });
+    setFormName(randomModelName);
+    clear();
+  };
 
   return (
     <Modal
@@ -82,30 +81,48 @@ const AddNewFileModal = ({
         />
       </div>
 
+      <div style={{ fontStyle: 'italic' }}>
+        Only .glb files are supported at the current time.
+      </div>
+
       {errors.length > 0 ? (
-        <div>
-          Something went wrong
+        <div className="jlab-gather-file-content">
+          <span className="jlab-gather-file-content-text">
+            Something went wrong:
+          </span>
           {errors.map(err => (
-            <div>{err.name}</div>
+            <span className="jlab-gather-error-text"> {err.name}</span>
           ))}
         </div>
       ) : (
-        <div>
-          <span>Selected File</span>
+        <div className="jlab-gather-file-content">
+          <span className="jlab-gather-file-content-text">Selected File: </span>
           {filesContent.map((file, index) => (
-            <div>
-              <div key={index}>{file.name}</div>
-              <br />
-            </div>
+            <span key={index}> {file.name}</span>
           ))}
         </div>
       )}
-      <button
-        className="jlab-gather-btn-common jlab-gather-btn-primary"
-        onClick={() => openFilePicker()}
-      >
-        {loading ? 'Loading' : 'Select File'}
-      </button>
+
+      <div className="jlab-gather-modal-buttons">
+        {loading ? (
+          <div>loading</div>
+        ) : (
+          <>
+            <button
+              className="jlab-gather-btn-common jlab-gather-btn-primary"
+              onClick={() => openFilePicker()}
+            >
+              Select File
+            </button>
+            <button
+              className="jlab-gather-btn-common jlab-gather-btn-primary"
+              onClick={handleUpload}
+            >
+              Upload
+            </button>
+          </>
+        )}
+      </div>
     </Modal>
   );
 };

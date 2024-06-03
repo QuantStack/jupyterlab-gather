@@ -7,17 +7,17 @@ import {
 import { IModelRegistryData } from '../../registry';
 import Modal from './Modal';
 
-interface IAddNewModelModalProps {
+interface IAddNewUrlModalProps {
   isOpen: boolean;
   onSubmit: (data: IModelRegistryData) => void;
   onClose: () => void;
 }
 
-const AddNewModelModal = ({
+const AddNewUrlModal = ({
   onSubmit,
   isOpen,
   onClose
-}: IAddNewModelModalProps) => {
+}: IAddNewUrlModalProps) => {
   const focusInputRef = useRef<HTMLInputElement | null>(null);
 
   const randomModelName = uniqueNamesGenerator({
@@ -95,4 +95,4 @@ const AddNewModelModal = ({
   );
 };
 
-export default AddNewModelModal;
+export default AddNewUrlModal;
