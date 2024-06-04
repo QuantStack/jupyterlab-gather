@@ -355,6 +355,8 @@
 }
 
 .jlab-gather-modal-content {
+  background-color: var(--jp-layout-color1);
+  color: var(--jp-inverse-layout-color1);
   padding: 2rem;
 }
 
