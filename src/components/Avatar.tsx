@@ -2,10 +2,15 @@ import React from 'react';
 
 type AvatarProps = {
   children: string;
+  location: string;
 };
 
-const Avatar = ({ children }: AvatarProps) => {
-  return <div className="jlab-gather-avatar">{children}</div>;
+const Avatar = ({ children, location }: AvatarProps) => {
+  return (
+    <div className={`jlab-gather-avatar jlab-gather-avatar-${location}`}>
+      {children}
+    </div>
+  );
 };
 
 export default Avatar;

@@ -60,7 +60,7 @@ const Peer = ({ peer, location }: IPeer) => {
           <div className="jlab-gather-peer-name">{peer.name}</div>
         </>
       ) : (
-        <Avatar>{getInitials(peer.name)}</Avatar>
+        <Avatar location={className}>{getInitials(peer.name)}</Avatar>
       )}
     </div>
   );
