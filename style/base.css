@@ -280,6 +280,7 @@
   gap: 0.2rem;
   height: fit-content;
   margin: 0.3rem;
+  margin-right: 0.6rem;
   padding: 0.7rem;
   background-color: #607d8b;
   border-radius: var(--gather-border-radius);

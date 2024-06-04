@@ -7,12 +7,19 @@ interface IPeerSidePane {
 }
 
 const PeerSidePane = ({ peers }: IPeerSidePane) => {
+  console.log('peers', peers);
+
+  console.log('peers.length', peers.length);
   return (
-    <div className="jlab-gather-peer-sidepane-list">
-      {peers.map(peer => (
-        <Peer key={peer.id} peer={peer} location="sidepane" />
-      ))}
-    </div>
+    <>
+      {peers.length > 0 && (
+        <div className="jlab-gather-peer-sidepane-list">
+          {peers.map(peer => (
+            <Peer key={peer.id} peer={peer} location="sidepane" />
+          ))}
+        </div>
+      )}
+    </>
   );
 };
 
