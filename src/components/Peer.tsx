@@ -12,10 +12,10 @@ import Avatar from './Avatar';
 
 interface IPeer {
   peer: HMSPeer;
-  className: string;
+  location: 'grid' | 'sidepane';
 }
 
-const Peer = ({ peer, className }: IPeer) => {
+const Peer = ({ peer, location }: IPeer) => {
   // TODO: Use peer id instead of Peer
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
@@ -32,7 +32,7 @@ const Peer = ({ peer, className }: IPeer) => {
   };
 
   return (
-    <div className={`jlab-gather-peer-tile jlab-gather-peer-tile-${className}`}>
+    <div className={`jlab-gather-peer-tile jlab-gather-peer-tile-${location}`}>
       {peer.isHandRaised ? (
         <FontAwesomeIcon
           icon={faHand}
@@ -46,7 +46,7 @@ const Peer = ({ peer, className }: IPeer) => {
           <video
             ref={videoRef}
             className={`jlab-gather-peer-video jlab-gather-peer-video-
-            ${className} 
+            ${location} 
             ${peer.isHandRaised ? 'jlab-gather-peer-hand-raised' : ''}
             ${peer.isLocal ? 'jlab-gather-local' : ''}
             ${peer.id === dominantSpeaker?.id ? 'jlab-gather-active-speaker' : ''}
