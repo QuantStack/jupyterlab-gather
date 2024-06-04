@@ -416,21 +416,12 @@
   height: 64px;
 }
 
-.gradient-border {
-  display: inline-block;
-  padding: 10px;
-  background: linear-gradient(to right, darkblue, darkorchid);
-  border-radius: 10px;
-}
-
-.active-speaker {
+.jlab-gather-active-speaker {
   background:
     linear-gradient(#fff, #fff) padding-box,
     linear-gradient(var(--jp-brand-color1), var(--jp-brand-color3)) border-box;
   border: var(--gather-speaking-border) solid transparent;
   border-radius: var(--gather-border-radius);
-
-  /* padding: 10px 20px; */
 }
 
 @keyframes breathe {

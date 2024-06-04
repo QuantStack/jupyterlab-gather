@@ -47,10 +47,9 @@ const Peer = ({ peer, className }: IPeer) => {
             ref={videoRef}
             className={`jlab-gather-peer-video jlab-gather-peer-video-
             ${className} 
-            
             ${peer.isHandRaised ? 'jlab-gather-peer-hand-raised' : ''}
             ${peer.isLocal ? 'jlab-gather-local' : ''}
-            ${peer.id === dominantSpeaker?.id ? 'active-speaker' : ''}
+            ${peer.id === dominantSpeaker?.id ? 'jlab-gather-active-speaker' : ''}
             `}
             autoPlay
             muted
