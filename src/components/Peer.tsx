@@ -32,7 +32,10 @@ const Peer = ({ peer, location }: IPeer) => {
   };
 
   return (
-    <div className={`jlab-gather-peer-tile jlab-gather-peer-tile-${location}`}>
+    <div
+      className={`jlab-gather-peer-tile jlab-gather-peer-tile-${location} 
+      ${peer.id === dominantSpeaker?.id ? 'jlab-gather-active-speaker' : ''}`}
+    >
       {peer.isHandRaised ? (
         <FontAwesomeIcon
           icon={faHand}
@@ -49,7 +52,6 @@ const Peer = ({ peer, location }: IPeer) => {
             ${location} 
             ${peer.isHandRaised ? 'jlab-gather-peer-hand-raised' : ''}
             ${peer.isLocal ? 'jlab-gather-local' : ''}
-            ${peer.id === dominantSpeaker?.id ? 'jlab-gather-active-speaker' : ''}
             `}
             autoPlay
             muted
