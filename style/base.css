@@ -106,10 +106,10 @@
 .jlab-gather-peer-tile-grid {
   flex: 1 1 20%;
   max-height: 32rem;
-  aspect-ratio: 4/3;
 }
 
 .jlab-gather-peer-video {
+  aspect-ratio: 4/3;
   object-fit: cover;
   z-index: 0;
   border-radius: var(--gather-border-radius);
@@ -332,16 +332,18 @@
 }
 
 .jlab-gather-avatar {
+  aspect-ratio: 1;
   box-shadow: 0 0 10px rgb(0 0 0 / 40%);
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: auto;
+  /* width: 100%; */
+  /* height: auto; */
   background-color: var(--jp-brand-color1);
   border-radius: 9999px;
   font-size: 3rem;
   color: var(--jp-ui-inverse-font-color1);
+  padding: 2rem;
 }
 
 .jlab-gather-modal {
