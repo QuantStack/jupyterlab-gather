@@ -1,7 +1,7 @@
 import {
   HMSPeer,
   selectDominantSpeaker,
-  selectIsLocalVideoEnabled,
+  selectIsPeerVideoEnabled,
   useHMSStore,
   useVideo
 } from '@100mslive/react-sdk';
@@ -20,7 +20,7 @@ const Peer = ({ peer, location }: IPeer) => {
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
   });
-  const isLocalVideoEnabled = useHMSStore(selectIsLocalVideoEnabled);
+  const isPeerVideoEnabled = useHMSStore(selectIsPeerVideoEnabled(peer.id));
 
   const dominantSpeaker = useHMSStore(selectDominantSpeaker);
 
@@ -44,7 +44,7 @@ const Peer = ({ peer, location }: IPeer) => {
       ) : (
         ''
       )}
-      {isLocalVideoEnabled ? (
+      {isPeerVideoEnabled ? (
         <>
           <video
             ref={videoRef}
