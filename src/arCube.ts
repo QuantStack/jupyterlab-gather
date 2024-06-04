@@ -114,7 +114,7 @@ class ArCube {
     );
 
     this.themeChangedSignal = hmsStore.getState(selectAppData('themeChanged'));
-    this.themeChangedSignal.connect(this.handleThemeChange);
+    this.themeChangedSignal.connect(this.handleThemeChange.bind(this));
 
     this.setupThreeStuff();
 
@@ -356,6 +356,8 @@ class ArCube {
       })
     );
 
+    bgCube.name = 'bgCube';
+
     sceneGroup.add(bgCube);
 
     this.sceneGroups.push(sceneGroup);
@@ -571,7 +573,15 @@ class ArCube {
   }
 
   handleThemeChange() {
-    console.log('themeChange');
+    this.sceneGroups.forEach(group => {
+      const cube = group.getObjectByName('bgCube') as THREE.Mesh;
+
+      if (cube && cube.material) {
+        (cube.material as THREE.MeshBasicMaterial).color.set(
+          this.getThemeColor()
+        );
+      }
+    });
   }
 
   render() {
