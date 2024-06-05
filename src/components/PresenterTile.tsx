@@ -1,10 +1,4 @@
-import {
-  HMSPeer,
-  HMSVideoTrack,
-  selectVideoTrackByID,
-  useHMSStore,
-  useVideo
-} from '@100mslive/react-sdk';
+import { HMSPeer, useVideo } from '@100mslive/react-sdk';
 import React from 'react';
 
 interface IPeer {
@@ -17,13 +11,6 @@ const Presenter = ({ peer, className }: IPeer) => {
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
   });
-
-  // TODO: This is for debugging, remove later
-  const track: HMSVideoTrack | null = useHMSStore(
-    selectVideoTrackByID(peer.videoTrack)
-  );
-
-  console.log('track preferred layer', track);
 
   return (
     <video
