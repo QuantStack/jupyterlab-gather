@@ -32,10 +32,7 @@ const Peer = ({ peer, location }: IPeer) => {
   };
 
   return (
-    <div
-      className={`jlab-gather-peer-tile jlab-gather-peer-tile-${location} 
-      ${peer.id === dominantSpeaker?.id ? 'jlab-gather-active-speaker' : ''}`}
-    >
+    <div className={`jlab-gather-peer-tile jlab-gather-peer-tile-${location}`}>
       {peer.isHandRaised ? (
         <FontAwesomeIcon
           icon={faHand}
@@ -48,10 +45,10 @@ const Peer = ({ peer, location }: IPeer) => {
         <>
           <video
             ref={videoRef}
-            className={`jlab-gather-peer-video jlab-gather-peer-video-
-            ${location} 
+            className={`jlab-gather-peer-video jlab-gather-peer-video-${location} 
             ${peer.isHandRaised ? 'jlab-gather-peer-hand-raised' : ''}
             ${peer.isLocal ? 'jlab-gather-local' : ''}
+            ${peer.id === dominantSpeaker?.id ? 'jlab-gather-active-speaker' : ''}
             `}
             autoPlay
             muted
@@ -60,7 +57,12 @@ const Peer = ({ peer, location }: IPeer) => {
           <div className="jlab-gather-peer-name">{peer.name}</div>
         </>
       ) : (
-        <Avatar location={className}>{getInitials(peer.name)}</Avatar>
+        <Avatar
+          location={location}
+          className={`${peer.id === dominantSpeaker?.id ? 'jlab-gather-active-speaker' : ''}`}
+        >
+          {getInitials(peer.name)}
+        </Avatar>
       )}
     </div>
   );

@@ -2,12 +2,15 @@ import React from 'react';
 
 type AvatarProps = {
   children: string;
-  location: string;
+  location: 'grid' | 'sidepane';
+  className?: string;
 };
 
-const Avatar = ({ children, location }: AvatarProps) => {
+const Avatar = ({ children, location, className }: AvatarProps) => {
   return (
-    <div className={`jlab-gather-avatar jlab-gather-avatar-${location}`}>
+    <div
+      className={`jlab-gather-avatar ${className} jlab-gather-avatar-${location}`}
+    >
       {children}
     </div>
   );
