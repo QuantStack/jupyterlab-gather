@@ -88,18 +88,22 @@ const RightSidebarComponent = () => {
     <div className="jlab-gather-sidebar-container">
       <div className="jlab-gather-sidebar-description">Set Scale</div>
       <div className="jlab-gather-sidebar-list jlab-gather-sidebar-right">
-        <ScaleSlider
-          sceneNumber={FIRST_SCENE}
-          initialScale={firstScale}
-          arCube={arCube}
-        />
-        {isSecondModel ? (
-          <ScaleSlider
-            sceneNumber={SECOND_SCENE}
-            initialScale={secondScale}
-            arCube={arCube}
-          />
-        ) : null}
+        {arCube?.modelInScene.length && arCube?.modelInScene.length > 0 && (
+          <>
+            <ScaleSlider
+              sceneNumber={FIRST_SCENE}
+              initialScale={firstScale}
+              arCube={arCube}
+            />
+            {isSecondModel && (
+              <ScaleSlider
+                sceneNumber={SECOND_SCENE}
+                initialScale={secondScale}
+                arCube={arCube}
+              />
+            )}
+          </>
+        )}
       </div>
     </div>
   );
