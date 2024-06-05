@@ -423,6 +423,23 @@
   border: var(--gather-speaking-border) solid transparent;
 }
 
+.jlab-gather-modal-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.jlab-gather-file-content {
+  padding: 2rem 0;
+}
+
+.jlab-gather-file-content-text {
+  font-weight: bold;
+}
+
+.jlab-gather-error-text {
+  color: var(--jp-error-color0);
+}
+
 @keyframes breathe {
   0% {
     opacity: 0.8;

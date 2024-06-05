@@ -6170,6 +6170,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"file-selector@npm:0.2.4":
+  version: 0.2.4
+  resolution: "file-selector@npm:0.2.4"
+  dependencies:
+    tslib: ^2.0.3
+  checksum: 83341e7416352c7de0caf433b33c8d007d3c298c17d6ba0e70168af82bb045d905ddd6f4bc3ca764a2035c6f18eae7f52223dc6a784056f61b8391c351f88323
+  languageName: node
+  linkType: hard
+
 "fill-range@npm:^7.0.1":
   version: 7.0.1
   resolution: "fill-range@npm:7.0.1"
@@ -8044,8 +8053,10 @@ __metadata:
     stylelint-csstree-validator: ^3.0.0
     stylelint-prettier: ^4.0.0
     three: ^0.162.0
+    ts-xor: ^1.3.0
     typescript: ~5.0.2
     unique-names-generator: ^4.7.1
+    use-file-picker: ^2.1.2
     yjs: ^13.5.0
   languageName: unknown
   linkType: soft
@@ -10858,6 +10869,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-xor@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "ts-xor@npm:1.3.0"
+  checksum: c0d2aa5374fa5193ab07be366718c386281667628a336cd606d2c670d22b7bf18b8612ffef28bd23bc70d85e6e2c32a71b337d8f16d40ce103cfc718ee5c4481
+  languageName: node
+  linkType: hard
+
 "tslib@npm:^1.13.0":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
@@ -10865,7 +10883,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.6.2":
+"tslib@npm:^2.0.3, tslib@npm:^2.6.2":
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: 329ea56123005922f39642318e3d1f0f8265d1e7fcb92c633e0809521da75eeaca28d2cf96d7248229deb40e5c19adf408259f4b9640afd20d13aecc1430f3ad
@@ -11126,6 +11144,17 @@ __metadata:
     querystringify: ^2.1.1
     requires-port: ^1.0.0
   checksum: fbdba6b1d83336aca2216bbdc38ba658d9cfb8fc7f665eb8b17852de638ff7d1a162c198a8e4ed66001ddbf6c9888d41e4798912c62b4fd777a31657989f7bdf
+  languageName: node
+  linkType: hard
+
+"use-file-picker@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "use-file-picker@npm:2.1.2"
+  dependencies:
+    file-selector: 0.2.4
+  peerDependencies:
+    react: ">=16"
+  checksum: a03297813d881c871d78a9dcc317b4398927bb403c00f859347475c405db91dcade39cdc02380c047842a15e3839280ff9b112f10336cb09593f2e4a77ec1f77
   languageName: node
   linkType: hard
 
