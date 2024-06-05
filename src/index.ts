@@ -3,7 +3,11 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
+import {
+  ICommandPalette,
+  IThemeManager,
+  MainAreaWidget
+} from '@jupyterlab/apputils';
 import { ILauncher } from '@jupyterlab/launcher';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { IStateDB } from '@jupyterlab/statedb';
@@ -22,7 +26,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: PLUGIN_ID,
   description: 'Video presentation over WebRTC with AR capabilities.',
   autoStart: true,
-  requires: [ICommandPalette, ILauncher, IGatherRegistryToken, IStateDB],
+  requires: [
+    ICommandPalette,
+    ILauncher,
+    IGatherRegistryToken,
+    IStateDB,
+    IThemeManager
+  ],
   optional: [ILayoutRestorer, ISettingRegistry],
   activate: (
     app: JupyterFrontEnd,
@@ -30,6 +40,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     launcher: ILauncher | null,
     registry: IModelRegistry,
     state: IStateDB,
+    themeManager: IThemeManager,
     settingRegistry: ISettingRegistry | null,
     restorer: ILayoutRestorer | null
   ) => {
@@ -47,7 +58,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
         if (!widget || widget.isDisposed) {
           const content = new RootDisplayWidget(
             registry.modelRegistryChanged,
-            state
+            state,
+            themeManager.themeChanged
           );
           widget = new MainAreaWidget({ content });
           widget.id = 'gather-jupyterlab';

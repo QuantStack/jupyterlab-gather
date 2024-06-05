@@ -4,7 +4,9 @@ import {
 } from '@100mslive/react-sdk';
 //@ts-expect-error AR.js doesn't have type definitions
 import * as THREEx from '@ar-js-org/ar.js/three.js/build/ar-threex.js';
-import { Signal } from '@lumino/signaling';
+import { IThemeManager } from '@jupyterlab/apputils';
+import { IChangedArgs } from '@jupyterlab/coreutils';
+import { ISignal, Signal } from '@lumino/signaling';
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -97,14 +99,22 @@ class ArCube {
   // readonly fpsInterval: number;
   // readonly webcamFromArjs: HTMLElement | null;
   // model: IModelRegistryData;
+  themeChangedSignal: ISignal<
+    IThemeManager,
+    IChangedArgs<string, string | null>
+  >;
 
   initialize() {
     this.sceneGroups = [];
     this.loadedModels = [];
+
     hmsStore.subscribe(
       this.setupSource.bind(this),
       selectAppData('videoDeviceId')
     );
+
+    this.themeChangedSignal = hmsStore.getState(selectAppData('themeChanged'));
+    this.themeChangedSignal.connect(this.handleThemeChange.bind(this));
 
     this.setupThreeStuff();
 
@@ -346,6 +356,8 @@ class ArCube {
       })
     );
 
+    bgCube.name = 'bgCube';
+
     sceneGroup.add(bgCube);
 
     this.sceneGroups.push(sceneGroup);
@@ -558,6 +570,18 @@ class ArCube {
     this.sceneGroups[sceneNumber]
       .getObjectByName(`model${sceneNumber}`)
       ?.scale.set(scale, scale, scale);
+  }
+
+  handleThemeChange() {
+    this.sceneGroups.forEach(group => {
+      const cube = group.getObjectByName('bgCube') as THREE.Mesh;
+
+      if (cube && cube.material) {
+        (cube.material as THREE.MeshBasicMaterial).color.set(
+          this.getThemeColor()
+        );
+      }
+    });
   }
 
   render() {
