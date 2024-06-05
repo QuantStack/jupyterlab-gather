@@ -1,5 +1,6 @@
 import {
   HMSPeer,
+  selectHasPeerHandRaised,
   selectLocalPeer,
   selectSessionStore,
   useAVToggle,
@@ -23,6 +24,8 @@ import SettingsButton from './buttons/SettingsButton';
 const ControlBar = () => {
   const hmsActions = useHMSActions();
   const localPeer = useHMSStore(selectLocalPeer);
+  const isHandRaised = useHMSStore(selectHasPeerHandRaised(localPeer!.id));
+
   const presenterId = useHMSStore<HMSPeer>(selectSessionStore('presenterId'));
   const { isLocalAudioEnabled, isLocalVideoEnabled, toggleAudio, toggleVideo } =
     useAVToggle();
@@ -41,9 +44,19 @@ const ControlBar = () => {
     hmsActions.leave();
   };
 
+  const handleAudioToggle = async () => {
+    if (toggleAudio) {
+      toggleAudio();
+    }
+
+    if (isHandRaised) {
+      await hmsActions.lowerLocalPeerHand();
+    }
+  };
+
   return (
     <div id="jlab-gather-control-bar" className="jlab-gather-control-bar">
-      <button className="jlab-gather-btn-control" onClick={toggleAudio}>
+      <button className="jlab-gather-btn-control" onClick={handleAudioToggle}>
         {isLocalAudioEnabled ? (
           <FontAwesomeIcon icon={faMicrophone} className="jlab-gather-icon" />
         ) : (
