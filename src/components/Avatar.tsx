@@ -1,8 +1,9 @@
 import React from 'react';
+import { Location } from './Peer';
 
 type AvatarProps = {
   children: string;
-  location: 'grid' | 'sidepane';
+  location: Location;
   className?: string;
 };
 
