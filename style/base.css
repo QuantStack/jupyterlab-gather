@@ -291,7 +291,7 @@
 
 .jlab-gather-peer-hand-raised {
   outline: 3px solid #f37726;
-  outline-offset: -3px;
+  outline-offset: -4px;
 }
 
 .jlab-gather-icon {
@@ -389,10 +389,17 @@
 }
 
 .jlab-gather-modal-close-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   top: 0.25rem;
   right: 0.25rem;
-  font-size: var(--jp-ui-font-size0);
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  font-size: var(--jp-ui-font-size3);
 }
 
 .jlab-gather-select {
