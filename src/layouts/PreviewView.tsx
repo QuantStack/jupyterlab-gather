@@ -7,7 +7,7 @@ import {
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
-import Video from '../components/Video';
+import Peer from '../components/Peer';
 import SettingsButton from '../components/buttons/SettingsButton';
 const PreviewView = () => {
   console.log('preview');
@@ -33,10 +33,7 @@ const PreviewView = () => {
         <h2>Get Started</h2>
         <div>Setup audio and video</div>
         {localPeer ? (
-          <Video
-            className="jlab-gather-preview-video jlab-gather-local"
-            trackId={localPeer.videoTrack}
-          />
+          <Peer peer={localPeer} location="preview" />
         ) : (
           <FontAwesomeIcon
             icon={faSpinner}
