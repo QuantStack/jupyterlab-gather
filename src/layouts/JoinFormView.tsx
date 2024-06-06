@@ -69,6 +69,8 @@ const JoinFormView = ({ state }: IJoinFormViewProps) => {
     const config: HMSConfig = {
       userName,
       authToken,
+      captureNetworkQualityInPreview: true,
+      alwaysRequestPermissions: true,
       settings: {
         isAudioMuted: true,
         isVideoMuted: false

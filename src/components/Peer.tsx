@@ -1,18 +1,28 @@
 import {
   HMSPeer,
+  selectConnectionQualityByPeerID,
   selectDominantSpeaker,
   selectIsPeerVideoEnabled,
+  selectVideoTrackByPeerID,
   useHMSStore,
   useVideo
 } from '@100mslive/react-sdk';
+import {
+  faFaceSadCry,
+  faFaceSmile,
+  faFaceSmileBeam,
+  faFaceTired
+} from '@fortawesome/free-regular-svg-icons';
 import { faHand } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import Avatar from './Avatar';
 
+export type Location = 'grid' | 'sidepane' | 'preview';
+
 interface IPeer {
   peer: HMSPeer;
-  location: 'grid' | 'sidepane';
+  location: Location;
 }
 
 const Peer = ({ peer, location }: IPeer) => {
@@ -20,9 +30,13 @@ const Peer = ({ peer, location }: IPeer) => {
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
   });
+  const videoTrack = useHMSStore(selectVideoTrackByPeerID(peer.id));
   const isPeerVideoEnabled = useHMSStore(selectIsPeerVideoEnabled(peer.id));
 
   const dominantSpeaker = useHMSStore(selectDominantSpeaker);
+  const downlinkQuality = useHMSStore(
+    selectConnectionQualityByPeerID(peer.id)
+  )?.downlinkQuality;
 
   const getInitials = (name: string) => {
     const nameSegments = name.split(/[_-\s]+/);
@@ -31,8 +45,51 @@ const Peer = ({ peer, location }: IPeer) => {
     return initials ? initials?.join('') : 'Woops';
   };
 
+  const getConnectionQualityIcon = () => {
+    if (!downlinkQuality || downlinkQuality === -1) {
+      return null;
+    }
+    if (downlinkQuality === 0) {
+      return (
+        <FontAwesomeIcon
+          icon={faFaceTired}
+          className="jlab-gather-network-quality-icon"
+          style={{ color: 'var(--jp-error-color1)' }}
+        />
+      );
+    }
+    if (downlinkQuality <= 2) {
+      return (
+        <FontAwesomeIcon
+          icon={faFaceSadCry}
+          className="jlab-gather-network-quality-icon"
+          style={{ color: 'var(--jp-warn-color1)' }}
+        />
+      );
+    }
+    if (downlinkQuality === 3) {
+      return (
+        <FontAwesomeIcon
+          icon={faFaceSmile}
+          className="jlab-gather-network-quality-icon"
+          style={{ color: 'var(--jp-success-color1)' }}
+        />
+      );
+    }
+    if (downlinkQuality >= 4) {
+      return (
+        <FontAwesomeIcon
+          icon={faFaceSmileBeam}
+          className="jlab-gather-network-quality-icon"
+          style={{ color: 'var(--jp-success-color1)' }}
+        />
+      );
+    }
+  };
+
   return (
     <div className={`jlab-gather-peer-tile jlab-gather-peer-tile-${location}`}>
+      {location === 'grid' && getConnectionQualityIcon()}
       {peer.isHandRaised ? (
         <FontAwesomeIcon
           icon={faHand}
@@ -41,7 +98,7 @@ const Peer = ({ peer, location }: IPeer) => {
       ) : (
         ''
       )}
-      {isPeerVideoEnabled ? (
+      {!videoTrack?.degraded && isPeerVideoEnabled ? (
         <>
           <video
             ref={videoRef}

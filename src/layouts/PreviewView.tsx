@@ -7,8 +7,10 @@ import {
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
-import Video from '../components/Video';
+import Peer from '../components/Peer';
+import AudioToggleButton from '../components/buttons/AudioToggleButton';
 import SettingsButton from '../components/buttons/SettingsButton';
+import VideoToggleButton from '../components/buttons/VideoToggleButton';
 const PreviewView = () => {
   console.log('preview');
   const hmsActions = useHMSActions();
@@ -33,10 +35,7 @@ const PreviewView = () => {
         <h2>Get Started</h2>
         <div>Setup audio and video</div>
         {localPeer ? (
-          <Video
-            className="jlab-gather-preview-video jlab-gather-local"
-            trackId={localPeer.videoTrack}
-          />
+          <Peer peer={localPeer} location="preview" />
         ) : (
           <FontAwesomeIcon
             icon={faSpinner}
@@ -58,13 +57,19 @@ const PreviewView = () => {
               'Join'
             )}
           </button>
+
+          <AudioToggleButton />
+
+          <VideoToggleButton />
+
+          <SettingsButton />
+
           <button
             className="jlab-gather-btn-common jlab-gather-btn-danger"
             onClick={handleBack}
           >
             Back
           </button>
-          <SettingsButton />
         </div>
       </div>
     </div>

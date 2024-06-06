@@ -89,6 +89,15 @@
   color: #f37726;
 }
 
+.jlab-gather-network-quality-icon {
+  position: absolute;
+  z-index: 40;
+  top: 0.5rem;
+  left: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+}
+
 .jlab-gather-peer-tile {
   display: flex;
   justify-content: center;
@@ -110,7 +119,6 @@
 }
 
 .jlab-gather-peer-video {
-  /* aspect-ratio: 4/3; */
   object-fit: cover;
   z-index: 0;
   overflow: hidden;
@@ -127,7 +135,8 @@
 /* .jlab-gather-peer-video-grid {
   min-width: 256px;
   min-height: 256px;
-} */
+}
+*/
 
 .jlab-gather-local {
   transform: scaleX(-1);
@@ -175,7 +184,7 @@
   height: 64px;
   background-color: var(--jp-accept-color-normal);
   cursor: pointer;
-  border: 2px solid var(--jp-inverse-border-color);
+  border: none;
   border-radius: 50%;
   font-size: 12px;
   color: whitesmoke;
@@ -291,7 +300,7 @@
 
 .jlab-gather-peer-hand-raised {
   outline: 3px solid #f37726;
-  outline-offset: -3px;
+  outline-offset: -4px;
 }
 
 .jlab-gather-icon {
@@ -389,10 +398,18 @@
 }
 
 .jlab-gather-modal-close-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   top: 0.25rem;
   right: 0.25rem;
-  font-size: var(--jp-ui-font-size0);
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  border: none;
+  border-radius: 50%;
+  font-size: var(--jp-ui-font-size3);
 }
 
 .jlab-gather-select {

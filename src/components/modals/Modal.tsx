@@ -1,3 +1,5 @@
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface IModalProps {
@@ -65,10 +67,10 @@ const Modal = ({
           <div className="jlab-gather-modal-title">{title}</div>
           {hasCloseBtn && (
             <button
-              className="jlab-gather-btn-common jlab-gather-btn-danger jlab-gather-modal-close-btn"
+              className="jlab-gather-btn-danger jlab-gather-modal-close-btn"
               onClick={handleCloseModal}
             >
-              Close
+              <FontAwesomeIcon icon={faXmark} className="" />
             </button>
           )}
         </div>
