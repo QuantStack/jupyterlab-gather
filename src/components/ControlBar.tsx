@@ -7,28 +7,22 @@ import {
   useHMSActions,
   useHMSStore
 } from '@100mslive/react-sdk';
-import {} from '@fortawesome/free-regular-svg-icons';
-import {
-  faMicrophone,
-  faMicrophoneSlash,
-  faPersonThroughWindow,
-  faVideo,
-  faVideoSlash
-} from '@fortawesome/free-solid-svg-icons';
+import { faPersonThroughWindow } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
+import AudioToggleButton from './buttons/AudioToggleButton';
 import PluginButton from './buttons/PluginButton';
 import RaiseHandButton from './buttons/RaiseHandButton';
 import SettingsButton from './buttons/SettingsButton';
+import VideoToggleButton from './buttons/VideoToggleButton';
 
 const ControlBar = () => {
   const hmsActions = useHMSActions();
   const localPeer = useHMSStore(selectLocalPeer);
   const isHandRaised = useHMSStore(selectHasPeerHandRaised(localPeer!.id));
+  const { toggleAudio } = useAVToggle();
 
   const presenterId = useHMSStore<HMSPeer>(selectSessionStore('presenterId'));
-  const { isLocalAudioEnabled, isLocalVideoEnabled, toggleAudio, toggleVideo } =
-    useAVToggle();
 
   useEffect(() => {
     hmsActions.sessionStore.observe('presenterId');
@@ -56,24 +50,9 @@ const ControlBar = () => {
 
   return (
     <div id="jlab-gather-control-bar" className="jlab-gather-control-bar">
-      <button className="jlab-gather-btn-control" onClick={handleAudioToggle}>
-        {isLocalAudioEnabled ? (
-          <FontAwesomeIcon icon={faMicrophone} className="jlab-gather-icon" />
-        ) : (
-          <FontAwesomeIcon
-            icon={faMicrophoneSlash}
-            className="jlab-gather-icon"
-          />
-        )}
-      </button>
+      {localPeer && <AudioToggleButton onClick={handleAudioToggle} />}
 
-      <button className="jlab-gather-btn-control" onClick={toggleVideo}>
-        {isLocalVideoEnabled ? (
-          <FontAwesomeIcon icon={faVideo} className="jlab-gather-icon" />
-        ) : (
-          <FontAwesomeIcon icon={faVideoSlash} className="jlab-gather-icon" />
-        )}
-      </button>
+      <VideoToggleButton />
 
       {/* <ScreenShareButton /> */}
       <PluginButton />
