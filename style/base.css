@@ -89,6 +89,15 @@
   color: #f37726;
 }
 
+.jlab-gather-network-quality-icon {
+  position: absolute;
+  z-index: 40;
+  top: 0.5rem;
+  left: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+}
+
 .jlab-gather-peer-tile {
   display: flex;
   justify-content: center;
