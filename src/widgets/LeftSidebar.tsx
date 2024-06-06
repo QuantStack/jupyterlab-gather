@@ -17,8 +17,6 @@ import { IModelRegistry, IModelRegistryData } from '../registry';
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/IridescenceAbalone/glTF/IridescenceAbalone.gltf
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Fox/glTF/Fox.gltf
 
-const SCENE_NOT_FOUND = -1;
-
 interface IModelInfoList {
   modelList: IModelRegistryData[];
   modelRegistry: IModelRegistry;
@@ -236,16 +234,14 @@ export class LeftSidebarWidget extends SidePanel {
     const loadedModels = hmsStore.getState(selectAppData('loadedModels'));
     const arCube: ArCube = hmsStore.getState(selectAppData('arCube'));
 
-    const sceneToReload = loadedModels.findIndex(
-      (model: string) => model === modelName
-    );
-
     if (!arCube) {
       return;
     }
 
-    if (sceneToReload !== SCENE_NOT_FOUND) {
-      arCube.changeModelInScene(sceneToReload, loadedModels[sceneToReload]);
+    if (loadedModels[modelName]) {
+      loadedModels[modelName].forEach((sceneNumber: number) => {
+        arCube.changeModelInScene(sceneNumber, modelName);
+      });
     }
   }
 }

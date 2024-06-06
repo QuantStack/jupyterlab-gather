@@ -43,7 +43,8 @@ class ArCube {
     // });
   }
 
-  loadedModels: string[];
+  modelInScene: string[];
+  scenesWithModel: Record<string, number[]>;
   clock: THREE.Clock;
   scene: THREE.Scene;
   camera: THREE.Camera;
@@ -106,8 +107,8 @@ class ArCube {
 
   initialize() {
     this.sceneGroups = [];
-    this.loadedModels = [];
-
+    this.modelInScene = new Array(2);
+    this.scenesWithModel = {};
     hmsStore.subscribe(
       this.setupSource.bind(this),
       selectAppData('videoDeviceId')
@@ -369,18 +370,16 @@ class ArCube {
     }
 
     this.loadModel(sceneNumber);
-    console.log('fin');
   }
 
   loadModel(sceneNumber: number, modelName?: string) {
-    console.log('loading model', sceneNumber, modelName);
     if (!this.gltfLoader) {
       this.gltfLoader = new GLTFLoader();
     }
 
     const modelNameOrDuck = modelName ? modelName : 'duck';
     const model = this.findModelByName(modelNameOrDuck);
-    console.log('model', model);
+    console.log('load model', model);
 
     // remove old model first
     // if (this.gltfModel) {
@@ -434,6 +433,7 @@ class ArCube {
       objectGroup.children = filterOutPlanes;
     });
 
+    // handle animations
     this.animations = gltf.animations;
     this.mixer = new THREE.AnimationMixer(gltfModel);
 
@@ -457,23 +457,37 @@ class ArCube {
     scaledModelBoundingBox.getCenter(modelCenter);
     gltfModel.position.set(-modelCenter.x, -modelCenter.y, -modelCenter.z);
 
+    // add model to scene
     this.sceneGroups[sceneNumber].add(gltfModel);
     this.okToLoadModel = true;
 
-    // Update loaded models list
-    const updatedModels = [
-      ...this.loadedModels.slice(0, sceneNumber),
-      modelName,
-      ...this.loadedModels.slice(sceneNumber)
-    ];
+    // Track which scenes a model is loaded in
+    // This is mostly to reflect changes to a model in JupyterCAD if it's loaded in multiple scenes
+    const updatedScenesWithModel = { ...this.scenesWithModel };
 
-    hmsActions.setAppData('loadedModels', updatedModels);
+    if (!(modelName in updatedScenesWithModel)) {
+      updatedScenesWithModel[modelName] = [];
+    }
+
+    if (!updatedScenesWithModel[modelName].includes(sceneNumber)) {
+      updatedScenesWithModel[modelName] = [
+        ...updatedScenesWithModel[modelName],
+        sceneNumber
+      ];
+    }
+
+    this.scenesWithModel = updatedScenesWithModel;
+
+    // Track which model is loaded in which scene
+    // This is to get model names on the scale sliders
+    this.modelInScene[sceneNumber] = modelName;
+
+    // update app data state
+    hmsActions.setAppData('loadedModels', updatedScenesWithModel);
     hmsActions.setAppData('canLoadModel', true);
 
-    // Send scale value to left sidebar
+    // Send scale value to right sidebar
     this.scaleSignal.emit({ sceneNumber, scale: minRatio });
-
-    console.log('model loaded parse');
   };
 
   calcScale(bgCubeBoundingBox: THREE.Box3, modelBoundingBox: THREE.Box3) {
@@ -512,6 +526,17 @@ class ArCube {
   }
 
   changeModelInScene(sceneNumber: number, modelName: string) {
+    // update tracking stuff
+    const modelNameToRemove = this.modelInScene[sceneNumber];
+    const updatedModels = { ...this.scenesWithModel };
+
+    updatedModels[modelNameToRemove] = updatedModels[modelNameToRemove].filter(
+      scene => scene !== sceneNumber
+    );
+
+    this.scenesWithModel = updatedModels;
+
+    // actually change model
     const sceneGroup = this.sceneGroups[sceneNumber];
     const modelToRemove = sceneGroup.getObjectByName(`model${sceneNumber}`);
 

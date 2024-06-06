@@ -1,7 +1,7 @@
 import {
   HMSPeer,
   selectDominantSpeaker,
-  selectIsLocalVideoEnabled,
+  selectIsPeerVideoEnabled,
   useHMSStore,
   useVideo
 } from '@100mslive/react-sdk';
@@ -20,7 +20,7 @@ const Peer = ({ peer, location }: IPeer) => {
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
   });
-  const isLocalVideoEnabled = useHMSStore(selectIsLocalVideoEnabled);
+  const isPeerVideoEnabled = useHMSStore(selectIsPeerVideoEnabled(peer.id));
 
   const dominantSpeaker = useHMSStore(selectDominantSpeaker);
 
@@ -32,10 +32,7 @@ const Peer = ({ peer, location }: IPeer) => {
   };
 
   return (
-    <div
-      className={`jlab-gather-peer-tile jlab-gather-peer-tile-${location} 
-      ${peer.id === dominantSpeaker?.id ? 'jlab-gather-active-speaker' : ''}`}
-    >
+    <div className={`jlab-gather-peer-tile jlab-gather-peer-tile-${location}`}>
       {peer.isHandRaised ? (
         <FontAwesomeIcon
           icon={faHand}
@@ -44,14 +41,14 @@ const Peer = ({ peer, location }: IPeer) => {
       ) : (
         ''
       )}
-      {isLocalVideoEnabled ? (
+      {isPeerVideoEnabled ? (
         <>
           <video
             ref={videoRef}
-            className={`jlab-gather-peer-video jlab-gather-peer-video-
-            ${location} 
+            className={`jlab-gather-peer-video jlab-gather-peer-video-${location} 
             ${peer.isHandRaised ? 'jlab-gather-peer-hand-raised' : ''}
             ${peer.isLocal ? 'jlab-gather-local' : ''}
+            ${peer.id === dominantSpeaker?.id ? 'jlab-gather-active-speaker' : ''}
             `}
             autoPlay
             muted
@@ -60,7 +57,12 @@ const Peer = ({ peer, location }: IPeer) => {
           <div className="jlab-gather-peer-name">{peer.name}</div>
         </>
       ) : (
-        <Avatar>{getInitials(peer.name)}</Avatar>
+        <Avatar
+          location={location}
+          className={`${peer.id === dominantSpeaker?.id ? 'jlab-gather-active-speaker' : ''}`}
+        >
+          {getInitials(peer.name)}
+        </Avatar>
       )}
     </div>
   );
