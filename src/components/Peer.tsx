@@ -3,6 +3,7 @@ import {
   selectConnectionQualityByPeerID,
   selectDominantSpeaker,
   selectIsPeerVideoEnabled,
+  selectVideoTrackByPeerID,
   useHMSStore,
   useVideo
 } from '@100mslive/react-sdk';
@@ -29,6 +30,7 @@ const Peer = ({ peer, location }: IPeer) => {
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
   });
+  const videoTrack = useHMSStore(selectVideoTrackByPeerID(peer.id));
   const isPeerVideoEnabled = useHMSStore(selectIsPeerVideoEnabled(peer.id));
 
   const dominantSpeaker = useHMSStore(selectDominantSpeaker);
@@ -96,7 +98,7 @@ const Peer = ({ peer, location }: IPeer) => {
       ) : (
         ''
       )}
-      {isPeerVideoEnabled ? (
+      {!videoTrack?.degraded && isPeerVideoEnabled ? (
         <>
           <video
             ref={videoRef}
