@@ -178,6 +178,7 @@
 }
 
 .jlab-gather-btn-control {
+  border: none;
   box-shadow: 0 0 10px rgb(0 0 0 / 40%);
   position: relative;
   width: 64px;
