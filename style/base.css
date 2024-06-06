@@ -121,6 +121,7 @@
 .jlab-gather-peer-video-sidepane {
   max-width: 128px;
   max-height: 128px;
+  box-sizing: border-box;
 }
 
 .jlab-gather-peer-video-grid {
