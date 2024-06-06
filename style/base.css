@@ -30,12 +30,12 @@
 }
 
 .jlab-gather-root {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  align-items: center;
 }
 
 .jlab-gather-form-input {
@@ -62,9 +62,9 @@
 }
 
 .jlab-gather-main-grid-container {
-  padding: 2rem 0;
   display: flex;
   justify-content: center;
+  padding: 2rem 0;
 }
 
 .jlab-gather-main-grid-view {
@@ -80,13 +80,13 @@
 }
 
 .jlab-gather-peer-hand-raised-icon {
-  color: #f37726;
   position: absolute;
   z-index: 40;
   top: 0.3rem;
   right: 0.3rem;
   width: 2rem;
   height: 2rem;
+  color: #f37726;
 }
 
 .jlab-gather-peer-tile {
@@ -110,24 +110,24 @@
 }
 
 .jlab-gather-peer-video {
-  aspect-ratio: 4/3;
+  /* aspect-ratio: 4/3; */
   object-fit: cover;
   z-index: 0;
-  border-radius: var(--gather-border-radius);
   overflow: hidden;
   border: var(--gather-speaking-border) solid transparent;
+  border-radius: var(--gather-border-radius);
 }
 
 .jlab-gather-peer-video-sidepane {
+  box-sizing: border-box;
   max-width: 128px;
   max-height: 128px;
-  box-sizing: border-box;
 }
 
-.jlab-gather-peer-video-grid {
+/* .jlab-gather-peer-video-grid {
   min-width: 256px;
   min-height: 256px;
-}
+} */
 
 .jlab-gather-local {
   transform: scaleX(-1);
@@ -155,10 +155,10 @@
   justify-content: center;
   gap: 0.25rem;
   position: sticky;
-  height: 64px;
   z-index: 10;
   bottom: 0;
   width: fit-content;
+  height: 64px;
   padding: 15px;
   background-color: rgb(187 222 251 / 50%);
   border-radius: var(--gather-border-radius);
@@ -280,7 +280,7 @@
 .jlab-gather-peer-sidepane-list {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.4rem;
   height: fit-content;
   margin: 0.3rem;
   margin-right: 0.6rem;
@@ -299,8 +299,8 @@
 }
 
 .jlab-gather-icon-breathe {
-  color: #f37726;
   animation: breathe 3s infinite alternate;
+  color: #f37726;
 }
 
 .jlab-gather-preview-container {
@@ -336,17 +336,17 @@
 
 .jlab-gather-avatar {
   aspect-ratio: 1;
-  box-sizing: border-box;
   box-shadow: 0 0 10px rgb(0 0 0 / 40%);
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
+  padding: 2rem;
   background-color: var(--jp-brand-color1);
+  border: var(--gather-speaking-border) solid transparent;
   border-radius: 9999px;
   font-size: 3rem;
   color: var(--jp-ui-inverse-font-color1);
-  padding: 2rem;
-  border: var(--gather-speaking-border) solid transparent;
 }
 
 .jlab-gather-avatar-grid {
@@ -355,22 +355,23 @@
 
 .jlab-gather-avatar-sidepane {
   width: 128px;
+  height: 128px;
 }
 
 .jlab-gather-modal {
-  padding: 0;
-  border: 0;
   box-shadow: var(--jp-input-box-shadow);
   position: relative;
   width: 60%;
   max-width: 40rem;
+  padding: 0;
+  border: 0;
   border-radius: var(--gather-border-radius);
 }
 
 .jlab-gather-modal-content {
+  padding: 2rem;
   background-color: var(--jp-layout-color1);
   color: var(--jp-inverse-layout-color1);
-  padding: 2rem;
 }
 
 .jlab-gather-modal-header {
