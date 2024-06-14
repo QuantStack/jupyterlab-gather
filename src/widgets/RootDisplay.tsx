@@ -24,7 +24,7 @@ const RootDisplay = ({
   state,
   themeChangedSignal
 }: IRootDisplayProps) => {
-  const childRef = useRef(null);
+  const rootRef = useRef(null);
 
   useEffect(() => {
     hmsActions.setAppData('themeChanged', themeChangedSignal);
@@ -33,14 +33,14 @@ const RootDisplay = ({
   // TODO: There's probably a better way to do this
   // add overflow: auto to parent container
   useEffect(() => {
-    if (childRef.current) {
-      const parent = (childRef.current as HTMLElement).parentElement;
+    if (rootRef.current) {
+      const parent = (rootRef.current as HTMLElement).parentElement;
       parent?.classList.add('jlab-gather-overflow');
     }
-  }, [childRef]);
+  }, [rootRef]);
 
   return (
-    <div ref={childRef} className="jlab-gather-root">
+    <div ref={rootRef} id="jlab-gather-rootId" className="jlab-gather-root">
       <MainDisplay state={state} />
     </div>
   );

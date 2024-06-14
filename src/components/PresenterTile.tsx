@@ -4,9 +4,11 @@ import React from 'react';
 interface IPeer {
   peer: HMSPeer;
   className: string;
+  height: number;
+  width: number;
 }
 
-const Presenter = ({ peer, className }: IPeer) => {
+const Presenter = ({ peer, className, height, width }: IPeer) => {
   // TODO: Use peer id instead of Peer
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
@@ -19,8 +21,8 @@ const Presenter = ({ peer, className }: IPeer) => {
       autoPlay
       muted
       playsInline
-      width={1280}
-      height={720}
+      width={width}
+      height={height}
     />
   );
 };
