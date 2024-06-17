@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 export function useResizeObserver() {
   const [rootDimensions, setRootDimensions] = useState({ width: 0, height: 0 });
 
-  const widget = document.getElementById('gather-jupyterlab');
+  const widget = document.getElementById('jlab-gather-root-id');
   const widgetRef = useRef(widget);
 
   useEffect(() => {

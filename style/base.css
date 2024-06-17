@@ -75,7 +75,6 @@
 
 .jlab-gather-parent {
   overflow-y: auto;
-  height: 100% !important;
 }
 
 .jlab-gather-peer-hand-raised-icon {
@@ -277,17 +276,12 @@
 
 .jlab-gather-presenter-container-main {
   display: flex;
-  justify-content: space-between;
-  gap: 0.3rem;
-  width: 100%;
-}
-
-.jlab-gather-presenter-container {
-  display: flex;
   justify-content: center;
+  gap: 0.3rem;
+  box-sizing: border-box;
   width: 100%;
+  min-height: 100%;
   padding: 0.4rem;
-  padding-right: 0;
 }
 
 .jlab-gather-presenter-video {
@@ -303,8 +297,6 @@
   flex-direction: column;
   gap: 0.4rem;
   height: fit-content;
-  margin-top: 0.4rem;
-  margin-right: 0.4rem;
   padding: 0.2rem;
   background-color: var(--gather-speaker-bg);
   border-radius: var(--gather-border-radius);

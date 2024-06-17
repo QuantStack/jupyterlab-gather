@@ -36,11 +36,12 @@ const RootDisplay = ({
     if (rootRef.current) {
       const parent = (rootRef.current as HTMLElement).parentElement;
       parent?.classList.add('jlab-gather-parent');
+      parent?.setAttribute('id', 'jlab-gather-root-id');
     }
   }, [rootRef]);
 
   return (
-    <div ref={rootRef} id="jlab-gather-rootId" className="jlab-gather-root">
+    <div ref={rootRef} className="jlab-gather-root">
       <MainDisplay state={state} />
     </div>
   );
