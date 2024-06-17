@@ -176,7 +176,7 @@
   bottom: 0;
   width: fit-content;
   height: 64px;
-  margin-top: -74px; /* height + one side of padding*/
+  margin-top: -74px; /* height + one side of padding */
   padding: 15px;
   background-color: rgb(187 222 251 / 50%);
   border-radius: var(--gather-border-radius);
