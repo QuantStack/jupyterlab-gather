@@ -18,7 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import Avatar from './Avatar';
 
-export type Location = 'grid' | 'sidepane' | 'preview';
+export type Location = 'grid' | 'sidepane' | 'preview' | 'presenter';
 
 interface IPeer {
   peer: HMSPeer;
