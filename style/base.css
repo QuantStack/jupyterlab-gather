@@ -61,7 +61,7 @@
   color: black !important;
 }
 
-.jlab-gather-main-grid {
+.jlab-gather-grid-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -274,7 +274,7 @@
   color: var(--jp-inverse-layout-color4);
 }
 
-.jlab-gather-presenter-container-main {
+.jlab-gather-presenter-container {
   display: flex;
   justify-content: center;
   gap: 0.3rem;

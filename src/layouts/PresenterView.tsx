@@ -36,7 +36,7 @@ const PresenterView = () => {
   }, []);
 
   return (
-    <div className="jlab-gather-presenter-container-main">
+    <div className="jlab-gather-presenter-container">
       {presenter ? (
         <Peer
           location="presenter"

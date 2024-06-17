@@ -27,31 +27,16 @@ const GridView = () => {
     desiredNumberOfVisibleTiles: 25
   });
 
-  const fakePeers = [];
-  for (let i = 0; i < peerCount; i++) {
-    fakePeers.push(
-      <Peer
-        key={i}
-        location="grid"
-        peer={peers[0]}
-        height={height}
-        width={width}
-      />
-    );
-  }
-
   return (
-    <div className="jlab-gather-main-grid">
+    <div className="jlab-gather-grid-container">
       {peers.map(peer => (
-        <>
-          <Peer
-            key={peer.id}
-            location="grid"
-            peer={peer}
-            height={height}
-            width={width}
-          />
-        </>
+        <Peer
+          key={peer.id}
+          location="grid"
+          peer={peer}
+          height={height}
+          width={width}
+        />
       ))}
       {/* {fakePeers} */}
     </div>
