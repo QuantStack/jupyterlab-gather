@@ -11,10 +11,11 @@ import Peer from '../components/Peer';
 import AudioToggleButton from '../components/buttons/AudioToggleButton';
 import SettingsButton from '../components/buttons/SettingsButton';
 import VideoToggleButton from '../components/buttons/VideoToggleButton';
+import {
+  TILE_VIEW_GRID_HORIZONTAL_MARGIN,
+  TILE_VIEW_GRID_VERTICAL_MARGIN
+} from '../constants';
 import { useResizeObserver } from '../hooks/useResizeObserver';
-
-const HORIZONTAL_PADDING = 18;
-const VERTICAL_PADDING = 14;
 
 const PreviewView = () => {
   console.log('preview');
@@ -41,8 +42,8 @@ const PreviewView = () => {
         <Peer
           peer={localPeer}
           location="preview"
-          height={rootDimensions.height - VERTICAL_PADDING}
-          width={rootDimensions.width - HORIZONTAL_PADDING}
+          height={rootDimensions.height - TILE_VIEW_GRID_VERTICAL_MARGIN}
+          width={rootDimensions.width - TILE_VIEW_GRID_HORIZONTAL_MARGIN}
         />
       ) : (
         <FontAwesomeIcon
