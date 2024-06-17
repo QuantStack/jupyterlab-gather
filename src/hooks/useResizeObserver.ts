@@ -13,8 +13,8 @@ export function useResizeObserver() {
 
     const observer = new ResizeObserver(entries => {
       setRootDimensions({
-        width: entries[0].contentRect.width,
-        height: entries[0].contentRect.height
+        width: entries[0].contentBoxSize[0].inlineSize,
+        height: entries[0].contentBoxSize[0].blockSize
       });
     });
 

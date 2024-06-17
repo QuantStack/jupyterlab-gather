@@ -35,7 +35,7 @@ const RootDisplay = ({
   useEffect(() => {
     if (rootRef.current) {
       const parent = (rootRef.current as HTMLElement).parentElement;
-      parent?.classList.add('jlab-gather-overflow');
+      parent?.classList.add('jlab-gather-parent');
     }
   }, [rootRef]);
 
