@@ -1,18 +1,44 @@
-import { selectPeers, useHMSStore } from '@100mslive/react-sdk';
+import {
+  selectPeerCount,
+  selectPeers,
+  useHMSStore
+} from '@100mslive/react-sdk';
 import React from 'react';
 import Peer from '../components/Peer';
+import { useResizeObserver } from '../hooks/useResizeObserver';
+import {
+  calculateResponsiveTileViewDimensions,
+  getMaxColumnCount
+} from '../utils/gridViewHelpers';
 
 const GridView = () => {
   const peers = useHMSStore(selectPeers);
-  // const isScreenShareOn = useHMSStore(selectIsSomeoneScreenSharing);
+  const peerCount = useHMSStore(selectPeerCount);
+
+  const rootDimensions = useResizeObserver();
+
+  const maxColumns = getMaxColumnCount(rootDimensions.width);
+
+  const { height, width } = calculateResponsiveTileViewDimensions({
+    clientWidth: rootDimensions.width,
+    clientHeight: rootDimensions.height,
+    maxColumns,
+    numberOfParticipants: peerCount,
+    desiredNumberOfVisibleTiles: 25
+  });
 
   return (
-    <div className="jlab-gather-main-grid-container">
-      <div className="jlab-gather-main-grid-view">
-        {peers.map(peer => (
-          <Peer key={peer.id} peer={peer} location="grid" />
-        ))}
-      </div>
+    <div className="jlab-gather-grid-container">
+      {peers.map(peer => (
+        <Peer
+          key={peer.id}
+          location="grid"
+          peer={peer}
+          height={height}
+          width={width}
+        />
+      ))}
+      {/* {fakePeers} */}
     </div>
   );
 };

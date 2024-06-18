@@ -18,14 +18,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import Avatar from './Avatar';
 
-export type Location = 'grid' | 'sidepane' | 'preview';
+export type Location = 'grid' | 'sidepane' | 'preview' | 'presenter';
 
 interface IPeer {
   peer: HMSPeer;
   location: Location;
+  width?: number;
+  height?: number;
 }
 
-const Peer = ({ peer, location }: IPeer) => {
+const Peer = ({ peer, location, height, width }: IPeer) => {
   // TODO: Use peer id instead of Peer
   const { videoRef } = useVideo({
     trackId: peer.videoTrack
@@ -88,7 +90,13 @@ const Peer = ({ peer, location }: IPeer) => {
   };
 
   return (
-    <div className={`jlab-gather-peer-tile jlab-gather-peer-tile-${location}`}>
+    <div
+      className={`jlab-gather-peer-tile jlab-gather-peer-tile-${location} 
+      ${peer.isHandRaised ? 'jlab-gather-peer-hand-raised' : ''}
+      ${peer.id === dominantSpeaker?.id ? 'jlab-gather-active-speaker' : ''}
+      `}
+      style={{ height: height, width: width }}
+    >
       {location === 'grid' && getConnectionQualityIcon()}
       {peer.isHandRaised ? (
         <FontAwesomeIcon
@@ -103,9 +111,8 @@ const Peer = ({ peer, location }: IPeer) => {
           <video
             ref={videoRef}
             className={`jlab-gather-peer-video jlab-gather-peer-video-${location} 
-            ${peer.isHandRaised ? 'jlab-gather-peer-hand-raised' : ''}
             ${peer.isLocal ? 'jlab-gather-local' : ''}
-            ${peer.id === dominantSpeaker?.id ? 'jlab-gather-active-speaker' : ''}
+            
             `}
             autoPlay
             muted
