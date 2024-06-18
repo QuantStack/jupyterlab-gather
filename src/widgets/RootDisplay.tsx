@@ -10,6 +10,7 @@ import { Notifications } from '../Notifications';
 import { MainDisplay } from '../components/MainDisplay';
 import { TypedHMSRoomProvider, hmsActions } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
+import { isLightTheme } from '../utils/utils';
 
 interface IRootDisplayProps {
   node: HTMLElement;
@@ -28,6 +29,7 @@ const RootDisplay = ({
   themeChangedSignal
 }: IRootDisplayProps) => {
   const rootRef = useRef(null);
+  const isLight = isLightTheme();
 
   useEffect(() => {
     hmsActions.setAppData('themeChanged', themeChangedSignal);
@@ -59,7 +61,7 @@ const RootDisplay = ({
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme="light"
+          theme={isLight ? 'light' : 'dark'}
           transition={Bounce}
         />
       </>
