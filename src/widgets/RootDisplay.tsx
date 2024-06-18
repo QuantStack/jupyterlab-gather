@@ -4,6 +4,9 @@ import { IStateDB } from '@jupyterlab/statedb';
 import { ReactWidget } from '@jupyterlab/ui-components';
 import { ISignal } from '@lumino/signaling';
 import React, { useEffect, useRef } from 'react';
+import { Bounce, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Notifications } from '../Notifications';
 import { MainDisplay } from '../components/MainDisplay';
 import { TypedHMSRoomProvider, hmsActions } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
@@ -42,7 +45,24 @@ const RootDisplay = ({
 
   return (
     <div ref={rootRef} className="jlab-gather-root">
-      <MainDisplay state={state} />
+      <>
+        <MainDisplay state={state} />
+        <Notifications />
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={true}
+          stacked
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
+      </>
     </div>
   );
 };
