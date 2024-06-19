@@ -12,3 +12,8 @@ export const SCROLL_BAR_WIDTH = 6;
 export const SIDEPANE_PEER_LIST_TILE = 128;
 export const SIDEPANE_PEER_LIST_PADDING = 3;
 export const SIDEPANE_PEER_LIST_MARGIN = 13;
+
+export const ROLES = {
+  host: 'host',
+  presenter: 'presenter'
+};
