@@ -54,7 +54,7 @@ const ScaleSlider = ({
 };
 
 const RightSidebarComponent = () => {
-  const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
+  const [arCube, setArCube] = useState<ArCube | null>(null);
   const [isSecondModel, setIsSecondModel] = useState(false);
   const [firstScale, setFirstScale] = useState(1);
   const [secondScale, setSecondScale] = useState(1);
@@ -70,8 +70,10 @@ const RightSidebarComponent = () => {
     if (updatedCube) {
       updatedCube.secondSceneSignal.connect(updateIsSecondModel);
       updatedCube.scaleSignal.connect(updateScaleValue);
-      setArCube(updatedCube);
+    } else {
+      setIsSecondModel(false);
     }
+    setArCube(updatedCube);
   };
 
   // This scale is just to adjust the slider position when a new model is loaded
