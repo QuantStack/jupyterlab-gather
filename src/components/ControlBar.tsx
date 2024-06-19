@@ -10,6 +10,7 @@ import {
 import { faPersonThroughWindow } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
+import { SESSION_STORE } from '../constants';
 import AudioToggleButton from './buttons/AudioToggleButton';
 import PluginButton from './buttons/PluginButton';
 import RaiseHandButton from './buttons/RaiseHandButton';
@@ -22,17 +23,19 @@ const ControlBar = () => {
   const isHandRaised = useHMSStore(selectHasPeerHandRaised(localPeer!.id));
   const { toggleAudio } = useAVToggle();
 
-  const presenterId = useHMSStore<HMSPeer>(selectSessionStore('presenterId'));
+  const presenterId = useHMSStore<HMSPeer>(
+    selectSessionStore(SESSION_STORE.presenterId)
+  );
 
   useEffect(() => {
-    hmsActions.sessionStore.observe('presenterId');
+    hmsActions.sessionStore.observe(SESSION_STORE.presenterId);
   }, [hmsActions]);
 
   const handleLeave = async () => {
     // Stop presentation if presenter leaves
     if (localPeer?.id === presenterId?.id) {
-      await hmsActions.sessionStore.set('isPresenting', false);
-      await hmsActions.sessionStore.set('presenterId', '');
+      await hmsActions.sessionStore.set(SESSION_STORE.isPresenting, false);
+      await hmsActions.sessionStore.set(SESSION_STORE.presenterId, '');
     }
 
     hmsActions.leave();

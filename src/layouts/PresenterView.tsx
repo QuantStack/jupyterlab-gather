@@ -7,6 +7,7 @@ import React, { useEffect } from 'react';
 import Peer from '../components/Peer';
 import PeerSidePane from '../components/PeerSidePane';
 import {
+  SESSION_STORE,
   SIDEPANE_PEER_LIST_MARGIN,
   SIDEPANE_PEER_LIST_PADDING,
   SIDEPANE_PEER_LIST_TILE,
@@ -17,7 +18,7 @@ import { useResizeObserver } from '../hooks/useResizeObserver';
 
 const PresenterView = () => {
   const peers = useHMSStore(selectPeers);
-  const presenter = useHMSStore(selectSessionStore('presenterId'));
+  const presenter = useHMSStore(selectSessionStore(SESSION_STORE.presenterId));
   const rootDimensions = useResizeObserver();
 
   const sidepaneWidth =
