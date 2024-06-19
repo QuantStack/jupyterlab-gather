@@ -1,6 +1,6 @@
 {
     "name": "jupyterlab_gather",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Video presentation over WebRTC with AR capabilities.",
     "keywords": [
         "jupyter",
