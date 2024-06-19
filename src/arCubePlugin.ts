@@ -162,8 +162,16 @@ class ArCubePlugin implements HMSVideoPlugin {
 
   stop() {
     // Remove video element added by AR.js
-    const el = document.getElementById('arjs-video');
-    el?.remove();
+    const video = document.getElementById('arjs-video') as HTMLVideoElement;
+
+    if (video) {
+      for (const track of (video.srcObject as MediaStream).getTracks()) {
+        track.stop();
+      }
+      video.srcObject = null;
+
+      video.remove();
+    }
   }
 }
 
