@@ -93,13 +93,13 @@ const JoinFormView = ({ state }: IJoinFormViewProps) => {
       <div className="jlab-gather-form-input">
         <label htmlFor="userName">Username</label>
         <input
-          required
-          className="jlab-gather-input"
-          value={inputValues.userName}
-          onChange={handleInputChange}
           type="text"
+          className="jlab-gather-input"
           name="userName"
           placeholder="Your name"
+          value={inputValues.userName}
+          onChange={handleInputChange}
+          required
         />
       </div>
       <div className="jlab-gather-form-input">
@@ -109,8 +109,9 @@ const JoinFormView = ({ state }: IJoinFormViewProps) => {
           className="jlab-gather-input"
           name="roomCode"
           placeholder="Room code"
-          onChange={handleInputChange}
           value={inputValues.roomCode}
+          onChange={handleInputChange}
+          required
         />
       </div>
       <button className="jlab-gather-btn-common jlab-gather-btn-primary">
