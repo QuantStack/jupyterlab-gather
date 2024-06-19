@@ -7,6 +7,7 @@ import 'rc-slider/assets/index.css';
 import React, { useEffect, useState } from 'react';
 import ArCube, { IScaleSignal } from '../arCube';
 import { arIcon } from '../components/Icons';
+import { APP_DATA } from '../constants';
 import { hmsStore } from '../hms';
 
 const FIRST_SCENE = 0;
@@ -59,12 +60,12 @@ const RightSidebarComponent = () => {
   const [secondScale, setSecondScale] = useState(1);
 
   useEffect(() => {
-    setArCube(hmsStore.getState(selectAppData('arCube')));
-    hmsStore.subscribe(updateArCube, selectAppData('arCube'));
+    setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
+    hmsStore.subscribe(updateArCube, selectAppData(APP_DATA.arCube));
   }, []);
 
   const updateArCube = () => {
-    const updatedCube = hmsStore.getState(selectAppData('arCube'));
+    const updatedCube = hmsStore.getState(selectAppData(APP_DATA.arCube));
 
     if (updatedCube) {
       updatedCube.secondSceneSignal.connect(updateIsSecondModel);

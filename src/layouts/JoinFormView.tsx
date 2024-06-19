@@ -8,6 +8,7 @@ import {
   colors,
   uniqueNamesGenerator
 } from 'unique-names-generator';
+import { APP_DATA } from '../constants';
 
 interface IJoinFormViewProps {
   state: IStateDB;
@@ -58,7 +59,7 @@ const JoinFormView = ({ state }: IJoinFormViewProps) => {
     e.preventDefault();
 
     console.log('clicking join');
-    hmsActions.setAppData('isConnecting', true);
+    hmsActions.setAppData(APP_DATA.isConnecting, true);
 
     const { userName = '', roomCode = '' } = inputValues;
 
@@ -77,7 +78,7 @@ const JoinFormView = ({ state }: IJoinFormViewProps) => {
       },
       metaData: ''
     };
-    hmsActions.setAppData('config', config);
+    hmsActions.setAppData(APP_DATA.config, config);
 
     try {
       await hmsActions.preview({ ...config });

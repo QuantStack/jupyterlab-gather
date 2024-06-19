@@ -8,6 +8,7 @@ import { Bounce, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Notifications } from '../Notifications';
 import { MainDisplay } from '../components/MainDisplay';
+import { APP_DATA } from '../constants';
 import { TypedHMSRoomProvider, hmsActions } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
 import { isLightTheme } from '../utils/utils';
@@ -32,7 +33,7 @@ const RootDisplay = ({
   const isLight = isLightTheme();
 
   useEffect(() => {
-    hmsActions.setAppData('themeChanged', themeChangedSignal);
+    hmsActions.setAppData(APP_DATA.themeChanged, themeChangedSignal);
   }, []);
 
   // TODO: There's probably a better way to do this

@@ -1,6 +1,7 @@
 import { DeviceType, useDevices } from '@100mslive/react-sdk';
 import React, { ChangeEvent, useEffect, useRef } from 'react';
 
+import { APP_DATA } from '../../constants';
 import { hmsActions } from '../../hms';
 import Modal from './Modal';
 
@@ -26,7 +27,7 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
   const updateDeviceOnChange = (deviceId: string, deviceType: DeviceType) => {
     updateDevice({ deviceId, deviceType });
     if (deviceType === DeviceType.videoInput) {
-      hmsActions.setAppData('videoDeviceId', deviceId);
+      hmsActions.setAppData(APP_DATA.videoDeviceId, deviceId);
     }
   };
 

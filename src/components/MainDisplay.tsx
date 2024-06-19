@@ -8,6 +8,7 @@ import {
 import { IStateDB } from '@jupyterlab/statedb';
 import React, { useEffect } from 'react';
 
+import { APP_DATA, SESSION_STORE } from '../constants';
 import GridView from '../layouts/GridView';
 import JoinFormView from '../layouts/JoinFormView';
 import PresenterView from '../layouts/PresenterView';
@@ -21,19 +22,21 @@ interface IMainDisplayProps {
 export const MainDisplay = ({ state }: IMainDisplayProps) => {
   const hmsActions = useHMSActions();
   const isConnected = useHMSStore(selectIsConnectedToRoom);
-  const isConnecting = useHMSStore(selectAppData('isConnecting'));
-  const isPresenting = useHMSStore(selectSessionStore('isPresenting'));
+  const isConnecting = useHMSStore(selectAppData(APP_DATA.isConnecting));
+  const isPresenting = useHMSStore(
+    selectSessionStore(SESSION_STORE.isPresenting)
+  );
 
   useEffect(() => {
     if (isConnected) {
-      hmsActions.setAppData('isConnecting', false);
+      hmsActions.setAppData(APP_DATA.isConnecting, false);
     }
   }, [isConnected]);
 
   useEffect(() => {
     if (isConnected) {
-      hmsActions.sessionStore.observe('isPresenting');
-      hmsActions.sessionStore.observe('presenterId');
+      hmsActions.sessionStore.observe(SESSION_STORE.isPresenting);
+      hmsActions.sessionStore.observe(SESSION_STORE.presenterId);
     }
 
     window.onunload = () => {

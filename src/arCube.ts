@@ -10,6 +10,7 @@ import { ISignal, Signal } from '@lumino/signaling';
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { APP_DATA } from './constants';
 import { hmsActions, hmsStore } from './hms';
 import { IModelRegistryData } from './registry';
 
@@ -111,10 +112,12 @@ class ArCube {
     this.scenesWithModel = {};
     hmsStore.subscribe(
       this.setupSource.bind(this),
-      selectAppData('videoDeviceId')
+      selectAppData(APP_DATA.videoDeviceId)
     );
 
-    this.themeChangedSignal = hmsStore.getState(selectAppData('themeChanged'));
+    this.themeChangedSignal = hmsStore.getState(
+      selectAppData(APP_DATA.themeChanged)
+    );
     this.themeChangedSignal.connect(this.handleThemeChange.bind(this));
 
     this.setupThreeStuff();
@@ -197,12 +200,12 @@ class ArCube {
     this.deltaTime = 0;
     this.totalTime = 0;
 
-    hmsActions.setAppData('renderer', this.renderer);
+    hmsActions.setAppData(APP_DATA.renderer, this.renderer);
   }
 
   setupSource() {
     console.log('setting up source');
-    const deviceId = hmsStore.getState(selectAppData('videoDeviceId'));
+    const deviceId = hmsStore.getState(selectAppData(APP_DATA.videoDeviceId));
 
     this.arToolkitSource = new THREEx.ArToolkitSource({
       sourceType: 'webcam',
@@ -388,7 +391,7 @@ class ArCube {
 
     // load model
     this.okToLoadModel = false;
-    hmsActions.setAppData('canLoadModel', false);
+    hmsActions.setAppData(APP_DATA.canLoadModel, false);
 
     if ('url' in model) {
       this.gltfLoader.load(
@@ -483,8 +486,8 @@ class ArCube {
     this.modelInScene[sceneNumber] = modelName;
 
     // update app data state
-    hmsActions.setAppData('loadedModels', updatedScenesWithModel);
-    hmsActions.setAppData('canLoadModel', true);
+    hmsActions.setAppData(APP_DATA.loadedModels, updatedScenesWithModel);
+    hmsActions.setAppData(APP_DATA.canLoadModel, true);
 
     // Send scale value to right sidebar
     this.scaleSignal.emit({ sceneNumber, scale: minRatio });
@@ -519,7 +522,9 @@ class ArCube {
   }
 
   findModelByName(name: string) {
-    const modelRegistry = hmsStore.getState(selectAppData('modelRegistry'));
+    const modelRegistry = hmsStore.getState(
+      selectAppData(APP_DATA.modelRegistry)
+    );
     return modelRegistry.find(
       (model: IModelRegistryData) => model.name === name
     );

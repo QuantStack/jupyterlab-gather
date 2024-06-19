@@ -11,6 +11,7 @@ import { arIcon } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
 import AddNewFileModal from '../components/modals/AddNewFileModal';
 import AddNewUrlModal from '../components/modals/AddNewUrlModal';
+import { APP_DATA } from '../constants';
 import { hmsActions, hmsStore } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
@@ -31,29 +32,34 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
   const [isAddModelFileOpen, setAddModelFileOpen] = useState(false);
 
   useEffect(() => {
-    setArCube(hmsStore.getState(selectAppData('arCube')));
+    setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
 
-    hmsStore.subscribe(updateModelLoadingState, selectAppData('canLoadModel'));
-    hmsStore.subscribe(updateArCube, selectAppData('arCube'));
+    hmsStore.subscribe(
+      updateModelLoadingState,
+      selectAppData(APP_DATA.canLoadModel)
+    );
+    hmsStore.subscribe(updateArCube, selectAppData(APP_DATA.arCube));
   }, []);
 
   const updateArCube = () => {
-    setArCube(hmsStore.getState(selectAppData('arCube')));
+    setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
   };
 
   const updateModelLoadingState = () => {
-    const canLoadModel = hmsStore.getState(selectAppData('canLoadModel'));
+    const canLoadModel = hmsStore.getState(
+      selectAppData(APP_DATA.canLoadModel)
+    );
     setIsDisabled(!canLoadModel);
   };
 
   const handleModelNameClick = (model: IModelRegistryData) => {
     setSelected(model);
-    hmsActions.setAppData('selectedModel', model);
+    hmsActions.setAppData(APP_DATA.selectedModel, model);
   };
 
   const handleModelSelectClick = (sceneNumber: number) => {
     if (!arCube) {
-      setArCube(hmsStore.getState(selectAppData('arCube')));
+      setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
     }
 
     if (!selected) {
@@ -206,7 +212,7 @@ export class LeftSidebarWidget extends SidePanel {
 
   addModelToRegistryArray(model: IModelRegistryData) {
     const registryFromStore: IModelRegistryData[] = [
-      ...hmsStore.getState(selectAppData('modelRegistry'))
+      ...hmsStore.getState(selectAppData(APP_DATA.modelRegistry))
     ];
 
     const existingModels = registryFromStore.map(
@@ -225,14 +231,16 @@ export class LeftSidebarWidget extends SidePanel {
       });
     }
 
-    hmsActions.setAppData('modelRegistry', registryFromStore);
+    hmsActions.setAppData(APP_DATA.modelRegistry, registryFromStore);
 
     return registryFromStore;
   }
 
   updateModel(modelName: string) {
-    const loadedModels = hmsStore.getState(selectAppData('loadedModels'));
-    const arCube: ArCube = hmsStore.getState(selectAppData('arCube'));
+    const loadedModels = hmsStore.getState(
+      selectAppData(APP_DATA.loadedModels)
+    );
+    const arCube: ArCube = hmsStore.getState(selectAppData(APP_DATA.arCube));
 
     if (!arCube) {
       return;

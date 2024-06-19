@@ -12,12 +12,17 @@ import { faBan, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import ArCubePlugin from '../../arCubePlugin';
+import { SESSION_STORE } from '../../constants';
 
 const PluginButton = () => {
   const hmsActions = useHMSActions();
   const localPeer = useHMSStore(selectLocalPeer);
-  const isPresenting = useHMSStore<boolean>(selectSessionStore('isPresenting'));
-  const presenterId = useHMSStore<HMSPeer>(selectSessionStore('presenterId'));
+  const isPresenting = useHMSStore<boolean>(
+    selectSessionStore(SESSION_STORE.isPresenting)
+  );
+  const presenterId = useHMSStore<HMSPeer>(
+    selectSessionStore(SESSION_STORE.presenterId)
+  );
   const role = useHMSStore(selectLocalPeerRole);
 
   const arPlugin = new ArCubePlugin();
@@ -29,8 +34,8 @@ const PluginButton = () => {
   const [prevRole, setPrevRole] = useState<HMSRole>();
 
   useEffect(() => {
-    hmsActions.sessionStore.observe('isPresenting');
-    hmsActions.sessionStore.observe('presenterId');
+    hmsActions.sessionStore.observe(SESSION_STORE.isPresenting);
+    hmsActions.sessionStore.observe(SESSION_STORE.presenterId);
 
     if (role) {
       setPrevRole(role);
@@ -48,15 +53,15 @@ const PluginButton = () => {
     if (!isPluginLoaded && !isPresenting) {
       console.log('adding');
       togglePresenterRole('presenter');
-      hmsActions.sessionStore.set('isPresenting', true);
-      hmsActions.sessionStore.set('presenterId', localPeer);
+      hmsActions.sessionStore.set(SESSION_STORE.isPresenting, true);
+      hmsActions.sessionStore.set(SESSION_STORE.presenterId, localPeer);
 
       await hmsActions.addPluginToVideoTrack(arPlugin);
     } else {
       console.log('removing');
       togglePresenterRole(prevRole?.name);
-      hmsActions.sessionStore.set('isPresenting', false);
-      hmsActions.sessionStore.set('presenterId', '');
+      hmsActions.sessionStore.set(SESSION_STORE.isPresenting, false);
+      hmsActions.sessionStore.set(SESSION_STORE.presenterId, '');
 
       await hmsActions.removePluginFromVideoTrack(arPlugin);
     }

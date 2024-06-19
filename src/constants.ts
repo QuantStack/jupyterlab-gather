@@ -17,3 +17,21 @@ export const ROLES = {
   host: 'host',
   presenter: 'presenter'
 };
+
+export const APP_DATA = {
+  arCube: 'arCube',
+  canLoadModel: 'canLoadModel',
+  config: 'config',
+  isConnecting: 'isConnecting',
+  loadedModels: 'loadedModels',
+  modelRegistry: 'modelRegistry',
+  selectedModel: 'selectedModel',
+  renderer: 'renderer',
+  themeChanged: 'themeChanged',
+  videoDeviceId: 'videoDeviceId'
+};
+
+export const SESSION_STORE = {
+  isPresenting: 'isPresenting',
+  presenterId: 'presenterId'
+};
