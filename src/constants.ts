@@ -23,15 +23,16 @@ export const APP_DATA = {
   canLoadModel: 'canLoadModel',
   config: 'config',
   isConnecting: 'isConnecting',
+  isSecondScene: 'isSecondScene',
   loadedModels: 'loadedModels',
   modelRegistry: 'modelRegistry',
   selectedModel: 'selectedModel',
   renderer: 'renderer',
   themeChanged: 'themeChanged',
   videoDeviceId: 'videoDeviceId'
-};
+} as const;
 
 export const SESSION_STORE = {
   isPresenting: 'isPresenting',
   presenterId: 'presenterId'
-};
+} as const;
