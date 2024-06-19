@@ -4,6 +4,7 @@ import {
   selectDominantSpeaker,
   selectIsPeerVideoEnabled,
   selectVideoTrackByPeerID,
+  useAVToggle,
   useHMSStore,
   useVideo
 } from '@100mslive/react-sdk';
@@ -13,7 +14,11 @@ import {
   faFaceSmileBeam,
   faFaceTired
 } from '@fortawesome/free-regular-svg-icons';
-import { faHand } from '@fortawesome/free-solid-svg-icons';
+import {
+  faHand,
+  faMicrophone,
+  faMicrophoneSlash
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import Avatar from './Avatar';
@@ -34,6 +39,7 @@ const Peer = ({ peer, location, height, width }: IPeer) => {
   });
   const videoTrack = useHMSStore(selectVideoTrackByPeerID(peer.id));
   const isPeerVideoEnabled = useHMSStore(selectIsPeerVideoEnabled(peer.id));
+  const { isLocalAudioEnabled } = useAVToggle();
 
   const dominantSpeaker = useHMSStore(selectDominantSpeaker);
   const downlinkQuality = useHMSStore(
@@ -94,6 +100,7 @@ const Peer = ({ peer, location, height, width }: IPeer) => {
       className={`jlab-gather-peer-tile jlab-gather-peer-tile-${location} 
       ${peer.isHandRaised ? 'jlab-gather-peer-hand-raised' : ''}
       ${peer.id === dominantSpeaker?.id ? 'jlab-gather-active-speaker' : ''}
+      ${!isPeerVideoEnabled ? 'jlab-gather-peer-tile-grid-bg' : ''}
       `}
       style={{ height: height, width: width }}
     >
@@ -111,14 +118,28 @@ const Peer = ({ peer, location, height, width }: IPeer) => {
           <video
             ref={videoRef}
             className={`jlab-gather-peer-video jlab-gather-peer-video-${location} 
-            ${peer.isLocal ? 'jlab-gather-local' : ''}
-            
-            `}
+            ${peer.isLocal ? 'jlab-gather-local' : ''}`}
             autoPlay
             muted
             playsInline
           />
-          <div className="jlab-gather-peer-name">{peer.name}</div>
+          {location !== 'presenter' && (
+            <div className="jlab-gather-peer-name">
+              {isLocalAudioEnabled ? (
+                <FontAwesomeIcon
+                  icon={faMicrophone}
+                  className="jlab-gather-icon-small"
+                />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faMicrophoneSlash}
+                  className="jlab-gather-icon-small"
+                />
+              )}
+              {'  '}
+              {peer.name}
+            </div>
+          )}
         </>
       ) : (
         <Avatar
