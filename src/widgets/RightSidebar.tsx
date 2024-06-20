@@ -7,7 +7,7 @@ import 'rc-slider/assets/index.css';
 import React, { useEffect, useState } from 'react';
 import ArCube, { IScaleSignal } from '../arCube';
 import { arIcon } from '../components/Icons';
-import { APP_DATA } from '../constants';
+import { APP_DATA, ARCUBE_DATA } from '../constants';
 import { hmsStore } from '../hms';
 
 const FIRST_SCENE = 0;
@@ -58,11 +58,20 @@ const RightSidebarComponent = () => {
   const [isSecondModel, setIsSecondModel] = useState(false);
   const [firstScale, setFirstScale] = useState(1);
   const [secondScale, setSecondScale] = useState(1);
+  const [modelInScene, setModelInScene] = useState([]);
 
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
     hmsStore.subscribe(updateArCube, selectAppData(APP_DATA.arCube));
+    hmsStore.subscribe(
+      updateModelInScene,
+      selectAppData(ARCUBE_DATA.modelInScene)
+    );
   }, []);
+
+  const updateModelInScene = () => {
+    setModelInScene(hmsStore.getState(selectAppData(ARCUBE_DATA.modelInScene)));
+  };
 
   const updateArCube = () => {
     const updatedCube = hmsStore.getState(selectAppData(APP_DATA.arCube));
@@ -91,7 +100,7 @@ const RightSidebarComponent = () => {
     <div className="jlab-gather-sidebar-container">
       <div className="jlab-gather-sidebar-description">Set Scale</div>
       <div className="jlab-gather-sidebar-list jlab-gather-sidebar-right">
-        {arCube?.modelInScene.length && arCube?.modelInScene.length > 0 && (
+        {arCube && modelInScene.length > 0 && (
           <>
             <ScaleSlider
               sceneNumber={FIRST_SCENE}

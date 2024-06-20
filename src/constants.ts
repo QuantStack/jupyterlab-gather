@@ -18,13 +18,17 @@ export const ROLES = {
   presenter: 'presenter'
 };
 
-export const APP_DATA = {
-  arCube: 'arCube',
+export const ARCUBE_DATA = {
   canLoadModel: 'canLoadModel',
-  config: 'config',
-  isConnecting: 'isConnecting',
   isSecondScene: 'isSecondScene',
   loadedModels: 'loadedModels',
+  modelInScene: 'modelInScene'
+} as const;
+
+export const APP_DATA = {
+  arCube: 'arCube',
+  config: 'config',
+  isConnecting: 'isConnecting',
   modelRegistry: 'modelRegistry',
   selectedModel: 'selectedModel',
   renderer: 'renderer',

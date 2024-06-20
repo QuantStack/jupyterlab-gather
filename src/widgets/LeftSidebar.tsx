@@ -11,7 +11,7 @@ import { arIcon } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
 import AddNewFileModal from '../components/modals/AddNewFileModal';
 import AddNewUrlModal from '../components/modals/AddNewUrlModal';
-import { APP_DATA } from '../constants';
+import { APP_DATA, ARCUBE_DATA } from '../constants';
 import { hmsActions, hmsStore } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
@@ -36,7 +36,7 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
 
     hmsStore.subscribe(
       updateModelLoadingState,
-      selectAppData(APP_DATA.canLoadModel)
+      selectAppData(ARCUBE_DATA.canLoadModel)
     );
     hmsStore.subscribe(updateArCube, selectAppData(APP_DATA.arCube));
   }, []);
@@ -58,7 +58,7 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
 
   const updateModelLoadingState = () => {
     const canLoadModel = hmsStore.getState(
-      selectAppData(APP_DATA.canLoadModel)
+      selectAppData(ARCUBE_DATA.canLoadModel)
     );
     setIsDisabled(!canLoadModel);
   };
@@ -249,7 +249,7 @@ export class LeftSidebarWidget extends SidePanel {
 
   updateModel(modelName: string) {
     const loadedModels = hmsStore.getState(
-      selectAppData(APP_DATA.loadedModels)
+      selectAppData(ARCUBE_DATA.loadedModels)
     );
     const arCube: ArCube = hmsStore.getState(selectAppData(APP_DATA.arCube));
 

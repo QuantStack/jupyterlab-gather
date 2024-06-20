@@ -10,7 +10,7 @@ import { ISignal, Signal } from '@lumino/signaling';
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { APP_DATA } from './constants';
+import { APP_DATA, ARCUBE_DATA } from './constants';
 import { hmsActions, hmsStore } from './hms';
 import { IModelRegistryData } from './registry';
 
@@ -391,7 +391,7 @@ class ArCube {
 
     // load model
     this.okToLoadModel = false;
-    hmsActions.setAppData(APP_DATA.canLoadModel, false);
+    hmsActions.setAppData(ARCUBE_DATA.canLoadModel, false);
 
     if ('url' in model) {
       this.gltfLoader.load(
@@ -484,10 +484,11 @@ class ArCube {
     // Track which model is loaded in which scene
     // This is to get model names on the scale sliders
     this.modelInScene[sceneNumber] = modelName;
+    hmsActions.setAppData(ARCUBE_DATA.modelInScene, [...this.modelInScene]);
 
     // update app data state
-    hmsActions.setAppData(APP_DATA.loadedModels, updatedScenesWithModel);
-    hmsActions.setAppData(APP_DATA.canLoadModel, true);
+    hmsActions.setAppData(ARCUBE_DATA.loadedModels, updatedScenesWithModel);
+    hmsActions.setAppData(ARCUBE_DATA.canLoadModel, true);
 
     // Send scale value to right sidebar
     this.scaleSignal.emit({ sceneNumber, scale: minRatio });
