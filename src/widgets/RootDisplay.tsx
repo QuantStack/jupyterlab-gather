@@ -11,6 +11,7 @@ import { MainDisplay } from '../components/MainDisplay';
 import { APP_DATA } from '../constants';
 import { TypedHMSRoomProvider, hmsActions } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
+import { useBearStore } from '../store';
 import { isLightTheme } from '../utils/utils';
 
 interface IRootDisplayProps {
@@ -31,6 +32,10 @@ const RootDisplay = ({
 }: IRootDisplayProps) => {
   const rootRef = useRef(null);
   const isLight = isLightTheme();
+
+  useBearStore.subscribe(state => console.log('bears - subscribe', state));
+  const bears = useBearStore.use.bears();
+  console.log('bears in root', bears);
 
   useEffect(() => {
     hmsActions.setAppData(APP_DATA.themeChanged, themeChangedSignal);

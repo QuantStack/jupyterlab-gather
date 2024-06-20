@@ -13,6 +13,7 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { APP_DATA, ARCUBE_DATA } from './constants';
 import { hmsActions, hmsStore } from './hms';
 import { IModelRegistryData } from './registry';
+import { useBearStore } from './store';
 
 const FIRST_SCENE = 0;
 const SECOND_SCENE = 1;
@@ -33,6 +34,23 @@ class ArCube {
     this.scaleSignal = new Signal(this);
     this.bgCubeCenter = new THREE.Vector3();
     this.initialize();
+    console.log('bears start');
+    const { getState, setState } = useBearStore;
+    const bears = getState().bears;
+    console.log('bears - test');
+    console.log('bears 1', bears);
+    const inc = useBearStore.getState().increase;
+    inc(2);
+    console.log('bears 2', getState().bears);
+
+    setState({ bears: 5 });
+
+    console.log('bears 3', getState().bears);
+
+    inc(3);
+
+    setState({ tests: 3 });
+    console.log('bears 4', getState());
 
     // this.animate();
     // window.addEventListener('markerFound', () => {
@@ -43,6 +61,8 @@ class ArCube {
     //   console.log('Marker lost');
     // });
   }
+
+  bears: number;
 
   modelInScene: string[];
   scenesWithModel: Record<string, number[]>;
