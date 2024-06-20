@@ -32,25 +32,26 @@ class ArCube {
   constructor() {
     this.secondSceneSignal = new Signal(this);
     this.scaleSignal = new Signal(this);
+    this.modelInSceneSignal = new Signal(this);
     this.bgCubeCenter = new THREE.Vector3();
     this.initialize();
-    console.log('bears start');
-    const { getState, setState } = useBearStore;
-    const bears = getState().bears;
-    console.log('bears - test');
-    console.log('bears 1', bears);
-    const inc = useBearStore.getState().increase;
-    inc(2);
-    console.log('bears 2', getState().bears);
+    // console.log('bears start');
+    // const { getState, setState } = useBearStore;
+    // const bears = getState().bears;
+    // console.log('bears - test');
+    // console.log('bears 1', bears);
+    // const inc = useBearStore.getState().increase;
+    // inc(2);
+    // console.log('bears 2', getState().bears);
 
-    setState({ bears: 5 });
+    // setState({ bears: 5 });
 
-    console.log('bears 3', getState().bears);
+    // console.log('bears 3', getState().bears);
 
-    inc(3);
+    // inc(3);
 
-    setState({ tests: 3 });
-    console.log('bears 4', getState());
+    // setState({ tests: 3 });
+    // console.log('bears 4', getState());
 
     // this.animate();
     // window.addEventListener('markerFound', () => {
@@ -95,6 +96,7 @@ class ArCube {
   readonly newWebcam: HTMLVideoElement | undefined;
   readonly secondSceneSignal: Signal<this, boolean>;
   readonly scaleSignal: Signal<this, IScaleSignal>;
+  readonly modelInSceneSignal: Signal<this, string[]>;
   bgCubeCenter: THREE.Vector3;
   arjsVid: HTMLElement | null;
   // sceneGroup: THREE.Group;
@@ -130,10 +132,19 @@ class ArCube {
     this.sceneGroups = [];
     this.modelInScene = new Array(2);
     this.scenesWithModel = {};
-    hmsStore.subscribe(
-      this.setupSource.bind(this),
-      selectAppData(APP_DATA.videoDeviceId)
+
+    useBearStore.subscribe(
+      state => state.videoDeviceId,
+      (state, oldState) => {
+        console.log('dev - videoDeviceId', state);
+        this.setupSource();
+      }
     );
+
+    // hmsStore.subscribe(
+    //   this.setupSource.bind(this),
+    //   selectAppData(APP_DATA.videoDeviceId)
+    // );
 
     this.themeChangedSignal = hmsStore.getState(
       selectAppData(APP_DATA.themeChanged)
@@ -224,9 +235,12 @@ class ArCube {
   }
 
   setupSource() {
-    console.log('setting up source');
-    const deviceId = hmsStore.getState(selectAppData(APP_DATA.videoDeviceId));
+    console.log('dev - setting up source');
+    // const deviceId = hmsStore.getState(selectAppData(APP_DATA.videoDeviceId));
+    console.log('dev - 1');
+    const deviceId = useBearStore.getState().videoDeviceId;
 
+    console.log('dev 2', deviceId);
     this.arToolkitSource = new THREEx.ArToolkitSource({
       sourceType: 'webcam',
       deviceId
@@ -505,6 +519,7 @@ class ArCube {
     // This is to get model names on the scale sliders
     this.modelInScene[sceneNumber] = modelName;
     hmsActions.setAppData(ARCUBE_DATA.modelInScene, [...this.modelInScene]);
+    this.modelInSceneSignal.emit(this.modelInScene);
 
     // update app data state
     hmsActions.setAppData(ARCUBE_DATA.loadedModels, updatedScenesWithModel);

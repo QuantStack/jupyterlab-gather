@@ -1,17 +1,29 @@
 import { StoreApi, useStore } from 'zustand';
+import { subscribeWithSelector } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 
-interface IBearState {
+type State = {
   bears: number;
   tests: number;
-  increase: (by: number) => void;
-}
+  videoDeviceId: string | null;
+};
 
-const bearStore = createStore<IBearState>()(set => ({
-  bears: 0,
-  tests: 1,
-  increase: by => set(state => ({ bears: state.bears + by }))
-}));
+type Action = {
+  increase: (by: number) => void;
+
+  updateVideoDeviceId: (videoDeviceId: State['videoDeviceId']) => void;
+};
+
+const bearStore = createStore<State & Action>()(
+  subscribeWithSelector(set => ({
+    bears: 0,
+    tests: 1,
+    videoDeviceId: null,
+    updateVideoDeviceId: videoDeviceId =>
+      set(() => ({ videoDeviceId: videoDeviceId })),
+    increase: by => set(state => ({ bears: state.bears + by }))
+  }))
+);
 
 type WithSelectors<S> = S extends { getState: () => infer T }
   ? S & { use: { [K in keyof T]: () => T[K] } }
