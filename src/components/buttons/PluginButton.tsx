@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import ArCubePlugin from '../../arCubePlugin';
 import { SESSION_STORE } from '../../constants';
+import { useCubeStore } from '../../store';
 
 const PluginButton = () => {
   const hmsActions = useHMSActions();
@@ -32,6 +33,8 @@ const PluginButton = () => {
 
   const [isDisabled, setIsDisabled] = useState(false);
   const [prevRole, setPrevRole] = useState<HMSRole>();
+
+  const arCube = useCubeStore.use.arCube();
 
   useEffect(() => {
     hmsActions.sessionStore.observe(SESSION_STORE.isPresenting);
@@ -62,6 +65,7 @@ const PluginButton = () => {
       togglePresenterRole(prevRole?.name);
       hmsActions.sessionStore.set(SESSION_STORE.isPresenting, false);
       hmsActions.sessionStore.set(SESSION_STORE.presenterId, '');
+      arCube?.cleanUp();
 
       await hmsActions.removePluginFromVideoTrack(arPlugin);
     }

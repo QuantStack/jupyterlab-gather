@@ -18,24 +18,6 @@ export const ROLES = {
   presenter: 'presenter'
 };
 
-export const ARCUBE_DATA = {
-  canLoadModel: 'canLoadModel',
-  isSecondScene: 'isSecondScene',
-  loadedModels: 'loadedModels',
-  modelInScene: 'modelInScene'
-} as const;
-
-export const APP_DATA = {
-  arCube: 'arCube',
-  config: 'config',
-  isConnecting: 'isConnecting',
-  modelRegistry: 'modelRegistry',
-  selectedModel: 'selectedModel',
-  renderer: 'renderer',
-  themeChanged: 'themeChanged',
-  videoDeviceId: 'videoDeviceId'
-} as const;
-
 export const SESSION_STORE = {
   isPresenting: 'isPresenting',
   presenterId: 'presenterId'

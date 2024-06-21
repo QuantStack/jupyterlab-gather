@@ -27,7 +27,6 @@ class ArCube {
    */
   constructor() {
     this.scaleSignal = new Signal(this);
-    this.modelInSceneSignal = new Signal(this);
     this.bgCubeCenter = new THREE.Vector3();
     this.initialize();
     // console.log('bears start');
@@ -82,7 +81,6 @@ class ArCube {
   resolve: any;
   deltaTime: number;
   totalTime: number;
-  okToLoadModel: boolean;
   renderTarget: THREE.WebGLRenderTarget;
   sceneGroups: THREE.Group[];
   isSecondScene: boolean;
@@ -90,9 +88,10 @@ class ArCube {
   readonly existingWebcam: HTMLVideoElement | null;
   readonly newWebcam: HTMLVideoElement | undefined;
   readonly scaleSignal: Signal<this, IScaleSignal>;
-  readonly modelInSceneSignal: Signal<this, string[]>;
   bgCubeCenter: THREE.Vector3;
   arjsVid: HTMLElement | null;
+  videoDeviceIdUnsub: () => void;
+  isSecondSceneUnsub: () => void;
   // sceneGroup: THREE.Group;
   // sceneGroupArray: THREE.Group[];
   // edgeGroup: THREE.Group;
@@ -128,12 +127,17 @@ class ArCube {
     this.scenesWithModel = {};
 
     // TODO: this returns the unsub function, use that
-    useCubeStore.subscribe(
+    this.videoDeviceIdUnsub = useCubeStore.subscribe(
       state => state.videoDeviceId,
       videoDeviceId => {
         console.log('dev - videoDeviceId', videoDeviceId);
         this.setupSource();
       }
+    );
+
+    this.isSecondSceneUnsub = useCubeStore.subscribe(
+      state => state.isSecondScene,
+      isSecondScene => (this.isSecondScene = isSecondScene)
     );
 
     this.themeChangedSignal = useCubeStore.getState().themeChangedSignal;
@@ -153,10 +157,21 @@ class ArCube {
     this.setupScene(FIRST_SCENE);
   }
 
+  cleanUp() {
+    this.videoDeviceIdUnsub();
+    this.isSecondSceneUnsub();
+
+    useCubeStore.setState({
+      canLoadModel: true,
+      modelInScene: [],
+      scenesWithModel: {},
+      isSecondScene: false
+    });
+  }
+
   setupThreeStuff() {
     console.log('setting up three stuff');
 
-    this.okToLoadModel = true;
     this.scene = new THREE.Scene();
 
     // promise to track if AR.js has loaded the webcam
@@ -247,22 +262,6 @@ class ArCube {
 
     return cubeColorValue;
   }
-
-  // updateSource() {
-  //   const deviceId = hmsStore.getState(selectAppData('videoDeviceId'));
-
-  //   this.arToolkitSource = new THREEx.ArToolkitSource({
-  //     sourceType: 'webcam',
-  //     deviceId
-  //   });
-
-  //   this.arjsVid = document.getElementById('arjs-video');
-
-  //   if (this.arjsVid) {
-  //     this.arjsVid.remove();
-  //   }
-  //   this.arToolkitSource.init();
-  // }
 
   setupContext() {
     console.log('setting up context');
@@ -410,7 +409,6 @@ class ArCube {
     // }
 
     // load model
-    this.okToLoadModel = false;
     useCubeStore.setState({ canLoadModel: false });
 
     if ('url' in model!) {
@@ -504,10 +502,8 @@ class ArCube {
     // This is to get model names on the scale sliders
     this.modelInScene[sceneNumber] = modelName;
     useCubeStore.setState({ modelInScene: this.modelInScene });
-    this.modelInSceneSignal.emit(this.modelInScene);
 
     // update app data state
-    this.okToLoadModel = true;
     useCubeStore.setState({ canLoadModel: true });
     useCubeStore.setState({ scenesWithModel: updatedScenesWithModel });
 
@@ -579,14 +575,12 @@ class ArCube {
 
   enableSecondScene() {
     console.log('enabling second');
-    this.isSecondScene = true;
     this.setupScene(SECOND_SCENE);
     useCubeStore.setState({ isSecondScene: true });
   }
 
   disableSecondScene() {
     console.log('disabling second');
-    this.isSecondScene = false;
     //TODO this won't work with more than two scenes but it's fine for now
     this.sceneGroups.pop();
 

@@ -217,7 +217,6 @@ export class LeftSidebarWidget extends SidePanel {
 
   updateModel(modelName: string) {
     const scenesWithModel = useCubeStore.getState().scenesWithModel;
-    // const arCube: ArCube = hmsStore.getState(selectAppData(APP_DATA.arCube));
     const arCube = useCubeStore.getState().arCube;
 
     if (!arCube) {
