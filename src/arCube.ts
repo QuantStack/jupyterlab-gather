@@ -236,8 +236,6 @@ class ArCube {
     this.clock = new THREE.Clock();
     this.deltaTime = 0;
     this.totalTime = 0;
-
-    hmsActions.setAppData(APP_DATA.renderer, this.renderer);
   }
 
   setupSource() {
