@@ -19,6 +19,7 @@ type State = {
   scenesWithModel: Record<string, number[]>;
   arCube: ArCube | null;
   isSecondScene: boolean;
+  isConnecting: boolean;
 };
 
 type Action = {
@@ -26,6 +27,7 @@ type Action = {
   updateThemeChangedSignal: (
     themeChangedSignal: State['themeChangedSignal']
   ) => void;
+  updateIsConnecting: (isConnecting: State['isConnecting']) => void;
 };
 
 const cubeStore = createStore<State & Action>()(
@@ -38,10 +40,13 @@ const cubeStore = createStore<State & Action>()(
     scenesWithModel: {},
     arCube: null,
     isSecondScene: false,
+    isConnecting: false,
     updateVideoDeviceId: videoDeviceId =>
       set(() => ({ videoDeviceId: videoDeviceId })),
     updateThemeChangedSignal: themeChangedSignal =>
-      set(() => ({ themeChangedSignal: themeChangedSignal }))
+      set(() => ({ themeChangedSignal: themeChangedSignal })),
+    updateIsConnecting: isConnecting =>
+      set(() => ({ isConnecting: isConnecting }))
   }))
 );
 

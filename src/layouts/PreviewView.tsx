@@ -17,14 +17,17 @@ import {
   TILE_VIEW_GRID_VERTICAL_MARGIN
 } from '../constants';
 import { useResizeObserver } from '../hooks/useResizeObserver';
+import { useCubeStore } from '../store';
 
 const PreviewView = () => {
   console.log('preview');
   const hmsActions = useHMSActions();
-  const [isJoining, setIsJoining] = useState(false);
-
   const localPeer = useHMSStore(selectLocalPeer);
   const config = useHMSStore(selectAppData(APP_DATA.config));
+
+  const [isJoining, setIsJoining] = useState(false);
+
+  const updateIsConnecting = useCubeStore.use.updateIsConnecting();
   const rootDimensions = useResizeObserver();
 
   const handleClick = () => {
@@ -34,7 +37,7 @@ const PreviewView = () => {
   };
 
   const handleBack = () => {
-    hmsActions.setAppData(APP_DATA.isConnecting, false);
+    updateIsConnecting(false);
     hmsActions.leave();
   };
 

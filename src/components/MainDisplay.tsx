@@ -1,5 +1,4 @@
 import {
-  selectAppData,
   selectIsConnectedToRoom,
   selectSessionStore,
   useHMSActions,
@@ -8,11 +7,12 @@ import {
 import { IStateDB } from '@jupyterlab/statedb';
 import React, { useEffect } from 'react';
 
-import { APP_DATA, SESSION_STORE } from '../constants';
+import { SESSION_STORE } from '../constants';
 import GridView from '../layouts/GridView';
 import JoinFormView from '../layouts/JoinFormView';
 import PresenterView from '../layouts/PresenterView';
 import PreviewView from '../layouts/PreviewView';
+import { useCubeStore } from '../store';
 import ControlBar from './ControlBar';
 
 interface IMainDisplayProps {
@@ -22,14 +22,16 @@ interface IMainDisplayProps {
 export const MainDisplay = ({ state }: IMainDisplayProps) => {
   const hmsActions = useHMSActions();
   const isConnected = useHMSStore(selectIsConnectedToRoom);
-  const isConnecting = useHMSStore(selectAppData(APP_DATA.isConnecting));
   const isPresenting = useHMSStore(
     selectSessionStore(SESSION_STORE.isPresenting)
   );
 
+  const isConnecting = useCubeStore.use.isConnecting();
+  const updateIsConnecting = useCubeStore.use.updateIsConnecting();
+
   useEffect(() => {
     if (isConnected) {
-      hmsActions.setAppData(APP_DATA.isConnecting, false);
+      updateIsConnecting(false);
     }
   }, [isConnected]);
 
