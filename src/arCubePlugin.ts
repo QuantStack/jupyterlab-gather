@@ -6,8 +6,7 @@ import {
 } from '@100mslive/hms-video-store';
 import * as THREE from 'three';
 import ArCube from './arCube';
-import { APP_DATA } from './constants';
-import { hmsActions } from './hms';
+import { useCubeStore } from './store';
 
 class ArCubePlugin implements HMSVideoPlugin {
   input: HTMLCanvasElement | null;
@@ -147,7 +146,7 @@ class ArCubePlugin implements HMSVideoPlugin {
 
   async init() {
     this.arCube = new ArCube();
-    hmsActions.setAppData(APP_DATA.arCube, this.arCube);
+    useCubeStore.setState({ arCube: this.arCube });
 
     this.arCube.animate();
   }
@@ -161,7 +160,7 @@ class ArCubePlugin implements HMSVideoPlugin {
   }
 
   stop() {
-    hmsActions.setAppData(APP_DATA.arCube, null);
+    useCubeStore.setState({ arCube: null });
 
     // Remove video element added by AR.js
     const video = document.getElementById('arjs-video') as HTMLVideoElement;

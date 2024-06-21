@@ -1,4 +1,3 @@
-import { selectAppData } from '@100mslive/react-sdk';
 import { ReactWidget } from '@jupyterlab/apputils';
 import { SidePanel } from '@jupyterlab/ui-components';
 import { Panel, Widget } from '@lumino/widgets';
@@ -7,8 +6,6 @@ import 'rc-slider/assets/index.css';
 import React, { useEffect, useState } from 'react';
 import ArCube, { IScaleSignal } from '../arCube';
 import { arIcon } from '../components/Icons';
-import { APP_DATA } from '../constants';
-import { hmsStore } from '../hms';
 import { useCubeStore } from '../store';
 
 const FIRST_SCENE = 0;
@@ -55,26 +52,16 @@ const ScaleSlider = ({
 };
 
 const RightSidebarComponent = () => {
-  const [arCube, setArCube] = useState<ArCube | null>(null);
   const [firstScale, setFirstScale] = useState(1);
   const [secondScale, setSecondScale] = useState(1);
 
+  const arCube = useCubeStore.use.arCube();
   const modelInScene = useCubeStore.use.modelInScene();
   const isSecondModel = useCubeStore.use.isSecondScene();
 
   useEffect(() => {
-    setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
-    hmsStore.subscribe(updateArCube, selectAppData(APP_DATA.arCube));
-  }, []);
-
-  const updateArCube = () => {
-    const updatedCube = hmsStore.getState(selectAppData(APP_DATA.arCube));
-
-    if (updatedCube) {
-      updatedCube.scaleSignal.connect(updateScaleValue);
-    }
-    setArCube(updatedCube);
-  };
+    arCube?.scaleSignal.connect(updateScaleValue);
+  }, [arCube]);
 
   // This scale is just to adjust the slider position when a new model is loaded
   const updateScaleValue = (sender: ArCube, value: IScaleSignal) => {

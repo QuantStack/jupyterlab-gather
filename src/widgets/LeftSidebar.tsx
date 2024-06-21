@@ -1,18 +1,14 @@
-import { selectAppData } from '@100mslive/react-sdk';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactWidget } from '@jupyterlab/apputils';
 import { Button, SidePanel, UseSignal } from '@jupyterlab/ui-components';
 import { ISignal } from '@lumino/signaling';
 import { Panel, Widget } from '@lumino/widgets';
-import React, { useEffect, useState } from 'react';
-import ArCube from '../arCube';
+import React, { useState } from 'react';
 import { arIcon } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
 import AddNewFileModal from '../components/modals/AddNewFileModal';
 import AddNewUrlModal from '../components/modals/AddNewUrlModal';
-import { APP_DATA } from '../constants';
-import { hmsStore } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
 import { useCubeStore } from '../store';
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
@@ -25,44 +21,31 @@ interface IModelInfoList {
 }
 
 const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
-  const [arCube, setArCube] = useState<ArCube | null>(null);
-  // const [selected, setSelected] = useState<IModelRegistryData>();
   const [isAddModelUrlOpen, setAddModelUrlOpen] = useState(false);
   const [isAddModelFileOpen, setAddModelFileOpen] = useState(false);
 
+  const arCube = useCubeStore.use.arCube();
   const isDisabled = !useCubeStore.use.canLoadModel();
   const isSecondScene = useCubeStore.use.isSecondScene();
-  const selected = useCubeStore.use.selected();
-  const setSelected = useCubeStore.use.updateSelected();
-
-  useEffect(() => {
-    setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
-  }, []);
-
-  useEffect(() => {
-    console.log('selected', selected);
-  }, [selected]);
+  const selected = useCubeStore.use.selectedModel();
+  const setSelected = useCubeStore.use.updateSelectedModel();
 
   const handleModelNameClick = (model: IModelRegistryData) => {
     setSelected(model);
   };
 
   const handleModelSelectClick = (sceneNumber: number) => {
-    console.log('dev - handle set click', sceneNumber);
-
     if (!arCube) {
-      console.log('dev - !arcube');
-      setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
+      console.log('Something went wrong');
+      return;
     }
-
-    console.log('dev - post !', arCube);
 
     if (!selected) {
       console.log('Model must be selected');
       return;
     }
 
-    arCube?.changeModelInScene(sceneNumber, selected.name);
+    arCube.changeModelInScene(sceneNumber, selected.name);
   };
 
   const handleLoadSecondScene = () => {
@@ -234,7 +217,8 @@ export class LeftSidebarWidget extends SidePanel {
 
   updateModel(modelName: string) {
     const scenesWithModel = useCubeStore.getState().scenesWithModel;
-    const arCube: ArCube = hmsStore.getState(selectAppData(APP_DATA.arCube));
+    // const arCube: ArCube = hmsStore.getState(selectAppData(APP_DATA.arCube));
+    const arCube = useCubeStore.getState().arCube;
 
     if (!arCube) {
       return;
