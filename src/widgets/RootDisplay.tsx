@@ -8,10 +8,9 @@ import { Bounce, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Notifications } from '../Notifications';
 import { MainDisplay } from '../components/MainDisplay';
-import { APP_DATA } from '../constants';
-import { TypedHMSRoomProvider, hmsActions } from '../hms';
+import { TypedHMSRoomProvider } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
-import { useBearStore } from '../store';
+import { useCubeStore } from '../store';
 import { isLightTheme } from '../utils/utils';
 
 interface IRootDisplayProps {
@@ -32,13 +31,12 @@ const RootDisplay = ({
 }: IRootDisplayProps) => {
   const rootRef = useRef(null);
   const isLight = isLightTheme();
+  const updateThemeSignal = useCubeStore.use.updateThemeChangedSignal();
 
-  useBearStore.subscribe(state => console.log('bears - subscribe', state));
-  const bears = useBearStore.use.bears();
-  console.log('bears in root', bears);
-
+  //TODO: Move this to index?
   useEffect(() => {
-    hmsActions.setAppData(APP_DATA.themeChanged, themeChangedSignal);
+    // hmsActions.setAppData(APP_DATA.themeChanged, themeChangedSignal);
+    updateThemeSignal(themeChangedSignal);
   }, []);
 
   // TODO: There's probably a better way to do this

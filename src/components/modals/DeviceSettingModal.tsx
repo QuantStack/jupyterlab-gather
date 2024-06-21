@@ -1,7 +1,7 @@
 import { DeviceType, useDevices } from '@100mslive/react-sdk';
 import React, { ChangeEvent, useEffect, useRef } from 'react';
 
-import { useBearStore } from '../../store';
+import { useCubeStore } from '../../store';
 import Modal from './Modal';
 
 interface IAddNewModelModalProps {
@@ -14,7 +14,7 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
   const { allDevices, updateDevice } = useDevices();
   //TODO: Using for optimistic updates in the label. Other devices update quick enough
   const { videoInput, audioInput, audioOutput } = allDevices;
-  const updateDeviceId = useBearStore.use.updateVideoDeviceId();
+  const updateDeviceId = useCubeStore.use.updateVideoDeviceId();
 
   useEffect(() => {
     if (isOpen && focusInputRef.current) {
@@ -27,7 +27,6 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
   const updateDeviceOnChange = (deviceId: string, deviceType: DeviceType) => {
     updateDevice({ deviceId, deviceType });
     if (deviceType === DeviceType.videoInput) {
-      console.log('dev - update device');
       updateDeviceId(deviceId);
       // useBearStore.setState({ videoDeviceId: deviceId });
       // hmsActions.setAppData(APP_DATA.videoDeviceId, deviceId);

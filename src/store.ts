@@ -1,27 +1,33 @@
+import { IThemeManager } from '@jupyterlab/apputils';
+import { IChangedArgs } from '@jupyterlab/coreutils';
+import { ISignal } from '@lumino/signaling';
 import { StoreApi, useStore } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 
 type State = {
-  bears: number;
-  tests: number;
   videoDeviceId: string | null;
+  themeChangedSignal: ISignal<
+    IThemeManager,
+    IChangedArgs<string, string | null>
+  > | null;
 };
 
 type Action = {
-  increase: (by: number) => void;
-
   updateVideoDeviceId: (videoDeviceId: State['videoDeviceId']) => void;
+  updateThemeChangedSignal: (
+    themeChangedSignal: State['themeChangedSignal']
+  ) => void;
 };
 
-const bearStore = createStore<State & Action>()(
+const cubeStore = createStore<State & Action>()(
   subscribeWithSelector(set => ({
-    bears: 0,
-    tests: 1,
     videoDeviceId: null,
+    themeChangedSignal: null,
     updateVideoDeviceId: videoDeviceId =>
       set(() => ({ videoDeviceId: videoDeviceId })),
-    increase: by => set(state => ({ bears: state.bears + by }))
+    updateThemeChangedSignal: themeChangedSignal =>
+      set(() => ({ themeChangedSignal: themeChangedSignal }))
   }))
 );
 
@@ -39,4 +45,4 @@ const createSelectors = <S extends StoreApi<object>>(_store: S) => {
   return store;
 };
 
-export const useBearStore = createSelectors(bearStore);
+export const useCubeStore = createSelectors(cubeStore);

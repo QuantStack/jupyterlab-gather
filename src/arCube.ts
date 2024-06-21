@@ -13,7 +13,7 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { APP_DATA, ARCUBE_DATA } from './constants';
 import { hmsActions, hmsStore } from './hms';
 import { IModelRegistryData } from './registry';
-import { useBearStore } from './store';
+import { useCubeStore } from './store';
 
 const FIRST_SCENE = 0;
 const SECOND_SCENE = 1;
@@ -126,17 +126,18 @@ class ArCube {
   themeChangedSignal: ISignal<
     IThemeManager,
     IChangedArgs<string, string | null>
-  >;
+  > | null;
 
   initialize() {
     this.sceneGroups = [];
     this.modelInScene = new Array(2);
     this.scenesWithModel = {};
 
-    useBearStore.subscribe(
+    // TODO: this returns the unsub function, use that
+    useCubeStore.subscribe(
       state => state.videoDeviceId,
-      (state, oldState) => {
-        console.log('dev - videoDeviceId', state);
+      videoDeviceId => {
+        console.log('dev - videoDeviceId', videoDeviceId);
         this.setupSource();
       }
     );
@@ -146,10 +147,15 @@ class ArCube {
     //   selectAppData(APP_DATA.videoDeviceId)
     // );
 
-    this.themeChangedSignal = hmsStore.getState(
-      selectAppData(APP_DATA.themeChanged)
-    );
-    this.themeChangedSignal.connect(this.handleThemeChange.bind(this));
+    // this.themeChangedSignal = hmsStore.getState(
+    //   selectAppData(APP_DATA.themeChanged)
+    // );
+
+    this.themeChangedSignal = useCubeStore.getState().themeChangedSignal;
+
+    this.themeChangedSignal
+      ? this.themeChangedSignal.connect(this.handleThemeChange.bind(this))
+      : console.log('Theme change signal not found');
 
     this.setupThreeStuff();
 
@@ -238,7 +244,7 @@ class ArCube {
     console.log('dev - setting up source');
     // const deviceId = hmsStore.getState(selectAppData(APP_DATA.videoDeviceId));
     console.log('dev - 1');
-    const deviceId = useBearStore.getState().videoDeviceId;
+    const deviceId = useCubeStore.getState().videoDeviceId;
 
     console.log('dev 2', deviceId);
     this.arToolkitSource = new THREEx.ArToolkitSource({
