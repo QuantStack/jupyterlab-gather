@@ -4,6 +4,7 @@ import { ISignal } from '@lumino/signaling';
 import { StoreApi, useStore } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
+import ArCube from './arCube';
 import { IModelRegistryData } from './registry';
 
 type State = {
@@ -16,6 +17,8 @@ type State = {
   canLoadModel: boolean;
   modelInScene: string[];
   scenesWithModel: Record<string, number[]>;
+  arCube: ArCube | null;
+  isSecondScene: boolean;
 };
 
 type Action = {
@@ -33,6 +36,8 @@ const cubeStore = createStore<State & Action>()(
     canLoadModel: true,
     modelInScene: [],
     scenesWithModel: {},
+    arCube: null,
+    isSecondScene: false,
     updateVideoDeviceId: videoDeviceId =>
       set(() => ({ videoDeviceId: videoDeviceId })),
     updateThemeChangedSignal: themeChangedSignal =>

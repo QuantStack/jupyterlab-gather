@@ -26,7 +26,6 @@ class ArCube {
    * Construct a new JupyterLab-Gather widget.
    */
   constructor() {
-    this.secondSceneSignal = new Signal(this);
     this.scaleSignal = new Signal(this);
     this.modelInSceneSignal = new Signal(this);
     this.bgCubeCenter = new THREE.Vector3();
@@ -90,7 +89,6 @@ class ArCube {
   bgCubeBoundingBox: THREE.Box3;
   readonly existingWebcam: HTMLVideoElement | null;
   readonly newWebcam: HTMLVideoElement | undefined;
-  readonly secondSceneSignal: Signal<this, boolean>;
   readonly scaleSignal: Signal<this, IScaleSignal>;
   readonly modelInSceneSignal: Signal<this, string[]>;
   bgCubeCenter: THREE.Vector3;
@@ -582,7 +580,7 @@ class ArCube {
     console.log('enabling second');
     this.isSecondScene = true;
     this.setupScene(SECOND_SCENE);
-    this.secondSceneSignal.emit(true);
+    useCubeStore.setState({ isSecondScene: true });
   }
 
   disableSecondScene() {
@@ -597,7 +595,7 @@ class ArCube {
       }
     });
 
-    this.secondSceneSignal.emit(false);
+    useCubeStore.setState({ isSecondScene: false });
   }
 
   resizeCanvasToDisplaySize() {

@@ -25,33 +25,17 @@ interface IModelInfoList {
 }
 
 const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
-  const isDisabled = !useCubeStore.use.canLoadModel();
-  const [isSecondScene, setIsSecondScene] = useState(false);
   const [arCube, setArCube] = useState<ArCube | null>(null);
   const [selected, setSelected] = useState<IModelRegistryData>();
   const [isAddModelUrlOpen, setAddModelUrlOpen] = useState(false);
   const [isAddModelFileOpen, setAddModelFileOpen] = useState(false);
 
+  const isDisabled = !useCubeStore.use.canLoadModel();
+  const isSecondScene = useCubeStore.use.isSecondScene();
+
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
-
-    hmsStore.subscribe(updateArCube, selectAppData(APP_DATA.arCube));
   }, []);
-
-  const updateArCube = () => {
-    const updatedCube = hmsStore.getState(selectAppData(APP_DATA.arCube));
-
-    if (updatedCube) {
-      updatedCube.secondSceneSignal.connect(updateIsSecondModel);
-    } else {
-      setIsSecondScene(false);
-    }
-    setArCube(updatedCube);
-  };
-
-  const updateIsSecondModel = (sender: ArCube, value: boolean) => {
-    setIsSecondScene(value);
-  };
 
   const handleModelNameClick = (model: IModelRegistryData) => {
     setSelected(model);
