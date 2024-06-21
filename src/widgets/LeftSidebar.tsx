@@ -12,7 +12,7 @@ import ModelListItem from '../components/ModelListItem';
 import AddNewFileModal from '../components/modals/AddNewFileModal';
 import AddNewUrlModal from '../components/modals/AddNewUrlModal';
 import { APP_DATA } from '../constants';
-import { hmsActions, hmsStore } from '../hms';
+import { hmsStore } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
 import { useCubeStore } from '../store';
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
@@ -26,26 +26,36 @@ interface IModelInfoList {
 
 const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
   const [arCube, setArCube] = useState<ArCube | null>(null);
-  const [selected, setSelected] = useState<IModelRegistryData>();
+  // const [selected, setSelected] = useState<IModelRegistryData>();
   const [isAddModelUrlOpen, setAddModelUrlOpen] = useState(false);
   const [isAddModelFileOpen, setAddModelFileOpen] = useState(false);
 
   const isDisabled = !useCubeStore.use.canLoadModel();
   const isSecondScene = useCubeStore.use.isSecondScene();
+  const selected = useCubeStore.use.selected();
+  const setSelected = useCubeStore.use.updateSelected();
 
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
   }, []);
 
+  useEffect(() => {
+    console.log('selected', selected);
+  }, [selected]);
+
   const handleModelNameClick = (model: IModelRegistryData) => {
     setSelected(model);
-    hmsActions.setAppData(APP_DATA.selectedModel, model);
   };
 
   const handleModelSelectClick = (sceneNumber: number) => {
+    console.log('dev - handle set click', sceneNumber);
+
     if (!arCube) {
+      console.log('dev - !arcube');
       setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
     }
+
+    console.log('dev - post !', arCube);
 
     if (!selected) {
       console.log('Model must be selected');

@@ -551,6 +551,7 @@ class ArCube {
   }
 
   changeModelInScene(sceneNumber: number, modelName: string) {
+    console.log('dev - change model in scene', sceneNumber, modelName);
     // update tracking stuff
     const modelNameToRemove = this.modelInScene[sceneNumber];
     const updatedModels = { ...this.scenesWithModel };

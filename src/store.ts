@@ -22,6 +22,7 @@ type State = {
   isSecondScene: boolean;
   isConnecting: boolean;
   config: HMSConfig;
+  selected: IModelRegistryData | null;
 };
 
 type Action = {
@@ -31,6 +32,7 @@ type Action = {
   ) => void;
   updateIsConnecting: (isConnecting: State['isConnecting']) => void;
   updateConfig: (config: State['config']) => void;
+  updateSelected: (selected: State['selected']) => void;
 };
 
 const cubeStore = createStore<State & Action>()(
@@ -45,13 +47,15 @@ const cubeStore = createStore<State & Action>()(
     isSecondScene: false,
     isConnecting: false,
     config: { authToken: '', userName: '' },
+    selected: null,
     updateVideoDeviceId: videoDeviceId =>
       set(() => ({ videoDeviceId: videoDeviceId })),
     updateThemeChangedSignal: themeChangedSignal =>
       set(() => ({ themeChangedSignal: themeChangedSignal })),
     updateIsConnecting: isConnecting =>
       set(() => ({ isConnecting: isConnecting })),
-    updateConfig: config => set(() => ({ config: config }))
+    updateConfig: config => set(() => ({ config: config })),
+    updateSelected: selected => set(() => ({ selected: selected }))
   }))
 );
 
