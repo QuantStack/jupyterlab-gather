@@ -426,7 +426,7 @@ class ArCube {
 
     // load model
     this.okToLoadModel = false;
-    hmsActions.setAppData(ARCUBE_DATA.canLoadModel, false);
+    useCubeStore.setState({ canLoadModel: false });
 
     if ('url' in model!) {
       this.gltfLoader.load(
@@ -497,7 +497,6 @@ class ArCube {
 
     // add model to scene
     this.sceneGroups[sceneNumber].add(gltfModel);
-    this.okToLoadModel = true;
 
     // Track which scenes a model is loaded in
     // This is mostly to reflect changes to a model in JupyterCAD if it's loaded in multiple scenes
@@ -524,7 +523,8 @@ class ArCube {
 
     // update app data state
     hmsActions.setAppData(ARCUBE_DATA.loadedModels, updatedScenesWithModel);
-    hmsActions.setAppData(ARCUBE_DATA.canLoadModel, true);
+    this.okToLoadModel = true;
+    useCubeStore.setState({ canLoadModel: true });
 
     // Send scale value to right sidebar
     this.scaleSignal.emit({ sceneNumber, scale: minRatio });

@@ -25,7 +25,7 @@ interface IModelInfoList {
 }
 
 const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
-  const [isDisabled, setIsDisabled] = useState(false);
+  const isDisabled = !useCubeStore.use.canLoadModel();
   const [isSecondScene, setIsSecondScene] = useState(false);
   const [arCube, setArCube] = useState<ArCube | null>(null);
   const [selected, setSelected] = useState<IModelRegistryData>();
@@ -35,10 +35,6 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
   useEffect(() => {
     setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
 
-    hmsStore.subscribe(
-      updateModelLoadingState,
-      selectAppData(ARCUBE_DATA.canLoadModel)
-    );
     hmsStore.subscribe(updateArCube, selectAppData(APP_DATA.arCube));
   }, []);
 
@@ -55,13 +51,6 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
 
   const updateIsSecondModel = (sender: ArCube, value: boolean) => {
     setIsSecondScene(value);
-  };
-
-  const updateModelLoadingState = () => {
-    const canLoadModel = hmsStore.getState(
-      selectAppData(ARCUBE_DATA.canLoadModel)
-    );
-    setIsDisabled(!canLoadModel);
   };
 
   const handleModelNameClick = (model: IModelRegistryData) => {
