@@ -4,6 +4,7 @@ import { ISignal } from '@lumino/signaling';
 import { StoreApi, useStore } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
+import { IModelRegistryData } from './registry';
 
 type State = {
   videoDeviceId: string | null;
@@ -11,6 +12,7 @@ type State = {
     IThemeManager,
     IChangedArgs<string, string | null>
   > | null;
+  modelRegistry: IModelRegistryData[];
 };
 
 type Action = {
@@ -24,6 +26,7 @@ const cubeStore = createStore<State & Action>()(
   subscribeWithSelector(set => ({
     videoDeviceId: null,
     themeChangedSignal: null,
+    modelRegistry: [],
     updateVideoDeviceId: videoDeviceId =>
       set(() => ({ videoDeviceId: videoDeviceId })),
     updateThemeChangedSignal: themeChangedSignal =>

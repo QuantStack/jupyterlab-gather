@@ -14,6 +14,7 @@ import AddNewUrlModal from '../components/modals/AddNewUrlModal';
 import { APP_DATA, ARCUBE_DATA } from '../constants';
 import { hmsActions, hmsStore } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
+import { useCubeStore } from '../store';
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/IridescenceAbalone/glTF/IridescenceAbalone.gltf
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Fox/glTF/Fox.gltf
@@ -222,9 +223,8 @@ export class LeftSidebarWidget extends SidePanel {
   }
 
   addModelToRegistryArray(model: IModelRegistryData) {
-    const registryFromStore: IModelRegistryData[] = [
-      ...hmsStore.getState(selectAppData(APP_DATA.modelRegistry))
-    ];
+    const registryFromStore: IModelRegistryData[] =
+      useCubeStore.getState().modelRegistry;
 
     const existingModels = registryFromStore.map(
       registryModels => registryModels.name
@@ -242,7 +242,9 @@ export class LeftSidebarWidget extends SidePanel {
       });
     }
 
-    hmsActions.setAppData(APP_DATA.modelRegistry, registryFromStore);
+    useCubeStore.setState({
+      modelRegistry: registryFromStore
+    });
 
     return registryFromStore;
   }

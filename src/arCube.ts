@@ -1,7 +1,4 @@
-import {
-  selectAppData,
-  selectIsSomeoneScreenSharing
-} from '@100mslive/react-sdk';
+import { selectIsSomeoneScreenSharing } from '@100mslive/react-sdk';
 //@ts-expect-error AR.js doesn't have type definitions
 import * as THREEx from '@ar-js-org/ar.js/three.js/build/ar-threex.js';
 import { IThemeManager } from '@jupyterlab/apputils';
@@ -10,7 +7,7 @@ import { ISignal, Signal } from '@lumino/signaling';
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { APP_DATA, ARCUBE_DATA } from './constants';
+import { ARCUBE_DATA } from './constants';
 import { hmsActions, hmsStore } from './hms';
 import { IModelRegistryData } from './registry';
 import { useCubeStore } from './store';
@@ -431,7 +428,7 @@ class ArCube {
     this.okToLoadModel = false;
     hmsActions.setAppData(ARCUBE_DATA.canLoadModel, false);
 
-    if ('url' in model) {
+    if ('url' in model!) {
       this.gltfLoader.load(
         model.url,
         gltf => {
@@ -444,7 +441,7 @@ class ArCube {
           console.log('Error loading model url', error);
         }
       );
-    } else if ('gltf' in model) {
+    } else if ('gltf' in model!) {
       // const data = JSON.stringify(model.gltf);
       const data = model.gltf;
       this.gltfLoader.parse(
@@ -562,9 +559,7 @@ class ArCube {
   }
 
   findModelByName(name: string) {
-    const modelRegistry = hmsStore.getState(
-      selectAppData(APP_DATA.modelRegistry)
-    );
+    const modelRegistry = useCubeStore.getState().modelRegistry;
     return modelRegistry.find(
       (model: IModelRegistryData) => model.name === name
     );
