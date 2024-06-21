@@ -1,3 +1,4 @@
+import { HMSConfig } from '@100mslive/react-sdk';
 import { IThemeManager } from '@jupyterlab/apputils';
 import { IChangedArgs } from '@jupyterlab/coreutils';
 import { ISignal } from '@lumino/signaling';
@@ -20,6 +21,7 @@ type State = {
   arCube: ArCube | null;
   isSecondScene: boolean;
   isConnecting: boolean;
+  config: HMSConfig;
 };
 
 type Action = {
@@ -28,6 +30,7 @@ type Action = {
     themeChangedSignal: State['themeChangedSignal']
   ) => void;
   updateIsConnecting: (isConnecting: State['isConnecting']) => void;
+  updateConfig: (config: State['config']) => void;
 };
 
 const cubeStore = createStore<State & Action>()(
@@ -41,12 +44,14 @@ const cubeStore = createStore<State & Action>()(
     arCube: null,
     isSecondScene: false,
     isConnecting: false,
+    config: { authToken: '', userName: '' },
     updateVideoDeviceId: videoDeviceId =>
       set(() => ({ videoDeviceId: videoDeviceId })),
     updateThemeChangedSignal: themeChangedSignal =>
       set(() => ({ themeChangedSignal: themeChangedSignal })),
     updateIsConnecting: isConnecting =>
-      set(() => ({ isConnecting: isConnecting }))
+      set(() => ({ isConnecting: isConnecting })),
+    updateConfig: config => set(() => ({ config: config }))
   }))
 );
 

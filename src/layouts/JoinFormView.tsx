@@ -8,7 +8,6 @@ import {
   colors,
   uniqueNamesGenerator
 } from 'unique-names-generator';
-import { APP_DATA } from '../constants';
 import { useCubeStore } from '../store';
 
 interface IJoinFormViewProps {
@@ -20,6 +19,7 @@ const JoinFormView = ({ state }: IJoinFormViewProps) => {
   const [savedRoomCode, setSavedRoomCode] = useState('');
 
   const updateIsConnecting = useCubeStore.use.updateIsConnecting();
+  const updateConfig = useCubeStore.use.updateConfig();
 
   const randomUserName = uniqueNamesGenerator({
     dictionaries: [adjectives, colors, animals],
@@ -81,7 +81,8 @@ const JoinFormView = ({ state }: IJoinFormViewProps) => {
       },
       metaData: ''
     };
-    hmsActions.setAppData(APP_DATA.config, config);
+
+    updateConfig(config);
 
     try {
       await hmsActions.preview({ ...config });
