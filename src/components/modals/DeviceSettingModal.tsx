@@ -28,8 +28,6 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
     updateDevice({ deviceId, deviceType });
     if (deviceType === DeviceType.videoInput) {
       updateDeviceId(deviceId);
-      // useBearStore.setState({ videoDeviceId: deviceId });
-      // hmsActions.setAppData(APP_DATA.videoDeviceId, deviceId);
     }
   };
 

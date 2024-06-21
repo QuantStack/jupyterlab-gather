@@ -138,15 +138,6 @@ class ArCube {
       }
     );
 
-    // hmsStore.subscribe(
-    //   this.setupSource.bind(this),
-    //   selectAppData(APP_DATA.videoDeviceId)
-    // );
-
-    // this.themeChangedSignal = hmsStore.getState(
-    //   selectAppData(APP_DATA.themeChanged)
-    // );
-
     this.themeChangedSignal = useCubeStore.getState().themeChangedSignal;
 
     this.themeChangedSignal
@@ -235,12 +226,9 @@ class ArCube {
   }
 
   setupSource() {
-    console.log('dev - setting up source');
-    // const deviceId = hmsStore.getState(selectAppData(APP_DATA.videoDeviceId));
-    console.log('dev - 1');
+    console.log('setting up source');
     const deviceId = useCubeStore.getState().videoDeviceId;
 
-    console.log('dev 2', deviceId);
     this.arToolkitSource = new THREEx.ArToolkitSource({
       sourceType: 'webcam',
       deviceId

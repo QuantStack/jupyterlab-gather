@@ -35,7 +35,6 @@ const RootDisplay = ({
 
   //TODO: Move this to index?
   useEffect(() => {
-    // hmsActions.setAppData(APP_DATA.themeChanged, themeChangedSignal);
     updateThemeSignal(themeChangedSignal);
   }, []);
 
