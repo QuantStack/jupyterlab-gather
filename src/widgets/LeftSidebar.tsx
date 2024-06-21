@@ -11,7 +11,7 @@ import { arIcon } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
 import AddNewFileModal from '../components/modals/AddNewFileModal';
 import AddNewUrlModal from '../components/modals/AddNewUrlModal';
-import { APP_DATA, ARCUBE_DATA } from '../constants';
+import { APP_DATA } from '../constants';
 import { hmsActions, hmsStore } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
 import { useCubeStore } from '../store';
@@ -239,17 +239,15 @@ export class LeftSidebarWidget extends SidePanel {
   }
 
   updateModel(modelName: string) {
-    const loadedModels = hmsStore.getState(
-      selectAppData(ARCUBE_DATA.loadedModels)
-    );
+    const scenesWithModel = useCubeStore.getState().scenesWithModel;
     const arCube: ArCube = hmsStore.getState(selectAppData(APP_DATA.arCube));
 
     if (!arCube) {
       return;
     }
 
-    if (loadedModels[modelName]) {
-      loadedModels[modelName].forEach((sceneNumber: number) => {
+    if (scenesWithModel[modelName]) {
+      scenesWithModel[modelName].forEach((sceneNumber: number) => {
         arCube.changeModelInScene(sceneNumber, modelName);
       });
     }

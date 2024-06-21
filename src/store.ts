@@ -15,6 +15,7 @@ type State = {
   modelRegistry: IModelRegistryData[];
   canLoadModel: boolean;
   modelInScene: string[];
+  scenesWithModel: Record<string, number[]>;
 };
 
 type Action = {
@@ -31,6 +32,7 @@ const cubeStore = createStore<State & Action>()(
     modelRegistry: [],
     canLoadModel: true,
     modelInScene: [],
+    scenesWithModel: {},
     updateVideoDeviceId: videoDeviceId =>
       set(() => ({ videoDeviceId: videoDeviceId })),
     updateThemeChangedSignal: themeChangedSignal =>

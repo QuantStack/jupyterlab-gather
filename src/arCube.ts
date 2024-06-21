@@ -7,8 +7,7 @@ import { ISignal, Signal } from '@lumino/signaling';
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { ARCUBE_DATA } from './constants';
-import { hmsActions, hmsStore } from './hms';
+import { hmsStore } from './hms';
 import { IModelRegistryData } from './registry';
 import { useCubeStore } from './store';
 
@@ -522,9 +521,9 @@ class ArCube {
     this.modelInSceneSignal.emit(this.modelInScene);
 
     // update app data state
-    hmsActions.setAppData(ARCUBE_DATA.loadedModels, updatedScenesWithModel);
     this.okToLoadModel = true;
     useCubeStore.setState({ canLoadModel: true });
+    useCubeStore.setState({ scenesWithModel: updatedScenesWithModel });
 
     // Send scale value to right sidebar
     this.scaleSignal.emit({ sceneNumber, scale: minRatio });
