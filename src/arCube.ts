@@ -518,7 +518,7 @@ class ArCube {
     // Track which model is loaded in which scene
     // This is to get model names on the scale sliders
     this.modelInScene[sceneNumber] = modelName;
-    hmsActions.setAppData(ARCUBE_DATA.modelInScene, [...this.modelInScene]);
+    useCubeStore.setState({ modelInScene: this.modelInScene });
     this.modelInSceneSignal.emit(this.modelInScene);
 
     // update app data state
