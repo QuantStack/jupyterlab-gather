@@ -52,14 +52,14 @@ const PluginButton = () => {
     // don't load plugin locally if someone else is presenting
     if (!isPluginLoaded && !isPresenting) {
       console.log('adding');
-      togglePresenterRole('presenter');
+      // togglePresenterRole('presenter');
       hmsActions.sessionStore.set(SESSION_STORE.isPresenting, true);
       hmsActions.sessionStore.set(SESSION_STORE.presenterId, localPeer);
 
       await hmsActions.addPluginToVideoTrack(arPlugin);
     } else {
       console.log('removing');
-      togglePresenterRole(prevRole?.name);
+      // togglePresenterRole(prevRole?.name);
       hmsActions.sessionStore.set(SESSION_STORE.isPresenting, false);
       hmsActions.sessionStore.set(SESSION_STORE.presenterId, '');
 
