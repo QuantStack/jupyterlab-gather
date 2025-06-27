@@ -91,12 +91,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
         // Register default models
         registry.registerModel({
           name: 'duck',
-          url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Duck/glTF/Duck.gltf'
+          url: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/Duck/glTF-Binary/Duck.glb'
         });
 
         registry.registerModel({
           name: 'fox',
-          url: 'https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Fox/glTF/Fox.gltf'
+          url: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/Fox/glTF-Binary/Fox.glb'
         });
       }
     });

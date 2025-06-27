@@ -5,6 +5,7 @@ import {
   uniqueNamesGenerator
 } from 'unique-names-generator';
 import { useFilePicker } from 'use-file-picker';
+//@ts-expect-error no types
 import { FileTypeValidator } from 'use-file-picker/validators';
 import { IModelRegistryData } from '../../registry';
 import Modal from './Modal';
