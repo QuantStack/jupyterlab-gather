@@ -3,6 +3,7 @@ import React, { ChangeEvent, useEffect, useRef } from 'react';
 
 import { useCubeStore } from '../../store';
 import Modal from './Modal';
+import DownloadCubeButton from '../buttons/DownloadCubeButton';
 
 interface IAddNewModelModalProps {
   isOpen: boolean;
@@ -60,6 +61,7 @@ const DeviceSettingModal = ({ isOpen, onClose }: IAddNewModelModalProps) => {
             updateDeviceOnChange(e.target.value, DeviceType.audioOutput)
           }
         />
+        <DownloadCubeButton />
       </div>
     </Modal>
   );
