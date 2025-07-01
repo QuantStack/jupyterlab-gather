@@ -71,13 +71,14 @@ const JoinFormView = ({ state }: IJoinFormViewProps) => {
       userName,
       authToken,
       captureNetworkQualityInPreview: true,
-      alwaysRequestPermissions: true,
+      rememberDeviceSelection: true,
       settings: {
         isAudioMuted: true,
         isVideoMuted: false
       },
       metaData: ''
     };
+
     hmsActions.setAppData(APP_DATA.config, config);
 
     try {
