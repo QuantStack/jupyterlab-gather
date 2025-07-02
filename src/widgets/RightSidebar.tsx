@@ -1,4 +1,3 @@
-import { selectAppData } from '@100mslive/react-sdk';
 import { ReactWidget } from '@jupyterlab/apputils';
 import { SidePanel } from '@jupyterlab/ui-components';
 import { Panel, Widget } from '@lumino/widgets';
@@ -7,8 +6,7 @@ import 'rc-slider/assets/index.css';
 import React, { useEffect, useState } from 'react';
 import ArCube, { IScaleSignal } from '../arCube';
 import { arIcon } from '../components/Icons';
-import { APP_DATA } from '../constants';
-import { hmsStore } from '../hms';
+import { useCubeStore } from '../store';
 
 const FIRST_SCENE = 0;
 const SECOND_SCENE = 1;
@@ -54,25 +52,16 @@ const ScaleSlider = ({
 };
 
 const RightSidebarComponent = () => {
-  const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
-  const [isSecondModel, setIsSecondModel] = useState(false);
   const [firstScale, setFirstScale] = useState(1);
   const [secondScale, setSecondScale] = useState(1);
 
+  const arCube = useCubeStore.use.arCube();
+  const modelInScene = useCubeStore.use.modelInScene();
+  const isSecondModel = useCubeStore.use.isSecondScene();
+
   useEffect(() => {
-    setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
-    hmsStore.subscribe(updateArCube, selectAppData(APP_DATA.arCube));
-  }, []);
-
-  const updateArCube = () => {
-    const updatedCube = hmsStore.getState(selectAppData(APP_DATA.arCube));
-
-    if (updatedCube) {
-      updatedCube.secondSceneSignal.connect(updateIsSecondModel);
-      updatedCube.scaleSignal.connect(updateScaleValue);
-      setArCube(updatedCube);
-    }
-  };
+    arCube?.scaleSignal.connect(updateScaleValue);
+  }, [arCube]);
 
   // This scale is just to adjust the slider position when a new model is loaded
   const updateScaleValue = (sender: ArCube, value: IScaleSignal) => {
@@ -81,15 +70,11 @@ const RightSidebarComponent = () => {
       : setSecondScale(value.scale);
   };
 
-  const updateIsSecondModel = (sender: ArCube, value: boolean) => {
-    setIsSecondModel(value);
-  };
-
   return (
     <div className="jlab-gather-sidebar-container">
       <div className="jlab-gather-sidebar-description">Set Scale</div>
       <div className="jlab-gather-sidebar-list jlab-gather-sidebar-right">
-        {arCube?.modelInScene.length && arCube?.modelInScene.length > 0 && (
+        {arCube && modelInScene.length > 0 && (
           <>
             <ScaleSlider
               sceneNumber={FIRST_SCENE}

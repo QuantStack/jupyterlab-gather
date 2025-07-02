@@ -1,5 +1,4 @@
 import {
-  selectAppData,
   selectLocalPeer,
   useHMSActions,
   useHMSStore
@@ -12,19 +11,21 @@ import AudioToggleButton from '../components/buttons/AudioToggleButton';
 import SettingsButton from '../components/buttons/SettingsButton';
 import VideoToggleButton from '../components/buttons/VideoToggleButton';
 import {
-  APP_DATA,
   TILE_VIEW_GRID_HORIZONTAL_MARGIN,
   TILE_VIEW_GRID_VERTICAL_MARGIN
 } from '../constants';
 import { useResizeObserver } from '../hooks/useResizeObserver';
+import { useCubeStore } from '../store';
 
 const PreviewView = () => {
   console.log('preview');
   const hmsActions = useHMSActions();
+  const localPeer = useHMSStore(selectLocalPeer);
+
   const [isJoining, setIsJoining] = useState(false);
 
-  const localPeer = useHMSStore(selectLocalPeer);
-  const config = useHMSStore(selectAppData(APP_DATA.config));
+  const config = useCubeStore.use.config();
+  const updateIsConnecting = useCubeStore.use.updateIsConnecting();
   const rootDimensions = useResizeObserver();
 
   const handleClick = () => {
@@ -34,7 +35,7 @@ const PreviewView = () => {
   };
 
   const handleBack = () => {
-    hmsActions.setAppData(APP_DATA.isConnecting, false);
+    updateIsConnecting(false);
     hmsActions.leave();
   };
 

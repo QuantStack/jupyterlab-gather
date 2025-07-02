@@ -1,7 +1,4 @@
-import {
-  selectAppData,
-  selectIsSomeoneScreenSharing
-} from '@100mslive/react-sdk';
+import { selectIsSomeoneScreenSharing } from '@100mslive/react-sdk';
 //@ts-expect-error AR.js doesn't have type definitions
 import * as THREEx from '@ar-js-org/ar.js/three.js/build/ar-threex.js';
 import { IThemeManager } from '@jupyterlab/apputils';
@@ -10,9 +7,9 @@ import { ISignal, Signal } from '@lumino/signaling';
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { APP_DATA } from './constants';
-import { hmsActions, hmsStore } from './hms';
+import { hmsStore } from './hms';
 import { IModelRegistryData } from './registry';
+import { useCubeStore } from './store';
 
 const FIRST_SCENE = 0;
 const SECOND_SCENE = 1;
@@ -29,19 +26,9 @@ class ArCube {
    * Construct a new JupyterLab-Gather widget.
    */
   constructor() {
-    this.secondSceneSignal = new Signal(this);
     this.scaleSignal = new Signal(this);
     this.bgCubeCenter = new THREE.Vector3();
     this.initialize();
-
-    // this.animate();
-    // window.addEventListener('markerFound', () => {
-    //   console.log('Marker found');
-    // });
-
-    // window.addEventListener('markerLost', () => {
-    //   console.log('Marker lost');
-    // });
   }
 
   modelInScene: string[];
@@ -66,59 +53,45 @@ class ArCube {
   resolve: any;
   deltaTime: number;
   totalTime: number;
-  okToLoadModel: boolean;
   renderTarget: THREE.WebGLRenderTarget;
   sceneGroups: THREE.Group[];
   isSecondScene: boolean;
   bgCubeBoundingBox: THREE.Box3;
   readonly existingWebcam: HTMLVideoElement | null;
   readonly newWebcam: HTMLVideoElement | undefined;
-  readonly secondSceneSignal: Signal<this, boolean>;
   readonly scaleSignal: Signal<this, IScaleSignal>;
   bgCubeCenter: THREE.Vector3;
   arjsVid: HTMLElement | null;
-  // sceneGroup: THREE.Group;
-  // sceneGroupArray: THREE.Group[];
-  // edgeGroup: THREE.Group;
-  // gltfModel: THREE.Group;
-  // observer: IntersectionObserver;
-  // readonly markerControls: any;
-  // readonly ambientLight: THREE.AmbientLight;
-  // readonly rotationArray: THREE.Vector3[];
-  // readonly markerRoot: THREE.Group;
-  // readonly markerGroup: THREE.Group;
-  // readonly pointLight: THREE.PointLight;
-  // readonly loader: THREE.TextureLoader;
-  // readonly stageMesh: THREE.MeshBasicMaterial;
-  // readonly stage: THREE.Mesh;
-  // readonly edgeGeometry: THREE.CylinderGeometry;
-  // readonly edgeCenters: THREE.Vector3[];
-  // readonly edgeRotations: THREE.Vector3[];
-  // readonly animationRequestId: number | undefined;
-  // readonly now: number;
-  // readonly then: number;
-  // readonly elapsed: number;
-  // readonly fpsInterval: number;
-  // readonly webcamFromArjs: HTMLElement | null;
-  // model: IModelRegistryData;
+  videoDeviceIdUnsub: () => void;
+  isSecondSceneUnsub: () => void;
   themeChangedSignal: ISignal<
     IThemeManager,
     IChangedArgs<string, string | null>
-  >;
+  > | null;
 
   initialize() {
     this.sceneGroups = [];
     this.modelInScene = new Array(2);
     this.scenesWithModel = {};
-    hmsStore.subscribe(
-      this.setupSource.bind(this),
-      selectAppData(APP_DATA.videoDeviceId)
+
+    this.videoDeviceIdUnsub = useCubeStore.subscribe(
+      state => state.videoDeviceId,
+      videoDeviceId => {
+        console.log('dev - videoDeviceId', videoDeviceId);
+        this.setupSource();
+      }
     );
 
-    this.themeChangedSignal = hmsStore.getState(
-      selectAppData(APP_DATA.themeChanged)
+    this.isSecondSceneUnsub = useCubeStore.subscribe(
+      state => state.isSecondScene,
+      isSecondScene => (this.isSecondScene = isSecondScene)
     );
-    this.themeChangedSignal.connect(this.handleThemeChange.bind(this));
+
+    this.themeChangedSignal = useCubeStore.getState().themeChangedSignal;
+
+    this.themeChangedSignal
+      ? this.themeChangedSignal.connect(this.handleThemeChange.bind(this))
+      : console.log('Theme change signal not found');
 
     this.setupThreeStuff();
 
@@ -131,10 +104,21 @@ class ArCube {
     this.setupScene(FIRST_SCENE);
   }
 
+  cleanUp() {
+    this.videoDeviceIdUnsub();
+    this.isSecondSceneUnsub();
+
+    useCubeStore.setState({
+      canLoadModel: true,
+      modelInScene: [],
+      scenesWithModel: {},
+      isSecondScene: false
+    });
+  }
+
   setupThreeStuff() {
     console.log('setting up three stuff');
 
-    this.okToLoadModel = true;
     this.scene = new THREE.Scene();
 
     // promise to track if AR.js has loaded the webcam
@@ -199,13 +183,11 @@ class ArCube {
     this.clock = new THREE.Clock();
     this.deltaTime = 0;
     this.totalTime = 0;
-
-    hmsActions.setAppData(APP_DATA.renderer, this.renderer);
   }
 
   setupSource() {
     console.log('setting up source');
-    const deviceId = hmsStore.getState(selectAppData(APP_DATA.videoDeviceId));
+    const deviceId = useCubeStore.getState().videoDeviceId;
 
     this.arToolkitSource = new THREEx.ArToolkitSource({
       sourceType: 'webcam',
@@ -227,22 +209,6 @@ class ArCube {
 
     return cubeColorValue;
   }
-
-  // updateSource() {
-  //   const deviceId = hmsStore.getState(selectAppData('videoDeviceId'));
-
-  //   this.arToolkitSource = new THREEx.ArToolkitSource({
-  //     sourceType: 'webcam',
-  //     deviceId
-  //   });
-
-  //   this.arjsVid = document.getElementById('arjs-video');
-
-  //   if (this.arjsVid) {
-  //     this.arjsVid.remove();
-  //   }
-  //   this.arToolkitSource.init();
-  // }
 
   setupContext() {
     console.log('setting up context');
@@ -390,10 +356,9 @@ class ArCube {
     // }
 
     // load model
-    this.okToLoadModel = false;
-    hmsActions.setAppData(APP_DATA.canLoadModel, false);
+    useCubeStore.setState({ canLoadModel: false });
 
-    if ('url' in model) {
+    if ('url' in model!) {
       this.gltfLoader.load(
         model.url,
         gltf => {
@@ -406,7 +371,7 @@ class ArCube {
           console.log('Error loading model url', error);
         }
       );
-    } else if ('gltf' in model) {
+    } else if ('gltf' in model!) {
       // const data = JSON.stringify(model.gltf);
       const data = model.gltf;
       this.gltfLoader.parse(
@@ -462,7 +427,6 @@ class ArCube {
 
     // add model to scene
     this.sceneGroups[sceneNumber].add(gltfModel);
-    this.okToLoadModel = true;
 
     // Track which scenes a model is loaded in
     // This is mostly to reflect changes to a model in JupyterCAD if it's loaded in multiple scenes
@@ -484,10 +448,11 @@ class ArCube {
     // Track which model is loaded in which scene
     // This is to get model names on the scale sliders
     this.modelInScene[sceneNumber] = modelName;
+    useCubeStore.setState({ modelInScene: this.modelInScene });
 
     // update app data state
-    hmsActions.setAppData(APP_DATA.loadedModels, updatedScenesWithModel);
-    hmsActions.setAppData(APP_DATA.canLoadModel, true);
+    useCubeStore.setState({ canLoadModel: true });
+    useCubeStore.setState({ scenesWithModel: updatedScenesWithModel });
 
     // Send scale value to right sidebar
     this.scaleSignal.emit({ sceneNumber, scale: minRatio });
@@ -522,15 +487,14 @@ class ArCube {
   }
 
   findModelByName(name: string) {
-    const modelRegistry = hmsStore.getState(
-      selectAppData(APP_DATA.modelRegistry)
-    );
+    const modelRegistry = useCubeStore.getState().modelRegistry;
     return modelRegistry.find(
       (model: IModelRegistryData) => model.name === name
     );
   }
 
   changeModelInScene(sceneNumber: number, modelName: string) {
+    console.log('dev - change model in scene', sceneNumber, modelName);
     // update tracking stuff
     const modelNameToRemove = this.modelInScene[sceneNumber];
     const updatedModels = { ...this.scenesWithModel };
@@ -558,14 +522,12 @@ class ArCube {
 
   enableSecondScene() {
     console.log('enabling second');
-    this.isSecondScene = true;
     this.setupScene(SECOND_SCENE);
-    this.secondSceneSignal.emit(true);
+    useCubeStore.setState({ isSecondScene: true });
   }
 
   disableSecondScene() {
     console.log('disabling second');
-    this.isSecondScene = false;
     //TODO this won't work with more than two scenes but it's fine for now
     this.sceneGroups.pop();
 
@@ -575,7 +537,7 @@ class ArCube {
       }
     });
 
-    this.secondSceneSignal.emit(false);
+    useCubeStore.setState({ isSecondScene: false });
   }
 
   resizeCanvasToDisplaySize() {

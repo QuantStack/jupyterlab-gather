@@ -1,19 +1,16 @@
-import { selectAppData } from '@100mslive/react-sdk';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactWidget } from '@jupyterlab/apputils';
 import { Button, SidePanel, UseSignal } from '@jupyterlab/ui-components';
 import { ISignal } from '@lumino/signaling';
 import { Panel, Widget } from '@lumino/widgets';
-import React, { useEffect, useState } from 'react';
-import ArCube from '../arCube';
+import React, { useState } from 'react';
 import { arIcon } from '../components/Icons';
 import ModelListItem from '../components/ModelListItem';
 import AddNewFileModal from '../components/modals/AddNewFileModal';
 import AddNewUrlModal from '../components/modals/AddNewUrlModal';
-import { APP_DATA } from '../constants';
-import { hmsActions, hmsStore } from '../hms';
 import { IModelRegistry, IModelRegistryData } from '../registry';
+import { useCubeStore } from '../store';
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Suzanne/glTF/Suzanne.gltf'
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/IridescenceAbalone/glTF/IridescenceAbalone.gltf
 // https://github.khronos.org/glTF-Sample-Viewer-Release/assets/models/Models/Fox/glTF/Fox.gltf
@@ -24,42 +21,23 @@ interface IModelInfoList {
 }
 
 const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [isSecondScene, setIsSecondScene] = useState(false);
-  const [arCube, setArCube] = useState<ArCube | undefined>(undefined);
-  const [selected, setSelected] = useState<IModelRegistryData>();
   const [isAddModelUrlOpen, setAddModelUrlOpen] = useState(false);
   const [isAddModelFileOpen, setAddModelFileOpen] = useState(false);
 
-  useEffect(() => {
-    setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
-
-    hmsStore.subscribe(
-      updateModelLoadingState,
-      selectAppData(APP_DATA.canLoadModel)
-    );
-    hmsStore.subscribe(updateArCube, selectAppData(APP_DATA.arCube));
-  }, []);
-
-  const updateArCube = () => {
-    setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
-  };
-
-  const updateModelLoadingState = () => {
-    const canLoadModel = hmsStore.getState(
-      selectAppData(APP_DATA.canLoadModel)
-    );
-    setIsDisabled(!canLoadModel);
-  };
+  const arCube = useCubeStore.use.arCube();
+  const isDisabled = !useCubeStore.use.canLoadModel();
+  const isSecondScene = useCubeStore.use.isSecondScene();
+  const selected = useCubeStore.use.selectedModel();
+  const setSelected = useCubeStore.use.updateSelectedModel();
 
   const handleModelNameClick = (model: IModelRegistryData) => {
     setSelected(model);
-    hmsActions.setAppData(APP_DATA.selectedModel, model);
   };
 
   const handleModelSelectClick = (sceneNumber: number) => {
     if (!arCube) {
-      setArCube(hmsStore.getState(selectAppData(APP_DATA.arCube)));
+      console.log('Something went wrong');
+      return;
     }
 
     if (!selected) {
@@ -67,7 +45,7 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
       return;
     }
 
-    arCube?.changeModelInScene(sceneNumber, selected.name);
+    arCube.changeModelInScene(sceneNumber, selected.name);
   };
 
   const handleLoadSecondScene = () => {
@@ -76,7 +54,7 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
     } else {
       arCube?.enableSecondScene();
     }
-    setIsSecondScene(!isSecondScene);
+    // setIsSecondScene(!isSecondScene);
   };
 
   const handleOpenAddUrlModal = () => {
@@ -211,9 +189,8 @@ export class LeftSidebarWidget extends SidePanel {
   }
 
   addModelToRegistryArray(model: IModelRegistryData) {
-    const registryFromStore: IModelRegistryData[] = [
-      ...hmsStore.getState(selectAppData(APP_DATA.modelRegistry))
-    ];
+    const registryFromStore: IModelRegistryData[] =
+      useCubeStore.getState().modelRegistry;
 
     const existingModels = registryFromStore.map(
       registryModels => registryModels.name
@@ -231,23 +208,23 @@ export class LeftSidebarWidget extends SidePanel {
       });
     }
 
-    hmsActions.setAppData(APP_DATA.modelRegistry, registryFromStore);
+    useCubeStore.setState({
+      modelRegistry: registryFromStore
+    });
 
     return registryFromStore;
   }
 
   updateModel(modelName: string) {
-    const loadedModels = hmsStore.getState(
-      selectAppData(APP_DATA.loadedModels)
-    );
-    const arCube: ArCube = hmsStore.getState(selectAppData(APP_DATA.arCube));
+    const scenesWithModel = useCubeStore.getState().scenesWithModel;
+    const arCube = useCubeStore.getState().arCube;
 
     if (!arCube) {
       return;
     }
 
-    if (loadedModels[modelName]) {
-      loadedModels[modelName].forEach((sceneNumber: number) => {
+    if (scenesWithModel[modelName]) {
+      scenesWithModel[modelName].forEach((sceneNumber: number) => {
         arCube.changeModelInScene(sceneNumber, modelName);
       });
     }

@@ -8,7 +8,7 @@ import {
   colors,
   uniqueNamesGenerator
 } from 'unique-names-generator';
-import { APP_DATA } from '../constants';
+import { useCubeStore } from '../store';
 
 interface IJoinFormViewProps {
   state: IStateDB;
@@ -17,6 +17,9 @@ interface IJoinFormViewProps {
 const JoinFormView = ({ state }: IJoinFormViewProps) => {
   const hmsActions = useHMSActions();
   const [savedRoomCode, setSavedRoomCode] = useState('');
+
+  const updateIsConnecting = useCubeStore.use.updateIsConnecting();
+  const updateConfig = useCubeStore.use.updateConfig();
 
   const randomUserName = uniqueNamesGenerator({
     dictionaries: [adjectives, colors, animals],
@@ -59,7 +62,7 @@ const JoinFormView = ({ state }: IJoinFormViewProps) => {
     e.preventDefault();
 
     console.log('clicking join');
-    hmsActions.setAppData(APP_DATA.isConnecting, true);
+    updateIsConnecting(true);
 
     const { userName = '', roomCode = '' } = inputValues;
 
@@ -71,14 +74,15 @@ const JoinFormView = ({ state }: IJoinFormViewProps) => {
       userName,
       authToken,
       captureNetworkQualityInPreview: true,
-      alwaysRequestPermissions: true,
+      rememberDeviceSelection: true,
       settings: {
         isAudioMuted: true,
         isVideoMuted: false
       },
       metaData: ''
     };
-    hmsActions.setAppData(APP_DATA.config, config);
+
+    updateConfig(config);
 
     try {
       await hmsActions.preview({ ...config });
@@ -93,13 +97,13 @@ const JoinFormView = ({ state }: IJoinFormViewProps) => {
       <div className="jlab-gather-form-input">
         <label htmlFor="userName">Username</label>
         <input
-          required
-          className="jlab-gather-input"
-          value={inputValues.userName}
-          onChange={handleInputChange}
           type="text"
+          className="jlab-gather-input"
           name="userName"
           placeholder="Your name"
+          value={inputValues.userName}
+          onChange={handleInputChange}
+          required
         />
       </div>
       <div className="jlab-gather-form-input">
@@ -109,8 +113,9 @@ const JoinFormView = ({ state }: IJoinFormViewProps) => {
           className="jlab-gather-input"
           name="roomCode"
           placeholder="Room code"
-          onChange={handleInputChange}
           value={inputValues.roomCode}
+          onChange={handleInputChange}
+          required
         />
       </div>
       <button className="jlab-gather-btn-common jlab-gather-btn-primary">
