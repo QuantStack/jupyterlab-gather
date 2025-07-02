@@ -1,4 +1,4 @@
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactWidget } from '@jupyterlab/apputils';
 import { Button, SidePanel, UseSignal } from '@jupyterlab/ui-components';
@@ -75,6 +75,12 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
     handleCloseAddModelModal();
   };
 
+  const handleDownload = () => {
+    const url =
+      'https://raw.githubusercontent.com/QuantStack/jupyterlab-gather/main/resources/ar-cubes/cube1.pdf';
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div className="jlab-gather-sidebar-container">
       <div className="jlab-gather-sidebar-description">
@@ -97,21 +103,15 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
       </div>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <div className="jlab-gather-sidebar-buttons">
-          <Button
-            className="jlab-gather-sidebar-button"
-            onClick={() => handleModelSelectClick(0)}
-          >
+          <Button onClick={() => handleModelSelectClick(0)}>
             Set as first model
           </Button>
-          <Button
-            className="jlab-gather-sidebar-button"
-            onClick={() => handleModelSelectClick(1)}
-          >
+          <Button onClick={() => handleModelSelectClick(1)}>
             Set as second model
           </Button>
         </div>
         <Button
-          className="jlab-gather-sidebar-load-button"
+          className="jlab-gather-sidebar-button"
           onClick={handleOpenAddUrlModal}
           disabled={isDisabled}
         >
@@ -123,7 +123,7 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
           onClose={handleCloseAddModelModal}
         />
         <Button
-          className="jlab-gather-sidebar-load-button"
+          className="jlab-gather-sidebar-button"
           onClick={handleOpenAddFileModal}
           disabled={isDisabled}
         >
@@ -135,7 +135,7 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
           onClose={handleCloseAddModelModal}
         />
         <Button
-          className="jlab-gather-sidebar-load-button"
+          className="jlab-gather-sidebar-button"
           onClick={handleLoadSecondScene}
           disabled={isDisabled}
         >
@@ -146,6 +146,16 @@ const LeftSidebarComponent = ({ modelList, modelRegistry }: IModelInfoList) => {
           ) : (
             'Load Second Model'
           )}
+        </Button>
+        <Button
+          className="jlab-gather-sidebar-button jlab-gather-btn-with-icon"
+          onClick={handleDownload}
+        >
+          <FontAwesomeIcon
+            icon={faDownload}
+            className="jlab-gather-icon-small"
+          />
+          Download AR Cube
         </Button>
       </div>
     </div>
