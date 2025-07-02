@@ -29,35 +29,7 @@ class ArCube {
     this.scaleSignal = new Signal(this);
     this.bgCubeCenter = new THREE.Vector3();
     this.initialize();
-    // console.log('bears start');
-    // const { getState, setState } = useBearStore;
-    // const bears = getState().bears;
-    // console.log('bears - test');
-    // console.log('bears 1', bears);
-    // const inc = useBearStore.getState().increase;
-    // inc(2);
-    // console.log('bears 2', getState().bears);
-
-    // setState({ bears: 5 });
-
-    // console.log('bears 3', getState().bears);
-
-    // inc(3);
-
-    // setState({ tests: 3 });
-    // console.log('bears 4', getState());
-
-    // this.animate();
-    // window.addEventListener('markerFound', () => {
-    //   console.log('Marker found');
-    // });
-
-    // window.addEventListener('markerLost', () => {
-    //   console.log('Marker lost');
-    // });
   }
-
-  bears: number;
 
   modelInScene: string[];
   scenesWithModel: Record<string, number[]>;
@@ -92,30 +64,6 @@ class ArCube {
   arjsVid: HTMLElement | null;
   videoDeviceIdUnsub: () => void;
   isSecondSceneUnsub: () => void;
-  // sceneGroup: THREE.Group;
-  // sceneGroupArray: THREE.Group[];
-  // edgeGroup: THREE.Group;
-  // gltfModel: THREE.Group;
-  // observer: IntersectionObserver;
-  // readonly markerControls: any;
-  // readonly ambientLight: THREE.AmbientLight;
-  // readonly rotationArray: THREE.Vector3[];
-  // readonly markerRoot: THREE.Group;
-  // readonly markerGroup: THREE.Group;
-  // readonly pointLight: THREE.PointLight;
-  // readonly loader: THREE.TextureLoader;
-  // readonly stageMesh: THREE.MeshBasicMaterial;
-  // readonly stage: THREE.Mesh;
-  // readonly edgeGeometry: THREE.CylinderGeometry;
-  // readonly edgeCenters: THREE.Vector3[];
-  // readonly edgeRotations: THREE.Vector3[];
-  // readonly animationRequestId: number | undefined;
-  // readonly now: number;
-  // readonly then: number;
-  // readonly elapsed: number;
-  // readonly fpsInterval: number;
-  // readonly webcamFromArjs: HTMLElement | null;
-  // model: IModelRegistryData;
   themeChangedSignal: ISignal<
     IThemeManager,
     IChangedArgs<string, string | null>
@@ -126,7 +74,6 @@ class ArCube {
     this.modelInScene = new Array(2);
     this.scenesWithModel = {};
 
-    // TODO: this returns the unsub function, use that
     this.videoDeviceIdUnsub = useCubeStore.subscribe(
       state => state.videoDeviceId,
       videoDeviceId => {
