@@ -22,7 +22,7 @@
   border: 2px solid transparent;
   border-radius: var(--gather-border-radius);
   font-family: inherit;
-  color: var(--jp-ui-font-color0);
+  color: var(--jp-ui-font-color1);
 }
 
 .jlab-gather-input::placeholder {
@@ -54,6 +54,12 @@
 .jlab-gather-btn-primary {
   background-color: var(--jp-brand-color1);
   color: whitesmoke;
+}
+
+.jlab-gather-btn-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .jlab-gather-btn-danger {
@@ -268,14 +274,9 @@
 }
 
 .jlab-gather-sidebar-button {
-  color: var(--jp-inverse-layout-color4);
-}
-
-.jlab-gather-sidebar-load-button {
   max-width: 313px;
   margin: 0.5rem;
   padding: 0.5rem;
-  color: var(--jp-inverse-layout-color4);
 }
 
 .jlab-gather-presenter-container {
@@ -374,10 +375,6 @@
   color: var(--jp-ui-inverse-font-color1);
 }
 
-.jlab-gather-avatar-grid {
-  /* height: 60%; */
-}
-
 .jlab-gather-avatar-sidepane {
   width: 128px;
   height: 128px;
@@ -447,6 +444,7 @@
 
 .jlab-gather-device-settings-row {
   display: flex;
+  align-items: center;
 }
 
 .jlab-gather-device-title {
