@@ -12,10 +12,6 @@ Imagine being able to share your work, collaborate on projects, or even teach in
 
 This extension is built on the foundation of JupyterLab's robust ecosystem, ensuring compatibility with existing JupyterLab features and extensions. Whether you're a teacher looking to make your lessons more interactive, a researcher wanting to share your findings in a more engaging way, or a student seeking a more immersive learning experience, this extension is designed to meet your needs.
 
-This extension is composed of a Python package named `jupyterlab_gather`
-for the server extension and a NPM package named `jupyterlab_gather`
-for the frontend extension.
-
 ## Requirements
 
 - JupyterLab >= 4.0.0
