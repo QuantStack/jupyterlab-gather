@@ -190,6 +190,7 @@
   padding: 15px;
   background-color: rgb(187 222 251 / 50%);
   border-radius: var(--gather-border-radius);
+  z-index: 40;
 }
 
 .jlab-gather-control-bar.jlab-gather-transparent {
