@@ -2,6 +2,32 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.1.3
+
+([Full Changelog](https://github.com/QuantStack/jupyterlab-gather/compare/v0.1.2...54d56262995eed071dc5e27c0f7b9a27d086d241))
+
+### Enhancements made
+
+- Add cube download [#31](https://github.com/QuantStack/jupyterlab-gather/pull/31) ([@gjmooney](https://github.com/gjmooney))
+- Add zustand [#30](https://github.com/QuantStack/jupyterlab-gather/pull/30) ([@gjmooney](https://github.com/gjmooney))
+- Add cube files; Update model links; Remove presenter toggle [#28](https://github.com/QuantStack/jupyterlab-gather/pull/28) ([@gjmooney](https://github.com/gjmooney))
+
+### Bugs fixed
+
+- Add cube files; Update model links; Remove presenter toggle [#28](https://github.com/QuantStack/jupyterlab-gather/pull/28) ([@gjmooney](https://github.com/gjmooney))
+
+### Other merged PRs
+
+- Readme change [#32](https://github.com/QuantStack/jupyterlab-gather/pull/32) ([@gjmooney](https://github.com/gjmooney))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/QuantStack/jupyterlab-gather/graphs/contributors?from=2024-06-19&to=2025-09-08&type=c))
+
+[@github-actions](https://github.com/search?q=repo%3AQuantStack%2Fjupyterlab-gather+involves%3Agithub-actions+updated%3A2024-06-19..2025-09-08&type=Issues) | [@gjmooney](https://github.com/search?q=repo%3AQuantStack%2Fjupyterlab-gather+involves%3Agjmooney+updated%3A2024-06-19..2025-09-08&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.1.2
 
 ([Full Changelog](https://github.com/QuantStack/jupyterlab-gather/compare/v0.1.1...58bcebc66e06d13ed5521152d541491cdc425d16))
@@ -26,8 +52,6 @@
 ([GitHub contributors page for this release](https://github.com/QuantStack/jupyterlab-gather/graphs/contributors?from=2024-05-30&to=2024-06-19&type=c))
 
 [@github-actions](https://github.com/search?q=repo%3AQuantStack%2Fjupyterlab-gather+involves%3Agithub-actions+updated%3A2024-05-30..2024-06-19&type=Issues) | [@gjmooney](https://github.com/search?q=repo%3AQuantStack%2Fjupyterlab-gather+involves%3Agjmooney+updated%3A2024-05-30..2024-06-19&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.1.1
 
